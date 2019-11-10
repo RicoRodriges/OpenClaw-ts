@@ -88,11 +88,11 @@ export default class ActorController {
 
             if (Math.abs(climbY) > ActorController.EPSILON) {
                 const event = new EventData_Start_Climb(actor.id, new Point(0, climbY));
-                EventMgr.getInstance().VTriggerEvent(event)
+                EventMgr.getInstance().VQueueEvent(event)
             }
             if (Math.abs(moveX) > ActorController.EPSILON || Math.abs(moveY) > ActorController.EPSILON) {
                 const event = new EventData_Actor_Start_Move(actor, new Point(moveX, moveY));
-                EventMgr.getInstance().VTriggerEvent(event)
+                EventMgr.getInstance().VQueueEvent(event)
             }
         }
     }
@@ -104,22 +104,22 @@ export default class ActorController {
             switch (actionType) {
                 case ActionType.FIRE: {
                     const event = new EventData_Actor_Fire(actorId);
-                    EventMgr.getInstance().VTriggerEvent(event);
+                    EventMgr.getInstance().VQueueEvent(event);
                     break;
                 }
                 case ActionType.ATTACK: {
                     const event = new EventData_Actor_Attack(actorId);
-                    EventMgr.getInstance().VTriggerEvent(event);
+                    EventMgr.getInstance().VQueueEvent(event);
                     break;
                 }
                 case ActionType.CHANGE_AMMO: {
                     const event = new EventData_Request_Change_Ammo_Type(actorId);
-                    EventMgr.getInstance().VTriggerEvent(event);
+                    EventMgr.getInstance().VQueueEvent(event);
                     break;
                 }
                 case ActionType.FIRE_ENDED: {
                     const event = new EventData_Actor_Fire_Ended(actorId);
-                    EventMgr.getInstance().VTriggerEvent(event);
+                    EventMgr.getInstance().VQueueEvent(event);
                     break;
                 }
             }

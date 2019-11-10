@@ -3,12 +3,10 @@ import {IEventData} from "./IEventData";
 export default class EventMgr {
     private static self = new EventMgr();
     eventListeners: Map<string, ((d: IEventData) => void)[]> = new Map<string, ((d: IEventData) => void)[]>();
+    eventQueue: IEventData[] = [];
 
     static getInstance() {
         return EventMgr.self;
-    }
-
-    constructor() {
     }
 
     VAddListener(f: (d: IEventData) => void, name: string) {
@@ -34,7 +32,18 @@ export default class EventMgr {
         }
     }
 
+    VQueueEvent(event: IEventData) {
+        const index = this.eventQueue.findIndex((v) => v.equals(event));
+        if (index !== -1) {
+            this.eventQueue = this.eventQueue.splice(index, 1);
+        }
+        this.eventQueue.push(event);
+    }
+
     VOnUpdate(t: number) {
-        // TODO: queue execution
+        if (this.eventQueue.length > 0) {
+            this.eventQueue.forEach((e) => this.VTriggerEvent(e));
+            this.eventQueue = [];
+        }
     }
 }
