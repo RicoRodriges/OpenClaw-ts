@@ -12,14 +12,17 @@ import {SpriteDefinition} from "../../components/SvgSpriteDefinitionComponent";
 import Rect from "./Rect";
 import Image from "../graphics/Image";
 import TilesSceneNode from "../scene/TilesSceneNode";
+import gameProperties from "../GameProperties";
+import ClawControllableComponent from "../actors/components/ClawControllableComponent";
 
-export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, maxJumpHeight: number, anim: Animation): Actor {
+export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, anim: Animation): Actor {
     const claw = new Actor();
     const positionComponent = new PositionComponent(claw, new Point(spawnX, spawnY));
     claw.components.push(positionComponent);
-    const physicsComponent = new PhysicsComponent(claw, true, false, true, maxJumpHeight, 40, 90, 4.0, 0.0, 0.5, physics);
+    const controllableComponent = new ClawControllableComponent(claw);
+    claw.components.push(controllableComponent);
+    const physicsComponent = new PhysicsComponent(claw, true, false, true, gameProperties.player.maxJumpHeight, gameProperties.player.stayW, gameProperties.player.stayH, 4.0, 0.0, 0.5, physics, controllableComponent);
     claw.components.push(physicsComponent);
-    //const controllableComponent = new ClawControllableComponent(claw, true);
     const animationComponent = new AnimationComponent(claw, anim);
     claw.components.push(animationComponent);
     const renderComponent = new ActorRenderComponent(claw);
@@ -53,7 +56,7 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
     return claw;
 }
 
-export function createSpriteDefinitions(tiles: Tiles, svgPatterPrefix: string): SpriteDefinition[] {
+export function createSpriteDefinitions(tiles: Tiles, spriteNamePrefix: string): SpriteDefinition[] {
     const w = tiles.w;
     const h = tiles.h;
     const src = tiles.src;
@@ -61,7 +64,7 @@ export function createSpriteDefinitions(tiles: Tiles, svgPatterPrefix: string): 
     const srcHeight = tiles.srcHeight;
     return tiles.map.map((t) => {
         return {
-            id: `${svgPatterPrefix}${t.id}`,
+            id: `${spriteNamePrefix}${t.id}`,
             rect: new Rect(t.x, t.y, w, h),
             srcWidth: srcWidth,
             srcHeight: srcHeight,
@@ -70,13 +73,13 @@ export function createSpriteDefinitions(tiles: Tiles, svgPatterPrefix: string): 
     });
 }
 
-export function createAnimation(tiles: AnimationTiles, svgPatterPrefix: string): Animation {
+export function createAnimation(tiles: AnimationTiles, animationName: string): Animation {
     const w = tiles.w;
     const h = tiles.h;
     const frames = tiles.map.map((t) =>
-        new Frame(new Image(0, 0, w, h, `${svgPatterPrefix}${t.id}`), t.delay)
+        new Frame(new Image(0, 0, w, h, `${animationName}${t.id}`), t.delay)
     );
-    return new Animation(frames);
+    return new Animation(animationName, frames);
 }
 
 export function createCollisionObjectsAndScene(physics: GamePhysics, tiles: CollisionTiles,

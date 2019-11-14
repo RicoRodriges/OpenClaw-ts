@@ -9,6 +9,7 @@ export default abstract class RenderComponent extends ActorComponent {
 export class ActorRenderComponent extends RenderComponent {
     public static readonly NAME = 'ActorRenderComponent';
     image?: Image;
+    mirror = false;
 
     constructor(owner: Actor) {
         super(owner);
@@ -19,7 +20,7 @@ export class ActorRenderComponent extends RenderComponent {
     }
 
     isMirrored() {
-        return false;
+        return this.mirror;
     }
 
     isYInverted() {

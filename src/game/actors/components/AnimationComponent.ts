@@ -28,6 +28,14 @@ export default class AnimationComponent extends ActorComponent {
         }
     }
 
+    setAnimation(anim: Animation) {
+        if (anim.name !== this.anim.name) {
+            this.time = 0;
+            this.current = 0;
+            this.anim = anim;
+        }
+    }
+
     getName(): string {
         return AnimationComponent.NAME;
     }

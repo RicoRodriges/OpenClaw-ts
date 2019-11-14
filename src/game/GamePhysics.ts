@@ -51,7 +51,7 @@ export default class GamePhysics {
     }
 
     VOnUpdate(diff: number) {
-        this.world.Step(diff / 1000.0, 1, 1);
+        this.world.Step(diff / 1000.0, 8, 10);
     }
 
     VSyncVisibleScene() {

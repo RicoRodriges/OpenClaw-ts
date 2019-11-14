@@ -4,6 +4,9 @@ import Point from "../../utils/Point";
 import {Direction} from "../../enums/Direction";
 import GamePhysics, {ActorBodyDef} from "../../GamePhysics";
 import PositionComponent from "./PositionComponent";
+import gameProperties from "../../GameProperties";
+import {ActorRenderComponent} from "./RenderComponent";
+import ClawControllableComponent from "./ClawControllableComponent";
 
 export default class PhysicsComponent extends ActorComponent {
     static NAME = 'PhysicsComponent';
@@ -42,7 +45,7 @@ export default class PhysicsComponent extends ActorComponent {
     // Hackerino to prevent loop jumping with space pressed
     ignoreJump = false;
 
-    // controllableComponent?: ClawControllableComponent;
+    controllableComponent: ClawControllableComponent | null;
 
     physics: GamePhysics;
 
@@ -65,7 +68,7 @@ export default class PhysicsComponent extends ActorComponent {
 
     constructor(public owner: Actor, canClimb: boolean, canBounce: boolean, canJump: boolean, maxJumpHeight: number,
                 width: number, height: number, gravityScale: number, friction: number, density: number,
-                physics: GamePhysics) {
+                physics: GamePhysics, controllableComponent: ClawControllableComponent | null = null) {
         super(owner);
         this.canClimb = canClimb;
         this.canBounce = canBounce;
@@ -88,16 +91,51 @@ export default class PhysicsComponent extends ActorComponent {
         this.actorBodyDef.position.y = posComp.position.y;
         this.actorBodyDef.actor = owner;
         physics.VAddActorBody(this.actorBodyDef);
+        this.controllableComponent = controllableComponent;
     }
 
     VUpdate(diff: number) {
-        super.VUpdate(diff);
         // if (Math.abs(this.currentSpeed.x) > 0.0001 || Math.abs(this.currentSpeed.y) > 0.0001) {
+        // if (this.currentSpeed.y < -1) {
+        //     if (!this.isJumping) {
+        //         this.isJumping = true;
+        //         this.currentSpeed.y = -gameProperties.player.maxJumpHeight;
+        //     } else {
+        //         this.currentSpeed.y = 0;
+        //     }
+        // } else {
+        //     const speed = this.physics.VGetVelocity(this.owner);
+        //     if (speed.y > 1) {
+        //         //this.currentSpeed.y = 8.8;
+        //     } else if (speed.y < -1) {
+        //         //this.currentSpeed.y = -8.8;
+        //     } else {
+        //         this.isJumping = false;
+        //     }
+        // }
         const speed = this.physics.VGetVelocity(this.owner);
         if (speed.y > 0.001) {
             this.currentSpeed.y = 8.8;
         }
+        //
+        // if (this.currentSpeed.x > 1) {
+        //     this.currentSpeed.x = gameProperties.player.speed;
+        // } else if (this.currentSpeed.x < -1) {
+        //     this.currentSpeed.x = -gameProperties.player.speed;
+        // }
+
         this.physics.VSetLinearSpeed(this.owner, this.currentSpeed);
+        const renderComponent = this.owner.getComponent(ActorRenderComponent.NAME) as ActorRenderComponent;
+        if (renderComponent) {
+            if (this.currentSpeed.x > 1) {
+                renderComponent.mirror = false;
+            } else if (this.currentSpeed.x < -1) {
+                renderComponent.mirror = true;
+            }
+        }
+        if (this.controllableComponent) {
+            this.controllableComponent.velocity = new Point(this.currentSpeed.x,this.currentSpeed.y);
+        }
         this.currentSpeed = new Point(0,0);
         // }
     }

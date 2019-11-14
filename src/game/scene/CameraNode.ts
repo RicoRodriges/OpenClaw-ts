@@ -5,7 +5,7 @@ import Scene from "./Scene";
 
 export default class CameraNode extends SceneNode {
     actor: Actor | null;
-    followByActor = false;
+    followByActor = true;
 
     constructor(public x: number, public y: number, public w: number, public h: number, follow: Actor | null = null) {
         super();
@@ -20,7 +20,13 @@ export default class CameraNode extends SceneNode {
                 this.y = actorNode.properties.position.y - this.h / 2;
             }
         }
-        return new Rect(this.x, this.y, this.w, this.h);
+        // if (this.actor) {
+        //     const actorNode = scene.actorNodes.get(this.actor);
+        //     if (actorNode) {
+        //         console.log(actorNode.properties.position.x - this.w / 2, actorNode.properties.position.y - this.h / 2);
+        //     }
+        // }
+        return new Rect(Math.floor(this.x), Math.floor(this.y), this.w, this.h);
     }
 
 }

@@ -101,21 +101,24 @@ export default {
         ]
     },
     map: [
-        [7, 7, 7, 7, 7, 7, 7, 7, 7],
-        [],
-        [4, null, null, null, null, null, null, null, 1],
-        [8, null, null, null, null, null, null, null, 5],
-        [8, null, null, null, null, null, null, null, 5],
-        [8, null, null, null, null, null, null, null, 5],
-        [10, 3, 4, null, null, 1, 2, 2, 9],
-        [6, 6, 8, null, null, 5, 6, 6, 6],
-        [6, 6, 10, 2, 2, 9, 6, 6, 6],
-        [6, 6, 6, 6, 6, 6, 6, 6, 6],
+        [6   , 6   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 6   , 6],
+        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
+        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
+        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
+        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
+        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
+        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
+        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
+        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
+        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
+        [6   , 10  , 2   , 2   , 3   , 4   , null, null, null, null, null, null, 1   , 2   , 2   , 2   , 2   , 9   , 6],
+        [6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6],
+        [6   , 6   , 6   , 6   , 6   , 10  , 2   , 2   , 2   , 2   , 2   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6],
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6],
     ],
     player: {
         spawnX: 64 * 3,
         spawnY: 80,
-        maxJumpHeight: 20,
         idleAnim: {
             src: 'sprites/claw_idle.png',
             w: 74,
@@ -170,6 +173,75 @@ export default {
                     x: 74 * 7,
                     y: 0,
                     delay: 100
+                },
+            ]
+        },
+        runAnim: {
+            src: 'sprites/claw_run.png',
+            w: 107,
+            h: 109,
+            srcWidth: 1070,
+            srcHeight: 109,
+            map: [
+                {
+                    id: 0,
+                    x: 107 * 0,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 1,
+                    x: 107 * 1,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 2,
+                    x: 107 * 2,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 3,
+                    x: 107 * 3,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 4,
+                    x: 107 * 4,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 5,
+                    x: 107 * 5,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 6,
+                    x: 107 * 6,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 7,
+                    x: 107 * 7,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 8,
+                    x: 107 * 8,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 9,
+                    x: 107 * 9,
+                    y: 0,
+                    delay: 50
                 },
             ]
         }

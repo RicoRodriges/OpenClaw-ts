@@ -16,12 +16,10 @@ export default class GameApp {
         // Update game
         EventMgr.getInstance().VOnUpdate(30);
         this.gameLogic.VOnUpdate(diff);
-    }
 
-    onRender(diff: number) {
+        // Render game
         if (this.gameLogic.gameView) {
             return this.gameLogic.gameView.VOnRender(diff);
         }
-        return null;
     }
 }

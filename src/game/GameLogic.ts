@@ -1,4 +1,3 @@
-import React from "react";
 import Actor from "./actors/Actor";
 import GameView from "./GameView";
 import GamePhysics from "./GamePhysics";
@@ -19,19 +18,30 @@ import EventData_Actor_Start_Move from "./events/EventData_Actor_Start_Move";
 import PhysicsComponent from "./actors/components/PhysicsComponent";
 import levelData from "./LevelData";
 import {ActorRenderComponent} from "./actors/components/RenderComponent";
-import SvgSpriteDefinitionComponent, {SpriteDefinition} from "../components/SvgSpriteDefinitionComponent";
+import {SpriteDefinition} from "../components/SvgSpriteDefinitionComponent";
+import ResourceMgr from "./ResourceMgr";
+import EventData_Level_Loaded from "./events/EventData_Level_Loaded";
+import TitleSceneNode from "./scene/TitleSceneNode";
+import gameProperties from "./GameProperties";
 
 export default class GameLogic {
     actors: Actor[] = [];
     gameView?: GameView;
     gamePhysics?: GamePhysics;
-    running = true;
+    running = false;
 
     constructor() {
         EventMgr.getInstance().VAddListener((e) => this.onActorStartMoveDelegate(e), EventData_Actor_Start_Move.NAME);
+        EventMgr.getInstance().VAddListener((e) => this.onLevelLoadedDelegate(e), EventData_Level_Loaded.NAME);
     }
 
     VOnUpdate(diff: number) {
+        if (!this.running) {
+            if (ResourceMgr.getInstance().isResourcesLoaded()) {
+                EventMgr.getInstance().VTriggerEvent(new EventData_Level_Loaded());
+            }
+        }
+
         if (this.running) {
             if (this.gamePhysics) {
                 this.gamePhysics.VOnUpdate(diff);
@@ -59,18 +69,28 @@ export default class GameLogic {
         spriteDefinitions = spriteDefinitions.concat(tileDefinitions);
         const idleAnimDefinitions = createSpriteDefinitions(levelData.player.idleAnim, 'claw_idle');
         spriteDefinitions = spriteDefinitions.concat(idleAnimDefinitions);
+        const runAnimDefinitions = createSpriteDefinitions(levelData.player.runAnim, 'claw_run');
+        spriteDefinitions = spriteDefinitions.concat(runAnimDefinitions);
+
+        const resources = ResourceMgr.getInstance();
+        spriteDefinitions.forEach((s) => {
+            resources.loadSprite(s.id, s.src, s.src, s.rect.x, s.rect.y, s.rect.w, s.rect.h);
+        });
 
         // Create animations
         const idleAnim = createAnimation(levelData.player.idleAnim, 'claw_idle');
+        resources.addAnimation('claw_idle', idleAnim);
+        const runAnim = createAnimation(levelData.player.runAnim, 'claw_run');
+        resources.addAnimation('claw_run', runAnim);
 
         // Create claw actor
-        const claw = createClawActor(this.gamePhysics, levelData.player.spawnX, levelData.player.spawnY,
-            levelData.player.maxJumpHeight, idleAnim);
+        const claw = createClawActor(this.gamePhysics, levelData.player.spawnX, levelData.player.spawnY, idleAnim);
         this.actors.push(claw);
 
         // Create claw scene node
         const renderComponent = claw.getComponent(ActorRenderComponent.NAME) as ActorRenderComponent;
-        const actorSceneNode = new ActorSceneNode(claw, levelData.player.spawnX, levelData.player.spawnY, renderComponent);
+        const actorSceneNode = new ActorSceneNode(claw, levelData.player.spawnX, levelData.player.spawnY,
+            gameProperties.player.stayW, gameProperties.player.stayH, renderComponent);
 
         // Create tile physics objects and scene node
         const tilesSceneNode = createCollisionObjectsAndScene(this.gamePhysics, levelData.tiles, levelData.map);
@@ -83,10 +103,24 @@ export default class GameLogic {
         const actorNodes = new Map<Actor, SceneNode>();
         actorNodes.set(claw, actorSceneNode);
 
+        // Create loading screen scene node
+        const titleSceneNode = new TitleSceneNode('Loading...', 30, 200);
+
+        // Create Loading screen scene
+        // @ts-ignore
+        const loadingScreenElementScene = new ScreenElementScene(titleSceneNode, null, new Map<Actor, SceneNode>());
+
         const screenElementScene = new ScreenElementScene(rootNode, new CameraNode(0, 0, w, h, claw), actorNodes);
-        this.gameView = new GameView([screenElementScene], new ActorController(actorSceneNode), (
-            <SvgSpriteDefinitionComponent key={1} sprites={spriteDefinitions} />
-        ));
+        this.gameView = new GameView([loadingScreenElementScene], [screenElementScene], new ActorController(actorSceneNode));
+    }
+
+    onLevelLoadedDelegate(e: IEventData) {
+        this.running = true;
+
+        const view = this.gameView;
+        if (view) {
+            view.isLoading = false;
+        }
 
         // Register keyboard events
         document.body.addEventListener('keydown', (e: any) => this.gameView && this.gameView.onKeyDown(e));
