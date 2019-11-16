@@ -130,49 +130,49 @@ export default {
                     id: 0,
                     x: 74 * 0,
                     y: 0,
-                    delay: 100
+                    delay: 150
                 },
                 {
                     id: 1,
                     x: 74 * 1,
                     y: 0,
-                    delay: 100
+                    delay: 150
                 },
                 {
                     id: 2,
                     x: 74 * 2,
                     y: 0,
-                    delay: 100
+                    delay: 150
                 },
                 {
                     id: 3,
                     x: 74 * 3,
                     y: 0,
-                    delay: 100
+                    delay: 150
                 },
                 {
                     id: 4,
                     x: 74 * 4,
                     y: 0,
-                    delay: 100
+                    delay: 150
                 },
                 {
                     id: 5,
                     x: 74 * 5,
                     y: 0,
-                    delay: 100
+                    delay: 150
                 },
                 {
                     id: 6,
                     x: 74 * 6,
                     y: 0,
-                    delay: 100
+                    delay: 150
                 },
                 {
                     id: 7,
                     x: 74 * 7,
                     y: 0,
-                    delay: 100
+                    delay: 150
                 },
             ]
         },
@@ -187,61 +187,61 @@ export default {
                     id: 0,
                     x: 107 * 0,
                     y: 0,
-                    delay: 50
+                    delay: 100
                 },
                 {
                     id: 1,
                     x: 107 * 1,
                     y: 0,
-                    delay: 50
+                    delay: 100
                 },
                 {
                     id: 2,
                     x: 107 * 2,
                     y: 0,
-                    delay: 50
+                    delay: 100
                 },
                 {
                     id: 3,
                     x: 107 * 3,
                     y: 0,
-                    delay: 50
+                    delay: 100
                 },
                 {
                     id: 4,
                     x: 107 * 4,
                     y: 0,
-                    delay: 50
+                    delay: 100
                 },
                 {
                     id: 5,
                     x: 107 * 5,
                     y: 0,
-                    delay: 50
+                    delay: 100
                 },
                 {
                     id: 6,
                     x: 107 * 6,
                     y: 0,
-                    delay: 50
+                    delay: 100
                 },
                 {
                     id: 7,
                     x: 107 * 7,
                     y: 0,
-                    delay: 50
+                    delay: 100
                 },
                 {
                     id: 8,
                     x: 107 * 8,
                     y: 0,
-                    delay: 50
+                    delay: 100
                 },
                 {
                     id: 9,
                     x: 107 * 9,
                     y: 0,
-                    delay: 50
+                    delay: 100
                 },
             ]
         },
@@ -303,29 +303,119 @@ export default {
             srcWidth: 435,
             srcHeight: 106,
             map: [
-                // {
-                //     id: 0,
-                //     x: 87 * 0,
-                //     y: 0,
-                //     delay: 50
-                // },
+                {
+                    id: 0,
+                    x: 87 * 0,
+                    y: 0,
+                    delay: 100
+                },
                 {
                     id: 1,
                     x: 87 * 1,
                     y: 0,
-                    delay: 50
+                    delay: 100
                 },
                 {
                     id: 2,
                     x: 87 * 2,
                     y: 0,
-                    delay: 50
+                    delay: 100
                 },
                 {
                     id: 3,
                     x: 87 * 3,
                     y: 0,
-                    delay: 50
+                    delay: 100
+                },
+            ]
+        },
+        swordAttackAnim: {
+            src: 'sprites/claw_swordAttack.png',
+            w: 161,
+            h: 110,
+            srcWidth: 644,
+            srcHeight: 110,
+            map: [
+                {
+                    id: 0,
+                    x: 161 * 0,
+                    y: 0,
+                    delay: 70
+                },
+                {
+                    id: 1,
+                    x: 161 * 1,
+                    y: 0,
+                    delay: 70
+                },
+                {
+                    id: 2,
+                    x: 161 * 2,
+                    y: 0,
+                    delay: 70
+                },
+                {
+                    id: 3,
+                    x: 161 * 3,
+                    y: 0,
+                    delay: 70
+                },
+                {
+                    id: 4,
+                    x: 161 * 2,
+                    y: 0,
+                    delay: 70
+                },
+                {
+                    id: 5,
+                    x: 161 * 1,
+                    y: 0,
+                    delay: 70
+                },
+                {
+                    id: 6,
+                    x: 161 * 0,
+                    y: 0,
+                    delay: 70
+                },
+            ]
+        },
+        swordAttackJumpAnim: {
+            src: 'sprites/claw_swordAttackJump.png',
+            w: 149,
+            h: 107,
+            srcWidth: 644,
+            srcHeight: 107,
+            map: [
+                {
+                    id: 0,
+                    x: 149 * 0,
+                    y: 0,
+                    delay: 70
+                },
+                {
+                    id: 1,
+                    x: 149 * 1,
+                    y: 0,
+                    delay: 70
+                },
+                {
+                    id: 2,
+                    x: 149 * 2,
+                    y: 0,
+                    delay: 70
+                },
+                {
+                    id: 3,
+                    x: 149 * 1,
+                    y: 0,
+                    delay: 70
+                },
+                {
+                    id: 4,
+                    x: 149 * 0,
+                    y: 0,
+                    delay: 70
                 },
             ]
         }

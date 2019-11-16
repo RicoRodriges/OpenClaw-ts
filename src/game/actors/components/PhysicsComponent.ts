@@ -398,4 +398,8 @@ export default class PhysicsComponent extends ActorComponent {
     OnEndFootContact() {
         this.numFootContacts--;
     }
+
+    RestoreGravityScale() {
+        this.physics.VSetGravityScale(this.owner, this.gravityScale);
+    }
 }

@@ -108,7 +108,7 @@ export default class ActorController {
                     break;
                 }
                 case ActionType.ATTACK: {
-                    const event = new EventData_Actor_Attack(actorId);
+                    const event = new EventData_Actor_Attack(actor);
                     EventMgr.getInstance().VQueueEvent(event);
                     break;
                 }

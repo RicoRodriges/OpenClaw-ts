@@ -2,9 +2,11 @@ import ActorComponent from "../ActorComponent";
 import Actor from "../Actor";
 import Animation from "../../graphics/Animation";
 import {ActorRenderComponent} from "./RenderComponent";
+import Frame from "../../graphics/Frame";
 
 export default class AnimationComponent extends ActorComponent {
     public static NAME = 'AnimationComponent';
+    public animationObservers: AnimationObserver[] = [];
     time: number;
 
     constructor(owner: Actor, public anim: Animation, public current = 0) {
@@ -19,10 +21,17 @@ export default class AnimationComponent extends ActorComponent {
                 renderComponent.setCurrentImage(this.anim.frames[0].image);
             } else {
                 this.time += diff;
-                if (this.time >= this.anim.frames[this.current].delay) {
+                const oldFrame = this.anim.frames[this.current];
+                if (this.time >= oldFrame.delay) {
                     this.time = 0;
-                    this.current = (this.current + 1) % this.anim.frames.length;
+                    const newCurrent = (this.current + 1) % this.anim.frames.length;
+                    this.current = newCurrent;
+                    const currentFrame = this.anim.frames[this.current];
+                    this.VOnAnimationFrameChanged(this.anim, oldFrame, currentFrame);
                     renderComponent.setCurrentImage(this.anim.frames[this.current].image);
+                    if (newCurrent === 0) {
+                        this.VOnAnimationLooped(this.anim);
+                    }
                 }
             }
         }
@@ -33,6 +42,10 @@ export default class AnimationComponent extends ActorComponent {
             this.time = 0;
             this.current = 0;
             this.anim = anim;
+            const renderComponent = this.owner.getComponent(ActorRenderComponent.NAME) as ActorRenderComponent;
+            if (renderComponent) {
+                renderComponent.setCurrentImage(this.anim.frames[this.current].image);
+            }
         }
     }
 
@@ -43,4 +56,17 @@ export default class AnimationComponent extends ActorComponent {
     GetCurrentAnimationName() {
         return this.anim.name;
     }
+
+    VOnAnimationFrameChanged(animation: Animation, oldFrame: Frame, currentFrame: Frame): void {
+        this.animationObservers.forEach((obs) => obs.VOnAnimationFrameChanged(animation, oldFrame, currentFrame));
+    }
+
+    VOnAnimationLooped(animation: Animation): void {
+        this.animationObservers.forEach((obs) => obs.VOnAnimationLooped(animation));
+    }
+}
+
+export interface AnimationObserver {
+    VOnAnimationFrameChanged(animation: Animation, oldFrame: Frame, currentFrame: Frame): void;
+    VOnAnimationLooped(animation: Animation): void;
 }

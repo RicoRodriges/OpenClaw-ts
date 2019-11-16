@@ -24,6 +24,8 @@ import EventData_Level_Loaded from "./events/EventData_Level_Loaded";
 import TitleSceneNode from "./scene/TitleSceneNode";
 import gameProperties from "./GameProperties";
 import {Animations} from "./enums/Animations";
+import EventData_Actor_Attack from "./events/EventData_Actor_Attack";
+import ClawControllableComponent from "./actors/components/ClawControllableComponent";
 
 export default class GameLogic {
     actors: Actor[] = [];
@@ -34,6 +36,7 @@ export default class GameLogic {
     constructor() {
         EventMgr.getInstance().VAddListener((e) => this.onActorStartMoveDelegate(e), EventData_Actor_Start_Move.NAME);
         EventMgr.getInstance().VAddListener((e) => this.onLevelLoadedDelegate(e), EventData_Level_Loaded.NAME);
+        EventMgr.getInstance().VAddListener((e) => this.onActorAttackDelegate(e), EventData_Actor_Attack.NAME);
     }
 
     VOnUpdate(diff: number) {
@@ -76,6 +79,10 @@ export default class GameLogic {
         spriteDefinitions = spriteDefinitions.concat(jumpAnimDefinitions);
         const fallAnimDefinitions = createSpriteDefinitions(levelData.player.fallAnim, Animations.fall);
         spriteDefinitions = spriteDefinitions.concat(fallAnimDefinitions);
+        const swordAttackAnimDefinitions = createSpriteDefinitions(levelData.player.swordAttackAnim, Animations.swordAttack);
+        spriteDefinitions = spriteDefinitions.concat(swordAttackAnimDefinitions);
+        const swordAttackJumpAnimDefinitions = createSpriteDefinitions(levelData.player.swordAttackJumpAnim, Animations.swordAttackJump);
+        spriteDefinitions = spriteDefinitions.concat(swordAttackJumpAnimDefinitions);
 
         const resources = ResourceMgr.getInstance();
         spriteDefinitions.forEach((s) => {
@@ -91,6 +98,10 @@ export default class GameLogic {
         resources.addAnimation(Animations.jump, jumpAnim);
         const fallAnim = createAnimation(levelData.player.fallAnim, Animations.fall);
         resources.addAnimation(Animations.fall, fallAnim);
+        const swordAttackAnim = createAnimation(levelData.player.swordAttackAnim, Animations.swordAttack);
+        resources.addAnimation(Animations.swordAttack, swordAttackAnim);
+        const swordAttackJumpAnim = createAnimation(levelData.player.swordAttackJumpAnim, Animations.swordAttackJump);
+        resources.addAnimation(Animations.swordAttackJump, swordAttackJumpAnim);
 
         // Create claw actor
         const claw = createClawActor(this.gamePhysics, levelData.player.spawnX, levelData.player.spawnY, idleAnim);
@@ -141,6 +152,14 @@ export default class GameLogic {
         const physicsComponent = event.actor.getComponent(PhysicsComponent.NAME) as PhysicsComponent;
         if (physicsComponent) {
             physicsComponent.SetCurrentSpeed(event.move);
+        }
+    }
+
+    private onActorAttackDelegate(e: IEventData) {
+        const event = e as EventData_Actor_Attack;
+        const controllableComponent = event.a.getComponent(ClawControllableComponent.NAME) as ClawControllableComponent;
+        if (controllableComponent) {
+            controllableComponent.OnAttack();
         }
     }
 }

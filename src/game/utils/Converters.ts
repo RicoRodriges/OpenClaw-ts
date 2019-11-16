@@ -24,6 +24,7 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
     const renderComponent = new ActorRenderComponent(claw);
     claw.components.push(renderComponent);
     const controllableComponent = new ClawControllableComponent(claw, animationComponent, renderComponent);
+    animationComponent.animationObservers.push(controllableComponent);
     claw.components.push(controllableComponent);
     const physicsComponent = new PhysicsComponent(claw, true, false, true, gameProperties.player.maxJumpHeight, gameProperties.player.stayW, gameProperties.player.stayH, 4.0, 0.0, 0.5, physics, controllableComponent, true);
     claw.components.push(physicsComponent);
