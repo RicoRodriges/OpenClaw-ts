@@ -1,0 +1,19 @@
+export enum ClawState {
+    ClawState_None,
+    ClawState_Standing,
+    ClawState_Walking,
+    ClawState_Jumping,
+    ClawState_Falling,
+    ClawState_Climbing,
+    ClawState_Ducking,
+    ClawState_Shooting,
+    ClawState_DuckShooting,
+    ClawState_JumpShooting,
+    ClawState_Attacking,
+    ClawState_DuckAttacking,
+    ClawState_JumpAttacking,
+    ClawState_TakingDamage,
+    ClawState_Dying,
+    ClawState_HoldingRope,
+    ClawState_Idle
+}

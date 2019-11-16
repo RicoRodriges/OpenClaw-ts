@@ -57,7 +57,6 @@ export default class ActorSceneNode extends SceneNode {
             sprite.rect.x, sprite.rect.y, sprite.rect.w, sprite.rect.h,
             renderRect.x, renderRect.y, renderRect.w, renderRect.h);
         ctx.restore();
-        // TODO: mirror
 
         // return (
         //     <rect key={renderComponent.owner.id}

@@ -40,4 +40,7 @@ export default class AnimationComponent extends ActorComponent {
         return AnimationComponent.NAME;
     }
 
+    GetCurrentAnimationName() {
+        return this.anim.name;
+    }
 }

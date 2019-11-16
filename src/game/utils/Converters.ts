@@ -19,14 +19,14 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
     const claw = new Actor();
     const positionComponent = new PositionComponent(claw, new Point(spawnX, spawnY));
     claw.components.push(positionComponent);
-    const controllableComponent = new ClawControllableComponent(claw);
-    claw.components.push(controllableComponent);
-    const physicsComponent = new PhysicsComponent(claw, true, false, true, gameProperties.player.maxJumpHeight, gameProperties.player.stayW, gameProperties.player.stayH, 4.0, 0.0, 0.5, physics, controllableComponent);
-    claw.components.push(physicsComponent);
     const animationComponent = new AnimationComponent(claw, anim);
     claw.components.push(animationComponent);
     const renderComponent = new ActorRenderComponent(claw);
     claw.components.push(renderComponent);
+    const controllableComponent = new ClawControllableComponent(claw, animationComponent, renderComponent);
+    claw.components.push(controllableComponent);
+    const physicsComponent = new PhysicsComponent(claw, true, false, true, gameProperties.player.maxJumpHeight, gameProperties.player.stayW, gameProperties.player.stayH, 4.0, 0.0, 0.5, physics, controllableComponent, true);
+    claw.components.push(physicsComponent);
 
     //pClawActor->LinkEndChild(CreateCollisionComponent(40, 100));
     //pClawActor->LinkEndChild(ActorTemplates::CreateFollowableComponent(Point(-5, -80), "/GAME/IMAGES/EXCLAMATION/*", ""));

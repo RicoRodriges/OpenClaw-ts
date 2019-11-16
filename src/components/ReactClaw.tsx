@@ -3,7 +3,7 @@ import GameApp from "../game/GameApp";
 import ResourceMgr from "../game/ResourceMgr";
 
 export default class ReactClaw extends React.Component {
-    maxFps = 24;
+    maxFps = 60;
     game = new GameApp();
     state = {dt: 1000 / this.maxFps};
 

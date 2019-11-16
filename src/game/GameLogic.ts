@@ -23,6 +23,7 @@ import ResourceMgr from "./ResourceMgr";
 import EventData_Level_Loaded from "./events/EventData_Level_Loaded";
 import TitleSceneNode from "./scene/TitleSceneNode";
 import gameProperties from "./GameProperties";
+import {Animations} from "./enums/Animations";
 
 export default class GameLogic {
     actors: Actor[] = [];
@@ -67,10 +68,14 @@ export default class GameLogic {
         let spriteDefinitions: SpriteDefinition[] = [];
         const tileDefinitions = createSpriteDefinitions(levelData.tiles, 'tile');
         spriteDefinitions = spriteDefinitions.concat(tileDefinitions);
-        const idleAnimDefinitions = createSpriteDefinitions(levelData.player.idleAnim, 'claw_idle');
+        const idleAnimDefinitions = createSpriteDefinitions(levelData.player.idleAnim, Animations.idle);
         spriteDefinitions = spriteDefinitions.concat(idleAnimDefinitions);
-        const runAnimDefinitions = createSpriteDefinitions(levelData.player.runAnim, 'claw_run');
+        const runAnimDefinitions = createSpriteDefinitions(levelData.player.runAnim, Animations.run);
         spriteDefinitions = spriteDefinitions.concat(runAnimDefinitions);
+        const jumpAnimDefinitions = createSpriteDefinitions(levelData.player.jumpAnim, Animations.jump);
+        spriteDefinitions = spriteDefinitions.concat(jumpAnimDefinitions);
+        const fallAnimDefinitions = createSpriteDefinitions(levelData.player.fallAnim, Animations.fall);
+        spriteDefinitions = spriteDefinitions.concat(fallAnimDefinitions);
 
         const resources = ResourceMgr.getInstance();
         spriteDefinitions.forEach((s) => {
@@ -78,10 +83,14 @@ export default class GameLogic {
         });
 
         // Create animations
-        const idleAnim = createAnimation(levelData.player.idleAnim, 'claw_idle');
-        resources.addAnimation('claw_idle', idleAnim);
-        const runAnim = createAnimation(levelData.player.runAnim, 'claw_run');
-        resources.addAnimation('claw_run', runAnim);
+        const idleAnim = createAnimation(levelData.player.idleAnim, Animations.idle);
+        resources.addAnimation(Animations.idle, idleAnim);
+        const runAnim = createAnimation(levelData.player.runAnim, Animations.run);
+        resources.addAnimation(Animations.run, runAnim);
+        const jumpAnim = createAnimation(levelData.player.jumpAnim, Animations.jump);
+        resources.addAnimation(Animations.jump, jumpAnim);
+        const fallAnim = createAnimation(levelData.player.fallAnim, Animations.fall);
+        resources.addAnimation(Animations.fall, fallAnim);
 
         // Create claw actor
         const claw = createClawActor(this.gamePhysics, levelData.player.spawnX, levelData.player.spawnY, idleAnim);

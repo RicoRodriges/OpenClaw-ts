@@ -244,6 +244,90 @@ export default {
                     delay: 50
                 },
             ]
+        },
+        jumpAnim: {
+            src: 'sprites/claw_jump.png',
+            w: 94,
+            h: 104,
+            srcWidth: 658,
+            srcHeight: 104,
+            map: [
+                {
+                    id: 0,
+                    x: 94 * 0,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 1,
+                    x: 94 * 1,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 2,
+                    x: 94 * 2,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 3,
+                    x: 94 * 3,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 4,
+                    x: 94 * 4,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 5,
+                    x: 94 * 5,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 6,
+                    x: 94 * 6,
+                    y: 0,
+                    delay: 50000000
+                },
+            ]
+        },
+        fallAnim: {
+            src: 'sprites/claw_fall.png',
+            w: 87,
+            h: 106,
+            srcWidth: 435,
+            srcHeight: 106,
+            map: [
+                // {
+                //     id: 0,
+                //     x: 87 * 0,
+                //     y: 0,
+                //     delay: 50
+                // },
+                {
+                    id: 1,
+                    x: 87 * 1,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 2,
+                    x: 87 * 2,
+                    y: 0,
+                    delay: 50
+                },
+                {
+                    id: 3,
+                    x: 87 * 3,
+                    y: 0,
+                    delay: 50
+                },
+            ]
         }
     },
 };
