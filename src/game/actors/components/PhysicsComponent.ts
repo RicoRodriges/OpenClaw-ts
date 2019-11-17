@@ -67,7 +67,7 @@ export default class PhysicsComponent extends ActorComponent {
 
     constructor(public owner: Actor, canClimb: boolean, canBounce: boolean, canJump: boolean, maxJumpHeight: number,
                 width: number, height: number, gravityScale: number, friction: number, density: number,
-                physics: GamePhysics, controllableComponent: ClawControllableComponent | null = null, createFootSensor = false) {
+                physics: GamePhysics, controllableComponent: ClawControllableComponent | null = null, createFootSensor = false, makeCapsule = false) {
         super(owner);
         this.canClimb = canClimb;
         this.canBounce = canBounce;
@@ -86,6 +86,7 @@ export default class PhysicsComponent extends ActorComponent {
         this.actorBodyDef.density = density;
         this.actorBodyDef.friction = friction;
         this.actorBodyDef.addFootSensor = createFootSensor;
+        this.actorBodyDef.makeCapsule = makeCapsule;
         const posComp = owner.getComponent(PositionComponent.NAME) as PositionComponent;
         this.actorBodyDef.position.x = posComp.position.x;
         this.actorBodyDef.position.y = posComp.position.y;

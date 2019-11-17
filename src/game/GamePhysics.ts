@@ -184,39 +184,69 @@ export default class GamePhysics {
         bodyDef.set_type(bDef.bodyType);
         bodyDef.set_position(new Box2D.b2Vec2(bDef.position.x / GamePhysics.METERS_TO_PIXELS, bDef.position.y / GamePhysics.METERS_TO_PIXELS));
 
-        const shape = new Box2D.b2PolygonShape();
-        //shape.SetUserData(bDef.fixtureType);
-        shape.SetAsBox(bDef.size.x / GamePhysics.METERS_TO_PIXELS / 2, bDef.size.y / GamePhysics.METERS_TO_PIXELS / 2);
-        const shapeDef = new Box2D.b2FixtureDef();
-        shapeDef.set_density(bDef.density);
-        shapeDef.set_friction(bDef.friction);
-        shapeDef.set_restitution(bDef.restitution);
-        shapeDef.set_shape(shape);
-        shapeDef.set_userData(bDef.fixtureType);
+        const body = this.world.CreateBody(bodyDef);
+        if (bDef.makeCapsule) {
+            const bodyShape = new Box2D.b2CircleShape();
+            bodyShape.set_m_p(new Box2D.b2Vec2(0, bDef.size.x / GamePhysics.METERS_TO_PIXELS / 2 - bDef.size.y / GamePhysics.METERS_TO_PIXELS / 2));
+            bodyShape.set_m_radius(bDef.size.x / 2);
 
-        let footShapeDef: any = null;
+            const fixtureDef = new Box2D.b2FixtureDef();
+            fixtureDef.set_shape(bodyShape);
+            fixtureDef.set_density(bDef.density);
+            fixtureDef.set_friction(bDef.friction);
+            fixtureDef.set_restitution(bDef.restitution);
+            fixtureDef.set_isSensor(bDef.makeSensor);
+            const filter = new Box2D.b2Filter();
+            filter.set_categoryBits(bDef.collisionFlag);
+            filter.set_maskBits(bDef.collisionMask);
+            fixtureDef.set_filter(filter);
+            body.CreateFixture(fixtureDef);
+
+            bodyShape.set_m_p(new Box2D.b2Vec2(0, bDef.size.y / GamePhysics.METERS_TO_PIXELS / 2 - bDef.size.x / GamePhysics.METERS_TO_PIXELS / 2));
+            fixtureDef.set_shape(bodyShape);
+            body.CreateFixture(fixtureDef);
+
+            const polygonShape = new Box2D.b2PolygonShape();
+            polygonShape.SetAsBox((bDef.size.x / 2 - 2) / GamePhysics.METERS_TO_PIXELS, (bDef.size.y - bDef.size.x) / GamePhysics.METERS_TO_PIXELS / 2);
+            fixtureDef.set_shape(polygonShape);
+            body.CreateFixture(fixtureDef);
+        } else {
+            const shape = new Box2D.b2PolygonShape();
+            //shape.SetUserData(bDef.fixtureType);
+            shape.SetAsBox(bDef.size.x / GamePhysics.METERS_TO_PIXELS / 2, bDef.size.y / GamePhysics.METERS_TO_PIXELS / 2);
+            const shapeDef = new Box2D.b2FixtureDef();
+            shapeDef.set_density(bDef.density);
+            shapeDef.set_friction(bDef.friction);
+            shapeDef.set_restitution(bDef.restitution);
+            shapeDef.set_isSensor(bDef.makeSensor);
+            shapeDef.set_shape(shape);
+            shapeDef.set_userData(bDef.fixtureType);
+            const filter = new Box2D.b2Filter();
+            filter.set_categoryBits(bDef.collisionFlag);
+            filter.set_maskBits(bDef.collisionMask);
+            shapeDef.set_filter(filter);
+            body.CreateFixture(shapeDef);
+        }
+
         if (bDef.addFootSensor) {
             const footShape = new Box2D.b2PolygonShape();
             //footShape.SetUserData(FixtureType.FixtureType_FootSensor);
             footShape.SetAsBox(
-                bDef.size.x / GamePhysics.METERS_TO_PIXELS / 2 - 2 / GamePhysics.METERS_TO_PIXELS,
-                1 / 2 / GamePhysics.METERS_TO_PIXELS,
-                new Box2D.b2Vec2(0, bDef.size.y / GamePhysics.METERS_TO_PIXELS),
+                (bDef.size.x / 2 - 2) / GamePhysics.METERS_TO_PIXELS,
+                24 / 2 / GamePhysics.METERS_TO_PIXELS,
+                new Box2D.b2Vec2(0, bDef.size.y / 2 / GamePhysics.METERS_TO_PIXELS),
                 0);
-            footShapeDef = new Box2D.b2FixtureDef();
+            const footShapeDef = new Box2D.b2FixtureDef();
             footShapeDef.set_userData(FixtureType.FixtureType_FootSensor);
             footShapeDef.set_shape(footShape);
             footShapeDef.set_isSensor(true);
-        }
-
-        const body = this.world.CreateBody(bodyDef);
-        body.CreateFixture(shapeDef);
-        if (footShapeDef) {
             body.CreateFixture(footShapeDef);
         }
+
         body.SetFixedRotation(true);
         if (bDef.actor) {
             this.actorBodies.set(bDef.actor, body);
+            body.SetUserData(bDef.actor);
         }
     }
 
@@ -284,7 +314,7 @@ export class ActorBodyDef {
     addFootSensor = false;
     makeCapsule = false;
     makeBullet = false;
-    makeSensor = true;
+    makeSensor = false;
     fixtureType = FixtureType.FixtureType_None;
     position = new Point(0, 0);
     positionOffset = new Point(0, 0);
@@ -294,8 +324,8 @@ export class ActorBodyDef {
     setInitialSpeed = false;
     setInitialImpulse = false;
     initialSpeed = new Point(0, 0);
-    collisionFlag = CollisionFlag.CollisionFlag_None;
-    collisionMask = 0;
+    collisionFlag = CollisionFlag.CollisionFlag_All;
+    collisionMask = 0xFFFF;
     friction = 1.0;
     density = 1.0;
     restitution = 0.0;

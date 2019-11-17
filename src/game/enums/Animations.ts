@@ -7,4 +7,7 @@ export enum Animations {
     damage2 = 'claw_damage2',
     swordAttack = 'claw_swordAttack',
     swordAttackJump = 'claw_swordAttackJump',
+    idleOfficer = 'officer_idle',
+    runOfficer = 'officer_run',
+    swordAttackOfficer = 'officer_swordAttack',
 }

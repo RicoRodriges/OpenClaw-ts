@@ -10,6 +10,8 @@ import {Animations} from "../../enums/Animations";
 import Frame from "../../graphics/Frame";
 import Animation from "../../graphics/Animation";
 import PhysicsComponent from "./PhysicsComponent";
+import PositionComponent from "./PositionComponent";
+import Point from "../../utils/Point";
 
 export default class ClawControllableComponent extends ActorComponent implements AnimationObserver {
     public static NAME = 'ClawControllableComponent';
@@ -170,46 +172,32 @@ export default class ClawControllableComponent extends ActorComponent implements
                 // animName == "kick" ||
                 // animName == "uppercut" ||
                 animation.name === Animations.swordAttackJump)) {
-                // Todo: attack logic
-                // if (pAnimation->GetCurrentAnimationFrame()->hasEvent ||
-                // (animName == "swipe" && pNewFrame->idx == 3))
-                //     {
-                //         Point position = m_pPositionComponent->GetPosition();
-                //         Point positionOffset(60, 20);
-                //         if (animName == "jumpswipe")
-                //         {
-                //             positionOffset.y -= 10;
-                //             positionOffset.x += 5;
-                //         }
-                //         if (m_Direction == Direction_Left)
-                //         {
-                //             positionOffset = Point(-1.0 * positionOffset.x, positionOffset.y);
-                //         }
-                //         position += positionOffset;
-                //
-                //
-                //             int damage = 10;
-                //
-                //             // When Claw is ducking he deals 1/2 damage
-                //             if (IsDucking())
-                //             {
-                //                 damage = 5;
-                //             }
-                //             if (m_pPowerupComponent->HasPowerup(PowerupType_Catnip))
-                //             {
-                //                 damage = 100;
-                //             }
-                //
-                //             ActorTemplates::CreateAreaDamage(
-                //             position,
-                //             Point(50, 25),
-                //             damage,
-                //             CollisionFlag_ClawAttack,
-                //             "Rectangle",
-                //             DamageType_MeleeAttack,
-                //             m_Direction,
-                //             m_pOwner->GetGUID());
-                //     }
+                const positionComponent = this.owner.getComponent(PositionComponent.NAME) as PositionComponent;
+                if (positionComponent && (animation.name === Animations.swordAttack && animation.frames[2] === currentFrame ||
+                    animation.name === Animations.swordAttackJump && animation.frames[2] === currentFrame)) {
+                    let positionOffset = new Point(60, 20);
+                    if (animation.name === Animations.swordAttackJump) {
+                        positionOffset.y -= 10;
+                        positionOffset.x += 5;
+                    }
+                    if (this.direction === Direction.Direction_Left) {
+                        positionOffset = new Point(-1.0 * positionOffset.x, positionOffset.y);
+                    }
+                    const position = new Point(positionComponent.position.x + positionOffset.x, positionComponent.position.y + positionOffset.y);
+
+
+                    const damage = 10;
+                    // TODO: attack
+                    // ActorTemplates::CreateAreaDamage(
+                    // position,
+                    // Point(50, 25),
+                    // damage,
+                    // CollisionFlag_ClawAttack,
+                    // "Rectangle",
+                    // DamageType_MeleeAttack,
+                    // m_Direction,
+                    // m_pOwner->GetGUID());
+                }
             }
         }
     }

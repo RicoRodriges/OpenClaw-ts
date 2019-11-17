@@ -5,7 +5,7 @@ import EventMgr from "./events/EventMgr";
 import {
     createAnimation,
     createClawActor,
-    createCollisionObjectsAndScene,
+    createCollisionObjectsAndScene, createOfficerActor,
     createSpriteDefinitions
 } from "./utils/Converters";
 import ActorController from "./ActorController";
@@ -26,6 +26,7 @@ import gameProperties from "./GameProperties";
 import {Animations} from "./enums/Animations";
 import EventData_Actor_Attack from "./events/EventData_Actor_Attack";
 import ClawControllableComponent from "./actors/components/ClawControllableComponent";
+import PositionComponent from "./actors/components/PositionComponent";
 
 export default class GameLogic {
     actors: Actor[] = [];
@@ -83,6 +84,12 @@ export default class GameLogic {
         spriteDefinitions = spriteDefinitions.concat(swordAttackAnimDefinitions);
         const swordAttackJumpAnimDefinitions = createSpriteDefinitions(levelData.player.swordAttackJumpAnim, Animations.swordAttackJump);
         spriteDefinitions = spriteDefinitions.concat(swordAttackJumpAnimDefinitions);
+        const idleOfficerAnimDefinitions = createSpriteDefinitions(levelData.officer.idleAnim, Animations.idleOfficer);
+        spriteDefinitions = spriteDefinitions.concat(idleOfficerAnimDefinitions);
+        const runOfficerAnimDefinitions = createSpriteDefinitions(levelData.officer.runAnim, Animations.runOfficer);
+        spriteDefinitions = spriteDefinitions.concat(runOfficerAnimDefinitions);
+        const swordAttackOfficerAnimDefinitions = createSpriteDefinitions(levelData.officer.swordAttackAnim, Animations.swordAttackOfficer);
+        spriteDefinitions = spriteDefinitions.concat(swordAttackOfficerAnimDefinitions);
 
         const resources = ResourceMgr.getInstance();
         spriteDefinitions.forEach((s) => {
@@ -102,15 +109,38 @@ export default class GameLogic {
         resources.addAnimation(Animations.swordAttack, swordAttackAnim);
         const swordAttackJumpAnim = createAnimation(levelData.player.swordAttackJumpAnim, Animations.swordAttackJump);
         resources.addAnimation(Animations.swordAttackJump, swordAttackJumpAnim);
+        const idleOfficerAnim = createAnimation(levelData.officer.idleAnim, Animations.idleOfficer);
+        resources.addAnimation(Animations.idleOfficer, idleOfficerAnim);
+        const runOfficerAnim = createAnimation(levelData.officer.runAnim, Animations.runOfficer);
+        resources.addAnimation(Animations.runOfficer, runOfficerAnim);
+        const swordAttackOfficerAnim = createAnimation(levelData.officer.swordAttackAnim, Animations.swordAttackOfficer);
+        resources.addAnimation(Animations.swordAttackOfficer, swordAttackOfficerAnim);
 
         // Create claw actor
         const claw = createClawActor(this.gamePhysics, levelData.player.spawnX, levelData.player.spawnY, idleAnim);
         this.actors.push(claw);
 
-        // Create claw scene node
-        const renderComponent = claw.getComponent(ActorRenderComponent.NAME) as ActorRenderComponent;
-        const actorSceneNode = new ActorSceneNode(claw, levelData.player.spawnX, levelData.player.spawnY,
-            gameProperties.player.stayW, gameProperties.player.stayH, renderComponent);
+        // Create enemy actors
+        levelData.officerInstances.forEach((o) => {
+            const officerActor = createOfficerActor(this.gamePhysics as GamePhysics, o.spawnX, o.spawnY, idleOfficerAnim, runOfficerAnim,
+                levelData.officer.speed, o.borderLeft, o.borderRight);
+            this.actors.push(officerActor);
+        });
+
+        // Create scene nodes for every actors
+        const actorSceneNodes: ActorSceneNode[] = [];
+        const actorNodes = new Map<Actor, SceneNode>();
+        this.actors.forEach((a) => {
+            const renderComponent = a.getComponent(ActorRenderComponent.NAME) as ActorRenderComponent;
+            const positionComponent = a.getComponent(PositionComponent.NAME) as PositionComponent;
+            if (renderComponent && positionComponent) {
+                const actorSceneNode = new ActorSceneNode(a, positionComponent.position.x, positionComponent.position.y,
+                    // TODO: remove this hack
+                    gameProperties.player.stayW, gameProperties.player.stayH, renderComponent);
+                actorSceneNodes.push(actorSceneNode);
+                actorNodes.set(a, actorSceneNode);
+            }
+        });
 
         // Create tile physics objects and scene node
         const tilesSceneNode = createCollisionObjectsAndScene(this.gamePhysics, levelData.tiles, levelData.map);
@@ -118,10 +148,7 @@ export default class GameLogic {
         // Add all scene nodes to root
         const rootNode = new SceneNode();
         rootNode.childrenList.push(tilesSceneNode);
-        rootNode.childrenList.push(actorSceneNode);
-
-        const actorNodes = new Map<Actor, SceneNode>();
-        actorNodes.set(claw, actorSceneNode);
+        rootNode.childrenList.push(...actorSceneNodes);
 
         // Create loading screen scene node
         const titleSceneNode = new TitleSceneNode('Loading...', 30, 200);
@@ -131,7 +158,7 @@ export default class GameLogic {
         const loadingScreenElementScene = new ScreenElementScene(titleSceneNode, null, new Map<Actor, SceneNode>());
 
         const screenElementScene = new ScreenElementScene(rootNode, new CameraNode(0, 0, w, h, claw), actorNodes);
-        this.gameView = new GameView([loadingScreenElementScene], [screenElementScene], new ActorController(actorSceneNode));
+        this.gameView = new GameView([loadingScreenElementScene], [screenElementScene], new ActorController(actorNodes.get(claw) as ActorSceneNode));
     }
 
     onLevelLoadedDelegate(e: IEventData) {

@@ -55,7 +55,9 @@ export default class ActorSceneNode extends SceneNode {
         ctx.scale(scaleX, scaleY);
         ctx.drawImage(sprite.img,
             sprite.rect.x, sprite.rect.y, sprite.rect.w, sprite.rect.h,
-            renderRect.x, renderRect.y, renderRect.w, renderRect.h);
+            // TODO: improve offsets and mirror animations
+            //scaleX < 0 ? (cameraRect.w - renderRect.x - this.properties.size.x / 2) : renderRect.x, renderRect.y, renderRect.w, renderRect.h);
+            scaleX < 0 ? (cameraRect.w - renderRect.x - renderRect.w) : renderRect.x, renderRect.y, renderRect.w, renderRect.h);
         ctx.restore();
 
         // return (

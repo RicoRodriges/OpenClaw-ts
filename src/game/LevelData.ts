@@ -116,6 +116,222 @@ export default {
         [6   , 6   , 6   , 6   , 6   , 10  , 2   , 2   , 2   , 2   , 2   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6],
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6],
     ],
+    officerInstances: [
+        {
+            spawnX: 9*64,
+            spawnY: 2*64,
+            borderLeft: 6*64 + 20,
+            borderRight: 11*64 - 20,
+        }
+    ],
+    officer: {
+        speed: 1.3,
+        runAnim: {
+            src: 'sprites/officer_run.png',
+            w: 101,
+            h: 126,
+            srcWidth: 808,
+            srcHeight: 126,
+            map: [
+                {
+                    id: 0,
+                    x: 101 * 0,
+                    y: 0,
+                    delay: 100
+                },
+                {
+                    id: 1,
+                    x: 101 * 1,
+                    y: 0,
+                    delay: 100
+                },
+                {
+                    id: 2,
+                    x: 101 * 2,
+                    y: 0,
+                    delay: 100
+                },
+                {
+                    id: 3,
+                    x: 101 * 3,
+                    y: 0,
+                    delay: 100
+                },
+                {
+                    id: 4,
+                    x: 101 * 4,
+                    y: 0,
+                    delay: 100
+                },
+                {
+                    id: 5,
+                    x: 101 * 5,
+                    y: 0,
+                    delay: 100
+                },
+                {
+                    id: 6,
+                    x: 101 * 6,
+                    y: 0,
+                    delay: 100
+                },
+                {
+                    id: 7,
+                    x: 101 * 7,
+                    y: 0,
+                    delay: 100
+                },
+            ]
+        },
+        idleAnim: {
+            src: 'sprites/officer_idle.png',
+            w: 64,
+            h: 128,
+            srcWidth: 320,
+            srcHeight: 128,
+            map: [
+                {
+                    id: 0,
+                    x: 64 * 0,
+                    y: 0,
+                    delay: 2000
+                },
+                {
+                    id: 1,
+                    x: 64 * 1,
+                    y: 0,
+                    delay: 1000
+                },
+                {
+                    id: 2,
+                    x: 64 * 2,
+                    y: 0,
+                    delay: 3000
+                },
+                {
+                    id: 3,
+                    x: 64 * 3,
+                    y: 0,
+                    delay: 1000
+                },
+                {
+                    id: 4,
+                    x: 64 * 4,
+                    y: 0,
+                    delay: 2000
+                },
+                {
+                    id: 5,
+                    x: 64 * 3,
+                    y: 0,
+                    delay: 1000
+                },
+                {
+                    id: 6,
+                    x: 64 * 2,
+                    y: 0,
+                    delay: 3000
+                },
+            ]
+        },
+        swordAttackAnim: {
+            src: 'sprites/officer.png',
+            srcWidth: 320,
+            srcHeight: 128,
+            map: [
+                {
+                    id: 0,
+                    x: 46,
+                    y: 267,
+                    cx: 35,
+                    cy: 65,
+                    w: 79,
+                    h: 123,
+                    delay: 500,
+                },
+                {
+                    id: 1,
+                    x: 210,
+                    y: 268,
+                    cx: 36,
+                    cy: 64,
+                    w: 82,
+                    h: 122,
+                    delay: 80,
+                },
+                {
+                    id: 2,
+                    x: 369,
+                    y: 275,
+                    cx: 53,
+                    cy: 60,
+                    w: 90,
+                    h: 115,
+                    delay: 80,
+                },
+                {
+                    id: 3,
+                    x: 521,
+                    y: 282,
+                    cx: 84,
+                    cy: 52,
+                    w: 112,
+                    h: 108,
+                    delay: 80,
+                },
+                {
+                    id: 4,
+                    x: 661,
+                    y: 287,
+                    cx: 135,
+                    cy: 48,
+                    w: 163,
+                    h: 103,
+                    delay: 80,
+                },
+                {
+                    id: 5,
+                    x: 521,
+                    y: 282,
+                    cx: 84,
+                    cy: 52,
+                    w: 112,
+                    h: 108,
+                    delay: 80,
+                },
+                {
+                    id: 6,
+                    x: 369,
+                    y: 275,
+                    cx: 53,
+                    cy: 60,
+                    w: 90,
+                    h: 115,
+                    delay: 80,
+                },
+                {
+                    id: 7,
+                    x: 210,
+                    y: 268,
+                    cx: 36,
+                    cy: 64,
+                    w: 82,
+                    h: 122,
+                    delay: 80,
+                },
+                {
+                    id: 8,
+                    x: 46,
+                    y: 267,
+                    cx: 35,
+                    cy: 65,
+                    w: 79,
+                    h: 123,
+                    delay: 80,
+                },
+            ]
+        }
+    },
     player: {
         spawnX: 64 * 3,
         spawnY: 80,
@@ -426,8 +642,8 @@ export interface Tiles {
     src: string;
     srcWidth: number;
     srcHeight: number;
-    w: number;
-    h: number;
+    w?: number;
+    h?: number;
     map: Tile[];
 }
 
@@ -435,6 +651,10 @@ export interface Tile {
     id: number;
     x: number;
     y: number;
+    cx?: number;
+    cy?: number;
+    w?: number;
+    h?: number;
 }
 
 export interface AnimationTiles extends Tiles {

@@ -14,6 +14,7 @@ import Image from "../graphics/Image";
 import TilesSceneNode from "../scene/TilesSceneNode";
 import gameProperties from "../GameProperties";
 import ClawControllableComponent from "../actors/components/ClawControllableComponent";
+import PatrolEnemyAIStateComponent from "../actors/components/enemy/PatrolEnemyAIStateComponent";
 
 export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, anim: Animation): Actor {
     const claw = new Actor();
@@ -26,7 +27,7 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
     const controllableComponent = new ClawControllableComponent(claw, animationComponent, renderComponent);
     animationComponent.animationObservers.push(controllableComponent);
     claw.components.push(controllableComponent);
-    const physicsComponent = new PhysicsComponent(claw, true, false, true, gameProperties.player.maxJumpHeight, gameProperties.player.stayW, gameProperties.player.stayH, 4.0, 0.0, 0.5, physics, controllableComponent, true);
+    const physicsComponent = new PhysicsComponent(claw, true, false, true, gameProperties.player.maxJumpHeight, gameProperties.player.stayW, gameProperties.player.stayH, 4.0, 0.0, 0.5, physics, controllableComponent, true, false);
     claw.components.push(physicsComponent);
 
     //pClawActor->LinkEndChild(CreateCollisionComponent(40, 100));
@@ -57,13 +58,30 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
     return claw;
 }
 
+export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY: number, idle: Animation, run: Animation,
+                                   speed: number, leftBorder: number, rightBorder: number) {
+    const officer = new Actor();
+    const positionComponent = new PositionComponent(officer, new Point(spawnX, spawnY));
+    officer.components.push(positionComponent);
+    const animationComponent = new AnimationComponent(officer, run);
+    officer.components.push(animationComponent);
+    const renderComponent = new ActorRenderComponent(officer);
+    officer.components.push(renderComponent);
+    const physicsComponent = new PhysicsComponent(officer, false, false, false, 0, gameProperties.player.stayW, gameProperties.player.stayH, 0, 0.0, 0.5, physics, null, false);
+    officer.components.push(physicsComponent);
+    const patrolComponent = new PatrolEnemyAIStateComponent(officer, physics, positionComponent, animationComponent, renderComponent, speed, leftBorder, rightBorder, idle, run);
+    animationComponent.animationObservers.push(patrolComponent);
+    officer.components.push(patrolComponent);
+    return officer;
+}
+
 export function createSpriteDefinitions(tiles: Tiles, spriteNamePrefix: string): SpriteDefinition[] {
-    const w = tiles.w;
-    const h = tiles.h;
     const src = tiles.src;
     const srcWidth = tiles.srcWidth;
     const srcHeight = tiles.srcHeight;
     return tiles.map.map((t) => {
+        const w = tiles.w !== undefined ? tiles.w : t.w !== undefined ? t.w : 0;
+        const h = tiles.h !== undefined ? tiles.h : t.h !== undefined ? t.h : 0;
         return {
             id: `${spriteNamePrefix}${t.id}`,
             rect: new Rect(t.x, t.y, w, h),
@@ -75,16 +93,18 @@ export function createSpriteDefinitions(tiles: Tiles, spriteNamePrefix: string):
 }
 
 export function createAnimation(tiles: AnimationTiles, animationName: string): Animation {
-    const w = tiles.w;
-    const h = tiles.h;
-    const frames = tiles.map.map((t) =>
-        new Frame(new Image(0, 0, w, h, `${animationName}${t.id}`), t.delay)
-    );
+    const frames = tiles.map.map((t) => {
+        const w = tiles.w !== undefined ? tiles.w : t.w !== undefined ? t.w : 0;
+        const h = tiles.h !== undefined ? tiles.h : t.h !== undefined ? t.h : 0;
+        const offsetX = t.cx !== undefined ? (w / 2 - t.cx) : 0;
+        const offsetY = t.cy !== undefined ? (h / 2 - t.cy) : 0;
+        return new Frame(new Image(offsetX, offsetY, w, h, `${animationName}${t.id}`), t.delay);
+    });
     return new Animation(animationName, frames);
 }
 
 export function createCollisionObjectsAndScene(physics: GamePhysics, tiles: CollisionTiles,
-                                       mapElement: (number | null)[][] | (number | null)[][][]): TilesSceneNode {
+                                               mapElement: (number | null)[][] | (number | null)[][][]): TilesSceneNode {
     const tilesMap: TileId[][][] = [];
     for (let y = 0; y < mapElement.length; ++y) {
         if (mapElement[y]) {
@@ -108,7 +128,7 @@ export function createCollisionObjectsAndScene(physics: GamePhysics, tiles: Coll
             }
         }
     }
-    const tileRenderComponent = new TileRenderComponent(new Actor(), tiles.w, tiles.h, tilesMap);
+    const tileRenderComponent = new TileRenderComponent(new Actor(), tiles.w || 0, tiles.h || 0, tilesMap);
     return new TilesSceneNode(tileRenderComponent);
 }
 
@@ -128,10 +148,10 @@ function setElement(val: number, y: number, x: number, arr: TileId[][][]) {
 }
 
 function createPhysicsObjectFromTile(tileId: number, y: number, x: number, tiles: CollisionTiles, physics: GamePhysics) {
-    const tileWidth = tiles.w;
-    const tileHeight = tiles.h;
     const tile = tiles.map.find((t) => t.id === tileId);
     if (tile && tile.collisions && tile.collisions.length > 0) {
+        const tileWidth = tiles.w || tile.w || 0;
+        const tileHeight = tiles.h || tile.h || 0;
         tile.collisions.forEach((c) => {
             const worldX = x * tileWidth + c.x;
             const worldY = y * tileHeight + c.y;
