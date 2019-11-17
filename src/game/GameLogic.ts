@@ -30,6 +30,7 @@ import EventData_Actor_Attack from "./events/EventData_Actor_Attack";
 import ClawControllableComponent from "./actors/components/ClawControllableComponent";
 import PositionComponent from "./actors/components/PositionComponent";
 import AudioMgr from "./audio/AudioMgr";
+import {Sounds} from "./enums/Sounds";
 
 export default class GameLogic {
     actors: Actor[] = [];
@@ -130,8 +131,9 @@ export default class GameLogic {
 
         // Create enemy actors
         levelData.officerInstances.forEach((o) => {
+            // TODO: agro sounds
             const officerActor = createOfficerActor(this.gamePhysics as GamePhysics, o.spawnX, o.spawnY, idleOfficerAnim, runOfficerAnim,
-                levelData.officer.speed, o.borderLeft, o.borderRight);
+                swordAttackOfficerAnim, levelData.officer.speed, o.borderLeft, o.borderRight, Sounds.officer_swordAttack);
             this.actors.push(officerActor);
         });
 

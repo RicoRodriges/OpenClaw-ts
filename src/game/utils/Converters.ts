@@ -16,6 +16,10 @@ import gameProperties from "../GameProperties";
 import ClawControllableComponent from "../actors/components/ClawControllableComponent";
 import PatrolEnemyAIStateComponent from "../actors/components/enemy/PatrolEnemyAIStateComponent";
 import ResourceMgr from "../ResourceMgr";
+import EnemyAIComponent from "../actors/components/enemy/EnemyAIComponent";
+import AttackAIStateComponent from "../actors/components/enemy/AttackAIStateComponent";
+import {Sounds} from "../enums/Sounds";
+import {FixtureType} from "../enums/FixtureType";
 
 export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, anim: Animation): Actor {
     const claw = new Actor();
@@ -26,9 +30,8 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
     const renderComponent = new ActorRenderComponent(claw);
     claw.components.push(renderComponent);
     const controllableComponent = new ClawControllableComponent(claw, animationComponent, renderComponent);
-    animationComponent.animationObservers.push(controllableComponent);
     claw.components.push(controllableComponent);
-    const physicsComponent = new PhysicsComponent(claw, true, false, true, gameProperties.player.maxJumpHeight, gameProperties.player.stayW, gameProperties.player.stayH, 4.0, 0.0, 0.5, physics, controllableComponent, true, false);
+    const physicsComponent = new PhysicsComponent(claw, true, false, true, gameProperties.player.maxJumpHeight, gameProperties.player.stayW, gameProperties.player.stayH, 4.0, 0.0, 0.5, physics, FixtureType.FixtureType_Controller, controllableComponent, true, false);
     claw.components.push(physicsComponent);
 
     //pClawActor->LinkEndChild(CreateCollisionComponent(40, 100));
@@ -60,7 +63,8 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
 }
 
 export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY: number, idle: Animation, run: Animation,
-                                   speed: number, leftBorder: number, rightBorder: number) {
+                                   attack: Animation, speed: number, leftBorder: number, rightBorder: number,
+                                   attackSound: Sounds, agroSounds: Sounds[] = []) {
     const officer = new Actor();
     const positionComponent = new PositionComponent(officer, new Point(spawnX, spawnY));
     officer.components.push(positionComponent);
@@ -68,11 +72,16 @@ export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY:
     officer.components.push(animationComponent);
     const renderComponent = new ActorRenderComponent(officer);
     officer.components.push(renderComponent);
-    const physicsComponent = new PhysicsComponent(officer, false, false, false, 0, gameProperties.player.stayW, gameProperties.player.stayH, 0, 0.0, 0.5, physics, null, false, true);
+    const physicsComponent = new PhysicsComponent(officer, false, false, false, 0, gameProperties.player.stayW, gameProperties.player.stayH, 0, 0.0, 0.5, physics, FixtureType.FixtureType_None, null, false, true);
     officer.components.push(physicsComponent);
-    const patrolComponent = new PatrolEnemyAIStateComponent(officer, physics, positionComponent, animationComponent, renderComponent, speed, leftBorder, rightBorder, idle, run);
-    animationComponent.animationObservers.push(patrolComponent);
+    const enemyAIComponent = new EnemyAIComponent(officer);
+    officer.components.push(enemyAIComponent);
+    const patrolComponent = new PatrolEnemyAIStateComponent(officer, physics, positionComponent, animationComponent, renderComponent, enemyAIComponent, speed, leftBorder, rightBorder, idle, run);
     officer.components.push(patrolComponent);
+    const attackAIStateComponent = new AttackAIStateComponent(officer, attack, 3, positionComponent, animationComponent, renderComponent, enemyAIComponent, physics, agroSounds, attackSound, 90);
+    officer.components.push(attackAIStateComponent);
+
+    enemyAIComponent.EnterBestState(true);
     return officer;
 }
 

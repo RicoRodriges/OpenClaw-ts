@@ -641,6 +641,10 @@ export default {
         {
             name: Sounds.claw_swordAttack,
             src: 'sounds/claw_swordAttack.mp3'
+        },
+        {
+            name: Sounds.officer_swordAttack,
+            src: 'sounds/officer_swordAttack.mp3'
         }
     ]
 };

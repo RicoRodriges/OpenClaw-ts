@@ -6,6 +6,7 @@ import GamePhysics, {ActorBodyDef} from "../../GamePhysics";
 import PositionComponent from "./PositionComponent";
 import gameProperties from "../../GameProperties";
 import ClawControllableComponent from "./ClawControllableComponent";
+import {FixtureType} from "../../enums/FixtureType";
 
 export default class PhysicsComponent extends ActorComponent {
     static NAME = 'PhysicsComponent';
@@ -67,7 +68,7 @@ export default class PhysicsComponent extends ActorComponent {
 
     constructor(public owner: Actor, canClimb: boolean, canBounce: boolean, canJump: boolean, maxJumpHeight: number,
                 width: number, height: number, gravityScale: number, friction: number, density: number,
-                physics: GamePhysics, controllableComponent: ClawControllableComponent | null = null, createFootSensor = false, makeCapsule = false) {
+                physics: GamePhysics, fixtureType: FixtureType, controllableComponent: ClawControllableComponent | null = null, createFootSensor = false, makeCapsule = false) {
         super(owner);
         this.canClimb = canClimb;
         this.canBounce = canBounce;
@@ -91,6 +92,7 @@ export default class PhysicsComponent extends ActorComponent {
         this.actorBodyDef.position.x = posComp.position.x;
         this.actorBodyDef.position.y = posComp.position.y;
         this.actorBodyDef.actor = owner;
+        this.actorBodyDef.fixtureType = fixtureType;
         physics.VAddActorBody(this.actorBodyDef);
         this.controllableComponent = controllableComponent;
     }

@@ -9,8 +9,11 @@ import AnimationComponent, {AnimationObserver} from "../AnimationComponent";
 import Animation from "../../../graphics/Animation";
 import {ActorRenderComponent} from "../RenderComponent";
 import Frame from "../../../graphics/Frame";
+import EnemyAIComponent from "./EnemyAIComponent";
 
 export default class PatrolEnemyAIStateComponent extends EnemyAIStateComponent implements AnimationObserver {
+    public static NAME = 'PatrolEnemyAIStateComponent';
+
     direction = Direction.Direction_Left;
     isWalking = true;
     physics: GamePhysics;
@@ -24,9 +27,9 @@ export default class PatrolEnemyAIStateComponent extends EnemyAIStateComponent i
     run: Animation;
 
     constructor(owner: Actor, physics: GamePhysics, positionComponent: PositionComponent, animationComponent: AnimationComponent,
-                renderComponent: ActorRenderComponent, speed: number,
+                renderComponent: ActorRenderComponent, enemyAIComponent: EnemyAIComponent, speed: number,
                 leftBorder: number, rightBorder: number, idle: Animation, run: Animation) {
-        super(owner);
+        super(owner, false, 0);
         this.physics = physics;
         this.positionComponent = positionComponent;
         this.animationComponent = animationComponent;
@@ -36,6 +39,8 @@ export default class PatrolEnemyAIStateComponent extends EnemyAIStateComponent i
         this.idle = idle;
         this.run = run;
         this.speed = Math.abs(speed);
+        animationComponent.animationObservers.push(this);
+        enemyAIComponent.states.push(this);
     }
 
     VUpdate(diff: number) {
@@ -115,5 +120,9 @@ export default class PatrolEnemyAIStateComponent extends EnemyAIStateComponent i
         if (!this.isWalking) {
             this.ChangeDirection(this.ToOppositeDirection(this.direction));
         }
+    }
+
+    getName() {
+        return PatrolEnemyAIStateComponent.NAME;
     }
 }

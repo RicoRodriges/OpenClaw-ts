@@ -29,6 +29,7 @@ export default class ClawControllableComponent extends ActorComponent implements
         super(owner);
         this.animationComponent = animationComponent;
         this.renderComponent = renderComponent;
+        animationComponent.animationObservers.push(this);
     }
 
     VUpdate(diff: number) {

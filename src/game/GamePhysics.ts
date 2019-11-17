@@ -8,6 +8,7 @@ import {FixtureType} from "./enums/FixtureType";
 import Point from "./utils/Point";
 import {CollisionFlag} from "./enums/CollisionFlag";
 import PhysicsComponent from "./actors/components/PhysicsComponent";
+import AttackAIStateComponent from "./actors/components/enemy/AttackAIStateComponent";
 
 export default class GamePhysics {
     public static METERS_TO_PIXELS = 75.0;
@@ -50,12 +51,33 @@ export default class GamePhysics {
                     }
                 }
             }
+            // Enemy agro area
+            {
+                if (pFixtureB.GetUserData() === FixtureType.FixtureType_EnemyAIMeleeSensor) {
+                    const t = pFixtureA;
+                    pFixtureA = pFixtureB;
+                    pFixtureB = t;
+                }
+
+                if (pFixtureA.GetUserData() === FixtureType.FixtureType_EnemyAIMeleeSensor &&
+                    pFixtureB.GetUserData() === FixtureType.FixtureType_Controller) {
+                    const enemy = this.GetActorFromB2Body(pFixtureA.GetBody());
+                    const claw = this.GetActorFromB2Body(pFixtureB.GetBody());
+                    if (enemy && claw) {
+                        const attackAIStateComponent = enemy.getComponent(AttackAIStateComponent.NAME) as AttackAIStateComponent;
+                        if (attackAIStateComponent) {
+                            attackAIStateComponent.OnEnemyEnterAgroRange(claw);
+                        }
+                    }
+                }
+            }
         };
         this.contactListener.EndContact = (contactPtr: any) => {
             const contact = Box2D.wrapPointer(contactPtr, Box2D.b2Contact);
             let pFixtureA = contact.GetFixtureA();
             let pFixtureB = contact.GetFixtureB();
 
+            // Foot contact
             {
                 // Make it in predictable order
                 if (pFixtureB.GetUserData() === FixtureType.FixtureType_FootSensor) {
@@ -70,6 +92,26 @@ export default class GamePhysics {
                         const pPhysicsComponent = this.GetPhysicsComponentFromB2Body(pFixtureA.GetBody());
                         if (pPhysicsComponent) {
                             pPhysicsComponent.OnEndFootContact();
+                        }
+                    }
+                }
+            }
+            // Enemy agro area
+            {
+                if (pFixtureB.GetUserData() === FixtureType.FixtureType_EnemyAIMeleeSensor) {
+                    const t = pFixtureA;
+                    pFixtureA = pFixtureB;
+                    pFixtureB = t;
+                }
+
+                if (pFixtureA.GetUserData() === FixtureType.FixtureType_EnemyAIMeleeSensor &&
+                    pFixtureB.GetUserData() === FixtureType.FixtureType_Controller) {
+                    const enemy = this.GetActorFromB2Body(pFixtureA.GetBody());
+                    const claw = this.GetActorFromB2Body(pFixtureB.GetBody());
+                    if (enemy && claw) {
+                        const attackAIStateComponent = enemy.getComponent(AttackAIStateComponent.NAME) as AttackAIStateComponent;
+                        if (attackAIStateComponent) {
+                            attackAIStateComponent.OnEnemyLeftAgroRange(claw);
                         }
                     }
                 }
@@ -317,16 +359,21 @@ export default class GamePhysics {
     }
 
     private GetPhysicsComponentFromB2Body(body: any) {
+        const actor = this.GetActorFromB2Body(body);
+        if (actor) {
+            return actor.getComponent(PhysicsComponent.NAME) as PhysicsComponent;
+        }
+        return null;
+    }
+
+    private GetActorFromB2Body(body: any) {
         let actor: Actor | undefined;
         this.actorBodies.forEach((b, a) => {
             if (b === body) {
                 actor = a;
             }
         });
-        if (actor) {
-            return actor.getComponent(PhysicsComponent.NAME) as PhysicsComponent;
-        }
-        return null;
+        return actor;
     }
 }
 
@@ -369,6 +416,6 @@ export class ActorFixtureDef {
     density = 0;
     restitution = 0;
 
-    collisionFlag = CollisionFlag.CollisionFlag_None;
-    collisionMask = 0x0;
+    collisionFlag = CollisionFlag.CollisionFlag_All;
+    collisionMask = 0xFFFF;
 }
