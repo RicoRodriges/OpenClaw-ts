@@ -5,8 +5,10 @@ import EventMgr from "./events/EventMgr";
 import {
     createAnimation,
     createClawActor,
-    createCollisionObjectsAndScene, createOfficerActor,
-    createSpriteDefinitions
+    createCollisionObjectsAndScene,
+    createOfficerActor,
+    createSpriteDefinitions,
+    loadAllSounds
 } from "./utils/Converters";
 import ActorController from "./ActorController";
 import ScreenElementScene from "./user-interface/ScreenElementScene";
@@ -27,6 +29,7 @@ import {Animations} from "./enums/Animations";
 import EventData_Actor_Attack from "./events/EventData_Actor_Attack";
 import ClawControllableComponent from "./actors/components/ClawControllableComponent";
 import PositionComponent from "./actors/components/PositionComponent";
+import AudioMgr from "./audio/AudioMgr";
 
 export default class GameLogic {
     actors: Actor[] = [];
@@ -115,6 +118,11 @@ export default class GameLogic {
         resources.addAnimation(Animations.runOfficer, runOfficerAnim);
         const swordAttackOfficerAnim = createAnimation(levelData.officer.swordAttackAnim, Animations.swordAttackOfficer);
         resources.addAnimation(Animations.swordAttackOfficer, swordAttackOfficerAnim);
+
+        // Load sounds
+        loadAllSounds(levelData.sounds);
+        // TODO: hack for lazy init
+        AudioMgr.getInstance();
 
         // Create claw actor
         const claw = createClawActor(this.gamePhysics, levelData.player.spawnX, levelData.player.spawnY, idleAnim);

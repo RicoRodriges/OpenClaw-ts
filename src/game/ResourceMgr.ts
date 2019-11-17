@@ -11,7 +11,9 @@ export default class ResourceMgr {
     private images = new Map<string, CanvasImageSource>();
     private sprites = new Map<string, SpriteInfo>();
     private animations = new Map<string, Animation>();
-    private loadingResources = new Map<string, Promise<CanvasImageSource>>();
+    private sounds = new Map<string, HTMLAudioElement>();
+    private loadingGraphics = new Map<string, Promise<CanvasImageSource>>();
+    private loadingSounds = new Map<string, Promise<HTMLAudioElement>>();
 
     static getInstance() {
         return ResourceMgr.self;
@@ -35,8 +37,12 @@ export default class ResourceMgr {
         return this.animations.get(name);
     }
 
+    getSound(name: string) {
+        return this.sounds.get(name);
+    }
+
     loadImage(name: string, src: string) {
-        if (!this.loadingResources.has(name) && !this.images.has(name)) {
+        if (!this.loadingGraphics.has(name) && !this.images.has(name)) {
             const promise = new Promise<CanvasImageSource>((r) => {
                 const img = new Image();
                 img.onload = () => {
@@ -44,10 +50,10 @@ export default class ResourceMgr {
                 };
                 img.src = src;
             });
-            this.loadingResources.set(name, promise);
+            this.loadingGraphics.set(name, promise);
             promise.then((img) => {
                 this.images.set(name, img);
-                this.loadingResources.delete(name);
+                this.loadingGraphics.delete(name);
             });
         }
     }
@@ -57,12 +63,29 @@ export default class ResourceMgr {
         this.sprites.set(spriteName, new SpriteInfo(imageName, x, y, width, height));
     }
 
+    loadSound(soundName: string, src: string) {
+        if (!this.loadingSounds.has(soundName) && !this.sounds.has(soundName)) {
+            const promise = new Promise<HTMLAudioElement>((r) => {
+                const audio = new Audio();
+                audio.onloadeddata = () => {
+                    r(audio);
+                };
+                audio.src = src;
+            });
+            this.loadingSounds.set(soundName, promise);
+            promise.then((audio) => {
+                this.sounds.set(soundName, audio);
+                this.loadingSounds.delete(soundName);
+            });
+        }
+    }
+
     addAnimation(name: string, anim: Animation) {
         this.animations.set(name, anim);
     }
 
     isResourcesLoaded() {
-        return this.loadingResources.size === 0;
+        return this.loadingGraphics.size === 0 && this.loadingSounds.size === 0;
     }
 
 }

@@ -1,4 +1,5 @@
 import {CollisionType} from "./enums/CollisionType";
+import {Sounds} from "./enums/Sounds";
 
 export class CollisionInfo {
     constructor(public x: number, public y: number, public w: number, public h: number,
@@ -636,6 +637,12 @@ export default {
             ]
         }
     },
+    sounds: [
+        {
+            name: Sounds.claw_swordAttack,
+            src: 'sounds/claw_swordAttack.mp3'
+        }
+    ]
 };
 
 export interface Tiles {
@@ -671,4 +678,9 @@ export interface CollisionTiles extends Tiles {
 
 export interface CollisionTile extends Tile {
     collisions: CollisionInfo[];
+}
+
+export interface SoundInfo {
+    name: string;
+    src: string;
 }

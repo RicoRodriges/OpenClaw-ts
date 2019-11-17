@@ -12,6 +12,9 @@ import Animation from "../../graphics/Animation";
 import PhysicsComponent from "./PhysicsComponent";
 import PositionComponent from "./PositionComponent";
 import Point from "../../utils/Point";
+import EventMgr from "../../events/EventMgr";
+import EventData_Request_Play_Sound from "../../events/EventData_Request_Play_Sound";
+import {Sounds} from "../../enums/Sounds";
 
 export default class ClawControllableComponent extends ActorComponent implements AnimationObserver {
     public static NAME = 'ClawControllableComponent';
@@ -185,7 +188,6 @@ export default class ClawControllableComponent extends ActorComponent implements
                     }
                     const position = new Point(positionComponent.position.x + positionOffset.x, positionComponent.position.y + positionOffset.y);
 
-
                     const damage = 10;
                     // TODO: attack
                     // ActorTemplates::CreateAreaDamage(
@@ -197,6 +199,7 @@ export default class ClawControllableComponent extends ActorComponent implements
                     // DamageType_MeleeAttack,
                     // m_Direction,
                     // m_pOwner->GetGUID());
+                    EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(Sounds.claw_swordAttack));
                 }
             }
         }

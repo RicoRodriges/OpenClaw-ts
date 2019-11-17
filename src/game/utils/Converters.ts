@@ -7,7 +7,7 @@ import {ActorRenderComponent, TileId, TileRenderComponent} from "../actors/compo
 import AnimationComponent from "../actors/components/AnimationComponent";
 import Animation from "../graphics/Animation";
 import Frame from "../graphics/Frame";
-import {AnimationTiles, CollisionTiles, Tiles} from "../LevelData";
+import {AnimationTiles, CollisionTiles, SoundInfo, Tiles} from "../LevelData";
 import {SpriteDefinition} from "../../components/SvgSpriteDefinitionComponent";
 import Rect from "./Rect";
 import Image from "../graphics/Image";
@@ -15,6 +15,7 @@ import TilesSceneNode from "../scene/TilesSceneNode";
 import gameProperties from "../GameProperties";
 import ClawControllableComponent from "../actors/components/ClawControllableComponent";
 import PatrolEnemyAIStateComponent from "../actors/components/enemy/PatrolEnemyAIStateComponent";
+import ResourceMgr from "../ResourceMgr";
 
 export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, anim: Animation): Actor {
     const claw = new Actor();
@@ -158,4 +159,9 @@ function createPhysicsObjectFromTile(tileId: number, y: number, x: number, tiles
             physics.addStaticBody(undefined, new Rect(worldX, worldY, c.w, c.h));
         });
     }
+}
+
+export function loadAllSounds(sounds: SoundInfo[]) {
+    const resources = ResourceMgr.getInstance();
+    sounds.forEach((s) => resources.loadSound(s.name, s.src));
 }
