@@ -131,9 +131,9 @@ export default class GameLogic {
 
         // Create enemy actors
         levelData.officerInstances.forEach((o) => {
-            // TODO: agro sounds
             const officerActor = createOfficerActor(this.gamePhysics as GamePhysics, o.spawnX, o.spawnY, idleOfficerAnim, runOfficerAnim,
-                swordAttackOfficerAnim, levelData.officer.speed, o.borderLeft, o.borderRight, Sounds.officer_swordAttack);
+                swordAttackOfficerAnim, levelData.officer.speed, o.borderLeft, o.borderRight,
+                Sounds.officer_swordAttack, [Sounds.officer_agro1, Sounds.officer_agro2]);
             this.actors.push(officerActor);
         });
 

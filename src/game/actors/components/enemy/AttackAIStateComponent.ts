@@ -173,7 +173,7 @@ export default class AttackAIStateComponent extends EnemyAIStateComponent implem
 
         if (!isPrevState && this.isActive) {
             if (this.agroSounds.length > 0) {
-                const index = (Math.random() * 100) % this.agroSounds.length;
+                const index = Math.round(Math.random() * 100) % this.agroSounds.length;
                 EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(this.agroSounds[index]));
             }
         }
