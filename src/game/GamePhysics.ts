@@ -230,7 +230,6 @@ export default class GamePhysics {
 
         if (bDef.addFootSensor) {
             const footShape = new Box2D.b2PolygonShape();
-            //footShape.SetUserData(FixtureType.FixtureType_FootSensor);
             footShape.SetAsBox(
                 (bDef.size.x / 2 - 2) / GamePhysics.METERS_TO_PIXELS,
                 24 / 2 / GamePhysics.METERS_TO_PIXELS,
@@ -243,11 +242,35 @@ export default class GamePhysics {
             body.CreateFixture(footShapeDef);
         }
 
+        bDef.fixtureList.forEach((f) => this.AddActorFixtureToBody(body, f));
+
         body.SetFixedRotation(true);
         if (bDef.actor) {
             this.actorBodies.set(bDef.actor, body);
             body.SetUserData(bDef.actor);
         }
+    }
+
+    AddActorFixtureToBody(body: any, pFixtureDef: ActorFixtureDef) {
+        const fixture = new Box2D.b2FixtureDef();
+
+        const rectangleShape = new Box2D.b2PolygonShape();
+        rectangleShape.SetAsBox(
+            pFixtureDef.size.x / GamePhysics.METERS_TO_PIXELS / 2,
+            pFixtureDef.size.y / GamePhysics.METERS_TO_PIXELS / 2
+        );
+        fixture.set_shape(rectangleShape);
+
+        fixture.set_density(pFixtureDef.density);
+        fixture.set_friction(pFixtureDef.friction);
+        fixture.set_restitution(pFixtureDef.restitution);
+        fixture.set_userData(pFixtureDef.fixtureType);
+        fixture.set_isSensor(pFixtureDef.isSensor);
+        const filter = new Box2D.b2Filter();
+        filter.set_categoryBits(pFixtureDef.collisionFlag);
+        filter.set_maskBits(pFixtureDef.collisionMask);
+        fixture.set_filter(filter);
+        body.CreateFixture(fixture);
     }
 
     VApplyLinearImpulse(a: Actor, impulse: Point) {
@@ -332,6 +355,20 @@ export class ActorBodyDef {
     prefabType = '';
     // TODO: This is a bit hacky - used for ducking
     isActive = true;
+    fixtureList: ActorFixtureDef[] = [];
+}
 
-    // fixtureList: ActorFixtureDef[] = [];
+export class ActorFixtureDef {
+    fixtureType = FixtureType.FixtureType_None;
+    collisionShape = 'Rectangle';
+    isSensor = false;
+    size = new Point(0, 0);
+    offset = new Point(0, 0);
+
+    friction = 0;
+    density = 0;
+    restitution = 0;
+
+    collisionFlag = CollisionFlag.CollisionFlag_None;
+    collisionMask = 0x0;
 }
