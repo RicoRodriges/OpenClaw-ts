@@ -188,7 +188,7 @@ export default class GamePhysics {
         if (bDef.makeCapsule) {
             const bodyShape = new Box2D.b2CircleShape();
             bodyShape.set_m_p(new Box2D.b2Vec2(0, bDef.size.x / GamePhysics.METERS_TO_PIXELS / 2 - bDef.size.y / GamePhysics.METERS_TO_PIXELS / 2));
-            bodyShape.set_m_radius(bDef.size.x / 2);
+            bodyShape.set_m_radius(bDef.size.x / GamePhysics.METERS_TO_PIXELS / 2);
 
             const fixtureDef = new Box2D.b2FixtureDef();
             fixtureDef.set_shape(bodyShape);
@@ -207,7 +207,7 @@ export default class GamePhysics {
             body.CreateFixture(fixtureDef);
 
             const polygonShape = new Box2D.b2PolygonShape();
-            polygonShape.SetAsBox((bDef.size.x / 2 - 2) / GamePhysics.METERS_TO_PIXELS, (bDef.size.y - bDef.size.x) / GamePhysics.METERS_TO_PIXELS / 2);
+            polygonShape.SetAsBox((bDef.size.x / 2. - 2) / GamePhysics.METERS_TO_PIXELS, (bDef.size.y - bDef.size.x) / GamePhysics.METERS_TO_PIXELS / 2);
             fixtureDef.set_shape(polygonShape);
             body.CreateFixture(fixtureDef);
         } else {

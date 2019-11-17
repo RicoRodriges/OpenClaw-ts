@@ -67,7 +67,7 @@ export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY:
     officer.components.push(animationComponent);
     const renderComponent = new ActorRenderComponent(officer);
     officer.components.push(renderComponent);
-    const physicsComponent = new PhysicsComponent(officer, false, false, false, 0, gameProperties.player.stayW, gameProperties.player.stayH, 0, 0.0, 0.5, physics, null, false);
+    const physicsComponent = new PhysicsComponent(officer, false, false, false, 0, gameProperties.player.stayW, gameProperties.player.stayH, 0, 0.0, 0.5, physics, null, false, true);
     officer.components.push(physicsComponent);
     const patrolComponent = new PatrolEnemyAIStateComponent(officer, physics, positionComponent, animationComponent, renderComponent, speed, leftBorder, rightBorder, idle, run);
     animationComponent.animationObservers.push(patrolComponent);
