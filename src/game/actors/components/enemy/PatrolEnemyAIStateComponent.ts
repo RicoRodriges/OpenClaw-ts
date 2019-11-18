@@ -10,6 +10,8 @@ import Animation from "../../../graphics/Animation";
 import {ActorRenderComponent} from "../RenderComponent";
 import Frame from "../../../graphics/Frame";
 import EnemyAIComponent from "./EnemyAIComponent";
+import CameraNode from "../../../scene/CameraNode";
+import {Sounds} from "../../../enums/Sounds";
 
 export default class PatrolEnemyAIStateComponent extends EnemyAIStateComponent implements AnimationObserver {
     public static NAME = 'PatrolEnemyAIStateComponent';
@@ -20,25 +22,32 @@ export default class PatrolEnemyAIStateComponent extends EnemyAIStateComponent i
     positionComponent: PositionComponent;
     animationComponent: AnimationComponent;
     renderComponent: ActorRenderComponent;
+    enemyAIComponent: EnemyAIComponent;
     leftBorder: number;
     rightBorder: number;
     speed: number;
     idle: Animation;
     run: Animation;
+    camera: CameraNode;
+    idleSounds: Sounds[];
 
     constructor(owner: Actor, physics: GamePhysics, positionComponent: PositionComponent, animationComponent: AnimationComponent,
                 renderComponent: ActorRenderComponent, enemyAIComponent: EnemyAIComponent, speed: number,
-                leftBorder: number, rightBorder: number, idle: Animation, run: Animation) {
+                leftBorder: number, rightBorder: number, idle: Animation, run: Animation, camera: CameraNode,
+                idleSounds: Sounds[] = [], private idleSpeechChance = 0.5, private idleSpeechRadius = 600) {
         super(owner, false, 0);
         this.physics = physics;
         this.positionComponent = positionComponent;
         this.animationComponent = animationComponent;
         this.renderComponent = renderComponent;
+        this.enemyAIComponent = enemyAIComponent;
         this.leftBorder = leftBorder;
         this.rightBorder = rightBorder;
         this.idle = idle;
         this.run = run;
         this.speed = Math.abs(speed);
+        this.camera = camera;
+        this.idleSounds = idleSounds;
         animationComponent.animationObservers.push(this);
         enemyAIComponent.states.push(this);
     }
@@ -95,14 +104,11 @@ export default class PatrolEnemyAIStateComponent extends EnemyAIStateComponent i
             this.animationComponent.setAnimation(this.idle);
             this.physics.VSetLinearSpeed(this.owner, new Point(0, 0));
 
-            // TODO: Try to play idle sound
-            // StrongActorPtr pClaw = g_pApp->GetGameLogic()->GetClawActor();
-            // assert(pClaw);
-            //
-            // if ((m_pOwner->GetPositionComponent()->GetPosition() - pClaw->GetPositionComponent()->GetPosition()).Length() < m_IdleSpeechSoundMaxDistance)
-            // {
-            //     m_pEnemyAIComponent->TryPlaySpeechSound(m_IdleSpeechSoundPlayChance, m_IdleSoundList);
-            // }
+            if (this.camera && this.idleSounds.length > 0) {
+                if (Math.abs(this.positionComponent.position.x - (this.camera.x + this.camera.w / 2)) < this.idleSpeechRadius &&
+                    Math.abs(this.positionComponent.position.y - (this.camera.y + this.camera.h / 2)) < this.idleSpeechRadius)
+                    this.enemyAIComponent.TryPlaySpeechSound(this.idleSpeechChance, this.idleSounds);
+            }
         }
     }
 

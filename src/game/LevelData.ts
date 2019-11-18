@@ -654,6 +654,14 @@ export default {
             name: Sounds.officer_agro2,
             src: 'sounds/officer_agro2.mp3'
         },
+        {
+            name: Sounds.officer_idle1,
+            src: 'sounds/officer_idle1.mp3'
+        },
+        {
+            name: Sounds.officer_idle2,
+            src: 'sounds/officer_idle2.mp3'
+        },
     ]
 };
 

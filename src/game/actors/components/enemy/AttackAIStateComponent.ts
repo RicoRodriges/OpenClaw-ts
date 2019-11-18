@@ -31,7 +31,8 @@ export default class AttackAIStateComponent extends EnemyAIStateComponent implem
                 animationComponent: AnimationComponent, renderComponent: ActorRenderComponent,
                 enemyAIComponent: EnemyAIComponent, physics: GamePhysics,
                 agroSounds: Sounds[] = [], attackSound: Sounds | undefined = undefined,
-                areaRadius = 60) {
+                private agroSoundChance = 0.5,
+                areaRadius = 90) {
         super(owner, false, 10);
         this.anim = anim;
         this.frameAttackIndex = frameAttackIndex;
@@ -173,8 +174,7 @@ export default class AttackAIStateComponent extends EnemyAIStateComponent implem
 
         if (!isPrevState && this.isActive) {
             if (this.agroSounds.length > 0) {
-                const index = Math.round(Math.random() * 100) % this.agroSounds.length;
-                EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(this.agroSounds[index]));
+                this.enemyAIComponent.TryPlaySpeechSound(this.agroSoundChance, this.agroSounds);
             }
         }
     }

@@ -129,11 +129,13 @@ export default class GameLogic {
         const claw = createClawActor(this.gamePhysics, levelData.player.spawnX, levelData.player.spawnY, idleAnim);
         this.actors.push(claw);
 
+        const camera = new CameraNode(0, 0, w, h, claw);
+
         // Create enemy actors
         levelData.officerInstances.forEach((o) => {
             const officerActor = createOfficerActor(this.gamePhysics as GamePhysics, o.spawnX, o.spawnY, idleOfficerAnim, runOfficerAnim,
-                swordAttackOfficerAnim, levelData.officer.speed, o.borderLeft, o.borderRight,
-                Sounds.officer_swordAttack, [Sounds.officer_agro1, Sounds.officer_agro2]);
+                swordAttackOfficerAnim, levelData.officer.speed, o.borderLeft, o.borderRight, camera,
+                Sounds.officer_swordAttack, [Sounds.officer_agro1, Sounds.officer_agro2], [Sounds.officer_idle1, Sounds.officer_idle2]);
             this.actors.push(officerActor);
         });
 
@@ -167,7 +169,7 @@ export default class GameLogic {
         // @ts-ignore
         const loadingScreenElementScene = new ScreenElementScene(titleSceneNode, null, new Map<Actor, SceneNode>());
 
-        const screenElementScene = new ScreenElementScene(rootNode, new CameraNode(0, 0, w, h, claw), actorNodes);
+        const screenElementScene = new ScreenElementScene(rootNode, camera, actorNodes);
         this.gameView = new GameView([loadingScreenElementScene], [screenElementScene], new ActorController(actorNodes.get(claw) as ActorSceneNode));
     }
 

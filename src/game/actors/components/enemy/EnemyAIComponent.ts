@@ -1,6 +1,9 @@
 import ActorComponent from "../../ActorComponent";
 import {EnemyAIStateComponent} from "./EnemyAIStateComponent";
 import Actor from "../../Actor";
+import {Sounds} from "../../../enums/Sounds";
+import EventMgr from "../../../events/EventMgr";
+import EventData_Request_Play_Sound from "../../../events/EventData_Request_Play_Sound";
 
 export default class EnemyAIComponent extends ActorComponent {
     public static NAME = 'EnemyAIComponent';
@@ -66,5 +69,14 @@ export default class EnemyAIComponent extends ActorComponent {
     private EnterState(pNewState: EnemyAIStateComponent) {
         this.LeaveAllStates(pNewState);
         pNewState.VOnStateEnter(pNewState);
+    }
+
+    TryPlaySpeechSound(chance: number, sounds: Sounds[]) {
+        if (sounds.length > 0) {
+            if (Math.random() <= chance) {
+                const index = Math.round(Math.random() * 100) % sounds.length;
+                EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(sounds[index]));
+            }
+        }
     }
 }

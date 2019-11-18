@@ -20,6 +20,8 @@ import EnemyAIComponent from "../actors/components/enemy/EnemyAIComponent";
 import AttackAIStateComponent from "../actors/components/enemy/AttackAIStateComponent";
 import {Sounds} from "../enums/Sounds";
 import {FixtureType} from "../enums/FixtureType";
+import CameraNode from "../scene/CameraNode";
+import {CollisionFlag} from "../enums/CollisionFlag";
 
 export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, anim: Animation): Actor {
     const claw = new Actor();
@@ -63,8 +65,9 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
 }
 
 export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY: number, idle: Animation, run: Animation,
-                                   attack: Animation, speed: number, leftBorder: number, rightBorder: number,
-                                   attackSound: Sounds, agroSounds: Sounds[] = []) {
+                                   attack: Animation, speed: number, leftBorder: number, rightBorder: number, camera: CameraNode,
+                                   attackSound: Sounds, agroSounds: Sounds[] = [],
+                                   idleSounds: Sounds[] = []) {
     const officer = new Actor();
     const positionComponent = new PositionComponent(officer, new Point(spawnX, spawnY));
     officer.components.push(positionComponent);
@@ -76,9 +79,9 @@ export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY:
     officer.components.push(physicsComponent);
     const enemyAIComponent = new EnemyAIComponent(officer);
     officer.components.push(enemyAIComponent);
-    const patrolComponent = new PatrolEnemyAIStateComponent(officer, physics, positionComponent, animationComponent, renderComponent, enemyAIComponent, speed, leftBorder, rightBorder, idle, run);
+    const patrolComponent = new PatrolEnemyAIStateComponent(officer, physics, positionComponent, animationComponent, renderComponent, enemyAIComponent, speed, leftBorder, rightBorder, idle, run, camera, idleSounds);
     officer.components.push(patrolComponent);
-    const attackAIStateComponent = new AttackAIStateComponent(officer, attack, 3, positionComponent, animationComponent, renderComponent, enemyAIComponent, physics, agroSounds, attackSound, 90);
+    const attackAIStateComponent = new AttackAIStateComponent(officer, attack, 3, positionComponent, animationComponent, renderComponent, enemyAIComponent, physics, agroSounds, attackSound);
     officer.components.push(attackAIStateComponent);
 
     enemyAIComponent.EnterBestState(true);
