@@ -32,7 +32,7 @@ export default class ReactClaw extends React.Component {
     }
 
     loop(dt: number) {
-        setTimeout(() => this.loop(dt), dt);
+        setTimeout(this.loop.bind(this, dt), dt);
         this.game.onUpdate(dt);
         //this.setState({dt: dt});
     }

@@ -15,6 +15,11 @@ import Point from "../../utils/Point";
 import EventMgr from "../../events/EventMgr";
 import EventData_Request_Play_Sound from "../../events/EventData_Request_Play_Sound";
 import {Sounds} from "../../enums/Sounds";
+import {createAreaDamageActor} from "../../utils/Converters";
+import {CollisionFlag} from "../../enums/CollisionFlag";
+import {DamageType} from "../../enums/DamageType";
+import EventData_Request_New_Actor from "../../events/EventData_Request_New_Actor";
+import GamePhysics from "../../GamePhysics";
 
 export default class ClawControllableComponent extends ActorComponent implements AnimationObserver {
     public static NAME = 'ClawControllableComponent';
@@ -22,13 +27,15 @@ export default class ClawControllableComponent extends ActorComponent implements
     frozen = false;
     animationComponent: AnimationComponent | null;
     renderComponent: ActorRenderComponent | null;
+    physics: GamePhysics;
     direction = Direction.Direction_Right;
     takeDamageTimeLeft = 0;
 
-    constructor(owner: Actor, animationComponent: AnimationComponent, renderComponent: ActorRenderComponent) {
+    constructor(owner: Actor, animationComponent: AnimationComponent, renderComponent: ActorRenderComponent, physics: GamePhysics) {
         super(owner);
         this.animationComponent = animationComponent;
         this.renderComponent = renderComponent;
+        this.physics = physics;
         animationComponent.animationObservers.push(this);
     }
 
@@ -190,16 +197,10 @@ export default class ClawControllableComponent extends ActorComponent implements
                     const position = new Point(positionComponent.position.x + positionOffset.x, positionComponent.position.y + positionOffset.y);
 
                     const damage = 10;
-                    // TODO: attack
-                    // ActorTemplates::CreateAreaDamage(
-                    // position,
-                    // Point(50, 25),
-                    // damage,
-                    // CollisionFlag_ClawAttack,
-                    // "Rectangle",
-                    // DamageType_MeleeAttack,
-                    // m_Direction,
-                    // m_pOwner->GetGUID());
+                    const actor = createAreaDamageActor(position,
+                        new Point(50, 25), damage, CollisionFlag.CollisionFlag_ClawAttack, DamageType.DamageType_MeleeAttack, this.owner,
+                        this.physics, 150);
+                    EventMgr.getInstance().VQueueEvent(new EventData_Request_New_Actor(actor));
                     EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(Sounds.claw_swordAttack));
                 }
             }

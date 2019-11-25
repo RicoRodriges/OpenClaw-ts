@@ -12,10 +12,9 @@ export default class SceneNode {
         this.properties = properties ? properties : new SceneNodeProperties(null, 0, 0, 0, 0);
     }
 
-    VRender(scene: Scene): any {
+    VRender(scene: Scene) {
         if (this.childrenList && this.childrenList.length > 0) {
-            return this.childrenList.map((c) => c.VRender(scene));
+            this.childrenList.forEach((c) => c.VRender(scene));
         }
-        return null;
     }
 }

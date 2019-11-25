@@ -7,6 +7,8 @@ import PositionComponent from "./PositionComponent";
 import gameProperties from "../../GameProperties";
 import ClawControllableComponent from "./ClawControllableComponent";
 import {FixtureType} from "../../enums/FixtureType";
+import {CollisionFlag} from "../../enums/CollisionFlag";
+import {BodyType} from "../../enums/BodyType";
 
 export default class PhysicsComponent extends ActorComponent {
     static NAME = 'PhysicsComponent';
@@ -33,8 +35,8 @@ export default class PhysicsComponent extends ActorComponent {
 
     fallHeight = 0;
 
-    hasConstantSpeed = false;
-    constantSpeed = new Point(0, 0);
+    hasConstantSpeed?: boolean;
+    constantSpeed?: Point;
 
     currentSpeed = new Point(0, 0);
     externalSourceSpeed?: Point;
@@ -53,28 +55,28 @@ export default class PhysicsComponent extends ActorComponent {
 
     // Actor body definition for physics body creation
     actorBodyDef = new ActorBodyDef();
-    clampToGround = false;
+    clampToGround?: boolean;
 
     // Spring caused us to go up
     isForcedUp = false;
     forcedUpHeight = 0;
 
-    topLadderB2Contact: any = null;
-    movingPlatformB2Contact: any = null;
+    topLadderB2Contact?: any;
+    movingPlatformB2Contact?: any;
 
     overlappingKinematicBodiesList: any[] = [];
-    overlappingLaddersList: any[] = [];
-    overlappingGroundsList: any[] = [];
+    overlappingLaddersList?: any[];
+    overlappingGroundsList?: any[];
 
     constructor(public owner: Actor, canClimb: boolean, canBounce: boolean, canJump: boolean, maxJumpHeight: number,
                 width: number, height: number, gravityScale: number, friction: number, density: number,
-                physics: GamePhysics, fixtureType: FixtureType, controllableComponent: ClawControllableComponent | null = null, createFootSensor = false, makeCapsule = false) {
+                physics: GamePhysics, fixtureType: FixtureType, controllableComponent: ClawControllableComponent | null = null, createFootSensor = false, makeCapsule = false,
+                collisionFlag = CollisionFlag.CollisionFlag_All, collisionMask = 0xFFFF, bodyType = BodyType.DYNAMIC, makeSensor = false) {
         super(owner);
         this.canClimb = canClimb;
         this.canBounce = canBounce;
         this.canJump = canClimb;
         this.maxJumpHeight = maxJumpHeight;
-        //XML_ADD_2_PARAM_ELEMENT("CollisionSize", "width", width, "height", height, elem);
         this.actorBodyDef.size.x = width;
         this.bodySize.x = width;
         this.actorBodyDef.size.y = height;
@@ -93,6 +95,10 @@ export default class PhysicsComponent extends ActorComponent {
         this.actorBodyDef.position.y = posComp.position.y;
         this.actorBodyDef.actor = owner;
         this.actorBodyDef.fixtureType = fixtureType;
+        this.actorBodyDef.collisionFlag = collisionFlag;
+        this.actorBodyDef.collisionMask = collisionMask;
+        this.actorBodyDef.bodyType = bodyType;
+        this.actorBodyDef.makeSensor = makeSensor;
         physics.VAddActorBody(this.actorBodyDef);
         this.controllableComponent = controllableComponent;
     }
@@ -107,7 +113,7 @@ export default class PhysicsComponent extends ActorComponent {
         if (this.doNothingTimeout > 0) {
             this.SetVelocity(new Point(0, 0));
             this.physics.VSetGravityScale(this.owner, 0);
-            this.currentSpeed = new Point(0, 0);
+            this.currentSpeed.SetZero();
             return;
         }
 
@@ -127,14 +133,14 @@ export default class PhysicsComponent extends ActorComponent {
         }
 
 
-        if (this.overlappingKinematicBodiesList.length === 0) {
-            this.externalSourceSpeed = new Point(0, 0);
+        if (this.overlappingKinematicBodiesList.length === 0 && this.externalSourceSpeed) {
+            this.externalSourceSpeed.SetZero();
         }
 
         if (this.controllableComponent && !this.controllableComponent.InPhysicsCapableState()) {
             this.SetVelocity(new Point(0, 0));
-            this.currentSpeed = new Point(0, 0);
-            this.climbingSpeed = new Point(0, 0);
+            this.currentSpeed.SetZero();
+            this.climbingSpeed.SetZero();
             this.isClimbing = false;
 
             return;
@@ -148,8 +154,8 @@ export default class PhysicsComponent extends ActorComponent {
             const currSpeed = this.getVelocity();
             this.SetVelocity(new Point(0, currSpeed.y));
 
-            this.currentSpeed = new Point(0, 0);
-            this.climbingSpeed = new Point(0, 0);
+            this.currentSpeed.SetZero();
+            this.climbingSpeed.SetZero();
 
             return;
         }
@@ -268,7 +274,7 @@ export default class PhysicsComponent extends ActorComponent {
 
         }
 
-        this.currentSpeed = new Point(0, 0);
+        this.currentSpeed.SetZero();
     }
 
     getName(): string {

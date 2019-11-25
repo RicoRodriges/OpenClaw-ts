@@ -6,4 +6,9 @@ export default class Point {
         this.x = x;
         this.y = y;
     }
+
+    SetZero() {
+        this.x = 0;
+        this.y = 0;
+    }
 }

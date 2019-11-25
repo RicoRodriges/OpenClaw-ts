@@ -4,11 +4,14 @@ import PositionComponent from "./actors/components/PositionComponent";
 import EventMgr from "./events/EventMgr";
 import EventData_Move_Actor from "./events/EventData_Move_Actor";
 import Rect from "./utils/Rect";
-import {FixtureType} from "./enums/FixtureType";
+import {FixtureType, fixtureTypeToString} from "./enums/FixtureType";
 import Point from "./utils/Point";
 import {CollisionFlag} from "./enums/CollisionFlag";
 import PhysicsComponent from "./actors/components/PhysicsComponent";
 import AttackAIStateComponent from "./actors/components/enemy/AttackAIStateComponent";
+import {BodyType} from "./enums/BodyType";
+import TriggerComponent from "./actors/components/TriggerComponent";
+import GameProperties from "./GameProperties";
 
 export default class GamePhysics {
     public static METERS_TO_PIXELS = 75.0;
@@ -17,24 +20,30 @@ export default class GamePhysics {
     world: any;
     contactListener: any;
     actorBodies = new Map<Actor, any>();
+    toBeDestroyed: Actor[] = [];
+    toBeCreated: ActorBodyDef[] = [];
 
     constructor() {
         const gravity = new Box2D.b2Vec2(0.0, 9.8);
         this.world = new Box2D.b2World(gravity);
+        Box2D.destroy(gravity);
 
-        const bodyDef = new Box2D.b2BodyDef();
-        bodyDef.set_type(Box2D.b2_staticBody);
-        this.world.CreateBody(bodyDef);
+        // const bodyDef = new Box2D.b2BodyDef();
+        // bodyDef.set_type(Box2D.b2_staticBody);
+        // this.world.CreateBody(bodyDef);
 
         this.contactListener = new Box2D.JSContactListener();
         this.contactListener.BeginContact = (contactPtr: any) => {
             const contact = Box2D.wrapPointer(contactPtr, Box2D.b2Contact);
             let pFixtureA = contact.GetFixtureA();
             let pFixtureB = contact.GetFixtureB();
+            if (GameProperties.debug) {
+                console.log(fixtureTypeToString(pFixtureA.GetUserData()),
+                    fixtureTypeToString(pFixtureB.GetUserData()));
+            }
 
             // Foot contact
             {
-                // Make it in predictable order
                 if (pFixtureB.GetUserData() === FixtureType.FixtureType_FootSensor) {
                     const t = pFixtureA;
                     pFixtureA = pFixtureB;
@@ -47,6 +56,27 @@ export default class GamePhysics {
                         const pPhysicsComponent = this.GetPhysicsComponentFromB2Body(pFixtureA.GetBody());
                         if (pPhysicsComponent) {
                             pPhysicsComponent.OnBeginFootContact();
+                        }
+                    }
+                }
+            }
+            // Trigger-like objects
+            {
+                if (pFixtureB.GetUserData() === FixtureType.FixtureType_Trigger) {
+                    const t = pFixtureA;
+                    pFixtureA = pFixtureB;
+                    pFixtureB = t;
+                }
+
+                if (pFixtureA.GetUserData() === FixtureType.FixtureType_Trigger) {
+                    const actor = this.GetActorFromB2Body(pFixtureB.GetBody());
+                    if (actor) {
+                        const triggerActor = this.GetActorFromB2Body(pFixtureA.GetBody());
+                        if (triggerActor) {
+                            const triggerComponent = triggerActor.getComponent(TriggerComponent.NAME) as TriggerComponent;
+                            if (triggerComponent) {
+                                triggerComponent.OnActorEntered(actor, FixtureType.FixtureType_Trigger);
+                            }
                         }
                     }
                 }
@@ -79,7 +109,6 @@ export default class GamePhysics {
 
             // Foot contact
             {
-                // Make it in predictable order
                 if (pFixtureB.GetUserData() === FixtureType.FixtureType_FootSensor) {
                     const t = pFixtureA;
                     pFixtureA = pFixtureB;
@@ -92,6 +121,27 @@ export default class GamePhysics {
                         const pPhysicsComponent = this.GetPhysicsComponentFromB2Body(pFixtureA.GetBody());
                         if (pPhysicsComponent) {
                             pPhysicsComponent.OnEndFootContact();
+                        }
+                    }
+                }
+            }
+            // Trigger-like objects
+            {
+                if (pFixtureB.GetUserData() === FixtureType.FixtureType_Trigger) {
+                    const t = pFixtureA;
+                    pFixtureA = pFixtureB;
+                    pFixtureB = t;
+                }
+
+                if (pFixtureA.GetUserData() === FixtureType.FixtureType_Trigger) {
+                    const actor = this.GetActorFromB2Body(pFixtureB.GetBody());
+                    if (actor) {
+                        const triggerActor = this.GetActorFromB2Body(pFixtureA.GetBody());
+                        if (triggerActor) {
+                            const triggerComponent = triggerActor.getComponent(TriggerComponent.NAME) as TriggerComponent;
+                            if (triggerComponent) {
+                                triggerComponent.OnActorLeft(actor, FixtureType.FixtureType_Trigger);
+                            }
                         }
                     }
                 }
@@ -127,8 +177,10 @@ export default class GamePhysics {
 
     addStaticBody(a: Actor | undefined, pos: Rect) {
         const def = new ActorBodyDef();
-        def.bodyType = Box2D.b2_staticBody;
+        def.bodyType = BodyType.STATIC;
         def.fixtureType = FixtureType.FixtureType_Solid;
+        def.collisionFlag = CollisionFlag.CollisionFlag_Solid;
+        def.collisionMask = CollisionFlag.CollisionFlag_Controller | CollisionFlag.CollisionFlag_DynamicActor;
         def.position = new Point(pos.x, pos.y);
         def.size = new Point(pos.w, pos.h);
         def.actor = a;
@@ -137,6 +189,22 @@ export default class GamePhysics {
 
     VOnUpdate(diff: number) {
         this.world.Step(diff / 1000.0, 8, 10);
+
+        if (this.toBeDestroyed.length > 0) {
+            this.toBeDestroyed.forEach((a) => {
+                const body = this.actorBodies.get(a);
+                if (this.world && body) {
+                    this.world.DestroyBody(body);
+                }
+                this.actorBodies.delete(a);
+            });
+            this.toBeDestroyed = [];
+        }
+
+        if (this.toBeCreated.length > 0) {
+            this.toBeCreated.forEach((a) => this.VAddActorBody(a));
+            this.toBeCreated = [];
+        }
     }
 
     VSyncVisibleScene() {
@@ -212,7 +280,8 @@ export default class GamePhysics {
                 if ((Math.abs(bodyPixelPosition.x - actorPixelPosition.x)) > 0.01 ||
                     (Math.abs(bodyPixelPosition.y - actorPixelPosition.y)) > 0.01) {
                     // Box2D has moved the physics object. Update actor's position and notify subsystems which care
-                    positionComponent.position = new Point(bodyPixelPosition.x, bodyPixelPosition.y);
+                    positionComponent.position.x = bodyPixelPosition.x;
+                    positionComponent.position.y = bodyPixelPosition.y;
 
                     const pEvent = new EventData_Move_Actor(pGameActor, bodyPixelPosition);
                     EventMgr.getInstance().VTriggerEvent(pEvent);
@@ -221,15 +290,23 @@ export default class GamePhysics {
         });
     }
 
+    VQueueAddActorBody(bDef: ActorBodyDef) {
+        this.toBeCreated.push(bDef);
+    }
+
     VAddActorBody(bDef: ActorBodyDef) {
         const bodyDef = new Box2D.b2BodyDef();
-        bodyDef.set_type(bDef.bodyType);
-        bodyDef.set_position(new Box2D.b2Vec2(bDef.position.x / GamePhysics.METERS_TO_PIXELS, bDef.position.y / GamePhysics.METERS_TO_PIXELS));
+        const b2Vec2 = new Box2D.b2Vec2(0, 0);
+
+        bodyDef.set_type(toBox2DType(bDef.bodyType));
+        b2Vec2.Set(bDef.position.x / GamePhysics.METERS_TO_PIXELS, bDef.position.y / GamePhysics.METERS_TO_PIXELS);
+        bodyDef.set_position(b2Vec2);
 
         const body = this.world.CreateBody(bodyDef);
         if (bDef.makeCapsule) {
             const bodyShape = new Box2D.b2CircleShape();
-            bodyShape.set_m_p(new Box2D.b2Vec2(0, bDef.size.x / GamePhysics.METERS_TO_PIXELS / 2 - bDef.size.y / GamePhysics.METERS_TO_PIXELS / 2));
+            b2Vec2.Set(0, bDef.size.x / GamePhysics.METERS_TO_PIXELS / 2 - bDef.size.y / GamePhysics.METERS_TO_PIXELS / 2);
+            bodyShape.set_m_p(b2Vec2);
             bodyShape.set_m_radius(bDef.size.x / GamePhysics.METERS_TO_PIXELS / 2);
 
             const fixtureDef = new Box2D.b2FixtureDef();
@@ -244,7 +321,8 @@ export default class GamePhysics {
             fixtureDef.set_filter(filter);
             body.CreateFixture(fixtureDef);
 
-            bodyShape.set_m_p(new Box2D.b2Vec2(0, bDef.size.y / GamePhysics.METERS_TO_PIXELS / 2 - bDef.size.x / GamePhysics.METERS_TO_PIXELS / 2));
+            b2Vec2.Set(0, bDef.size.y / GamePhysics.METERS_TO_PIXELS / 2 - bDef.size.x / GamePhysics.METERS_TO_PIXELS / 2);
+            bodyShape.set_m_p(b2Vec2);
             fixtureDef.set_shape(bodyShape);
             body.CreateFixture(fixtureDef);
 
@@ -252,6 +330,10 @@ export default class GamePhysics {
             polygonShape.SetAsBox((bDef.size.x / 2. - 2) / GamePhysics.METERS_TO_PIXELS, (bDef.size.y - bDef.size.x) / GamePhysics.METERS_TO_PIXELS / 2);
             fixtureDef.set_shape(polygonShape);
             body.CreateFixture(fixtureDef);
+            Box2D.destroy(polygonShape);
+            Box2D.destroy(filter);
+            Box2D.destroy(fixtureDef);
+            Box2D.destroy(bodyShape);
         } else {
             const shape = new Box2D.b2PolygonShape();
             //shape.SetUserData(bDef.fixtureType);
@@ -268,20 +350,33 @@ export default class GamePhysics {
             filter.set_maskBits(bDef.collisionMask);
             shapeDef.set_filter(filter);
             body.CreateFixture(shapeDef);
+
+            Box2D.destroy(shape);
+            Box2D.destroy(filter);
+            Box2D.destroy(shapeDef);
         }
 
         if (bDef.addFootSensor) {
             const footShape = new Box2D.b2PolygonShape();
+            b2Vec2.Set(0, bDef.size.y / 2 / GamePhysics.METERS_TO_PIXELS);
             footShape.SetAsBox(
                 (bDef.size.x / 2 - 2) / GamePhysics.METERS_TO_PIXELS,
                 24 / 2 / GamePhysics.METERS_TO_PIXELS,
-                new Box2D.b2Vec2(0, bDef.size.y / 2 / GamePhysics.METERS_TO_PIXELS),
+                b2Vec2,
                 0);
             const footShapeDef = new Box2D.b2FixtureDef();
             footShapeDef.set_userData(FixtureType.FixtureType_FootSensor);
             footShapeDef.set_shape(footShape);
             footShapeDef.set_isSensor(true);
+            const filter = new Box2D.b2Filter();
+            filter.set_categoryBits(CollisionFlag.CollisionFlag_Controller);
+            filter.set_maskBits(CollisionFlag.CollisionFlag_Solid | CollisionFlag.CollisionFlag_Ground);
+            footShapeDef.set_filter(filter);
             body.CreateFixture(footShapeDef);
+
+            Box2D.destroy(footShapeDef);
+            Box2D.destroy(filter);
+            Box2D.destroy(footShape);
         }
 
         bDef.fixtureList.forEach((f) => this.AddActorFixtureToBody(body, f));
@@ -291,6 +386,8 @@ export default class GamePhysics {
             this.actorBodies.set(bDef.actor, body);
             body.SetUserData(bDef.actor);
         }
+        Box2D.destroy(b2Vec2);
+        Box2D.destroy(bodyDef);
     }
 
     AddActorFixtureToBody(body: any, pFixtureDef: ActorFixtureDef) {
@@ -313,19 +410,28 @@ export default class GamePhysics {
         filter.set_maskBits(pFixtureDef.collisionMask);
         fixture.set_filter(filter);
         body.CreateFixture(fixture);
+        Box2D.destroy(fixture);
+        Box2D.destroy(rectangleShape);
+        Box2D.destroy(filter);
     }
 
     VApplyLinearImpulse(a: Actor, impulse: Point) {
         const body = this.actorBodies.get(a);
         if (body) {
-            body.ApplyLinearImpulse(new Box2D.b2Vec2(impulse.x / GamePhysics.METERS_TO_PIXELS, impulse.y / GamePhysics.METERS_TO_PIXELS), body.GetWorldCenter());
+            const impulseV = new Box2D.b2Vec2(impulse.x / GamePhysics.METERS_TO_PIXELS, impulse.y / GamePhysics.METERS_TO_PIXELS);
+            const center = body.GetWorldCenter();
+            body.ApplyLinearImpulse(impulseV, center);
+            // TODO: Box2D.destroy(center);
+            Box2D.destroy(impulseV);
         }
     }
 
     VSetLinearSpeed(a: Actor, speed: Point) {
         const body = this.actorBodies.get(a);
         if (body) {
-            body.SetLinearVelocity(new Box2D.b2Vec2(speed.x, speed.y));
+            const speedV = new Box2D.b2Vec2(speed.x, speed.y);
+            body.SetLinearVelocity(speedV);
+            Box2D.destroy(speedV);
         }
     }
 
@@ -354,7 +460,8 @@ export default class GamePhysics {
         const body = this.actorBodies.get(a);
         if (body) {
             const b2Position = new Box2D.b2Vec2(position.x / GamePhysics.METERS_TO_PIXELS, position.y / GamePhysics.METERS_TO_PIXELS);
-            body.SetTransform(b2Position, 0)
+            body.SetTransform(b2Position, 0);
+            Box2D.destroy(b2Position);
         }
     }
 
@@ -375,12 +482,27 @@ export default class GamePhysics {
         });
         return actor;
     }
+
+    VRemoveActor(actor: Actor) {
+        this.toBeDestroyed.push(actor);
+    }
 }
 
+function toBox2DType(bodyType: BodyType) {
+    switch (bodyType) {
+        case BodyType.DYNAMIC:
+            return Box2D.b2_dynamicBody;
+        case BodyType.KINEMATIC:
+            return Box2D.b2_kinematicBody;
+        case BodyType.STATIC:
+        default:
+            return Box2D.b2_staticBody;
+    }
+}
 
 export class ActorBodyDef {
     actor?: Actor;
-    bodyType = Box2D.b2_dynamicBody;
+    bodyType = BodyType.DYNAMIC;
     addFootSensor = false;
     makeCapsule = false;
     makeBullet = false;

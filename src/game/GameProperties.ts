@@ -7,5 +7,6 @@ export default {
         maxJumpSpeed: 8.8,
         maxFallSpeed: 14.0,
         springBoardSpringSpeed: 11
-    }
+    },
+    debug: false,
 };

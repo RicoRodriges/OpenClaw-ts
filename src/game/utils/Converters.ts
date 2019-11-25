@@ -22,6 +22,10 @@ import {Sounds} from "../enums/Sounds";
 import {FixtureType} from "../enums/FixtureType";
 import CameraNode from "../scene/CameraNode";
 import {CollisionFlag} from "../enums/CollisionFlag";
+import {DamageType} from "../enums/DamageType";
+import {BodyType} from "../enums/BodyType";
+import TriggerComponent from "../actors/components/TriggerComponent";
+import AreaDamageComponent from "../actors/components/loot/AreaDamageComponent";
 
 export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, anim: Animation): Actor {
     const claw = new Actor();
@@ -31,9 +35,13 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
     claw.components.push(animationComponent);
     const renderComponent = new ActorRenderComponent(claw);
     claw.components.push(renderComponent);
-    const controllableComponent = new ClawControllableComponent(claw, animationComponent, renderComponent);
+    const controllableComponent = new ClawControllableComponent(claw, animationComponent, renderComponent, physics);
     claw.components.push(controllableComponent);
-    const physicsComponent = new PhysicsComponent(claw, true, false, true, gameProperties.player.maxJumpHeight, gameProperties.player.stayW, gameProperties.player.stayH, 4.0, 0.0, 0.5, physics, FixtureType.FixtureType_Controller, controllableComponent, true, false);
+    const collisionMask = CollisionFlag.CollisionFlag_EnemyAIAttack | CollisionFlag.CollisionFlag_Solid | CollisionFlag.CollisionFlag_Ground |
+    CollisionFlag.CollisionFlag_Trigger | CollisionFlag.CollisionFlag_DamageAura;
+    const physicsComponent = new PhysicsComponent(claw, true, false, true, gameProperties.player.maxJumpHeight, gameProperties.player.stayW, gameProperties.player.stayH,
+        4.0, 0.0, 0.5, physics, FixtureType.FixtureType_Controller, controllableComponent, true, false,
+        CollisionFlag.CollisionFlag_Controller, collisionMask);
     claw.components.push(physicsComponent);
 
     //pClawActor->LinkEndChild(CreateCollisionComponent(40, 100));
@@ -75,7 +83,10 @@ export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY:
     officer.components.push(animationComponent);
     const renderComponent = new ActorRenderComponent(officer);
     officer.components.push(renderComponent);
-    const physicsComponent = new PhysicsComponent(officer, false, false, false, 0, gameProperties.player.stayW, gameProperties.player.stayH, 0, 0.0, 0.5, physics, FixtureType.FixtureType_None, null, false, true);
+    const collisionMask = CollisionFlag.CollisionFlag_ClawAttack | CollisionFlag.CollisionFlag_Solid | CollisionFlag.CollisionFlag_Ground | CollisionFlag.CollisionFlag_Trigger;
+    const physicsComponent = new PhysicsComponent(officer, false, false, false, 0, gameProperties.player.stayW, gameProperties.player.stayH,
+        0, 0.0, 0.5, physics, FixtureType.FixtureType_EnemyAI, null, false, true,
+        CollisionFlag.CollisionFlag_DynamicActor, collisionMask);
     officer.components.push(physicsComponent);
     const enemyAIComponent = new EnemyAIComponent(officer);
     officer.components.push(enemyAIComponent);
@@ -176,4 +187,36 @@ function createPhysicsObjectFromTile(tileId: number, y: number, x: number, tiles
 export function loadAllSounds(sounds: SoundInfo[]) {
     const resources = ResourceMgr.getInstance();
     sounds.forEach((s) => resources.loadSound(s.name, s.src));
+}
+
+export function createAreaDamageActor(pos: Point, size: Point, damage: number, collisionFlag: CollisionFlag,
+                                      damageType: DamageType, actor: Actor, physics: GamePhysics, damageDuration: number) {
+    const damageActor = new Actor();
+
+    const positionComponent = new PositionComponent(damageActor, pos);
+    damageActor.components.push(positionComponent);
+
+    let collisionMask = 0;
+    if (collisionFlag === CollisionFlag.CollisionFlag_ClawAttack) {
+        collisionMask = (CollisionFlag.CollisionFlag_Crate | CollisionFlag.CollisionFlag_DynamicActor);
+    } else if (collisionFlag === CollisionFlag.CollisionFlag_EnemyAIAttack) {
+        collisionMask = (CollisionFlag.CollisionFlag_Controller | CollisionFlag.CollisionFlag_InvisibleController);
+    } else if (collisionFlag === CollisionFlag.CollisionFlag_Explosion) {
+        collisionMask = (CollisionFlag.CollisionFlag_Crate |
+            CollisionFlag.CollisionFlag_PowderKeg |
+            CollisionFlag.CollisionFlag_DynamicActor |
+            CollisionFlag.CollisionFlag_Controller |
+            CollisionFlag.CollisionFlag_InvisibleController);
+    }
+    const triggerComponent = new TriggerComponent(damageActor);
+    damageActor.components.push(triggerComponent);
+
+    const areaDamageComponent = new AreaDamageComponent(damageActor, triggerComponent, null, damageDuration);
+    damageActor.components.push(areaDamageComponent);
+
+    const physicsComponent = new PhysicsComponent(damageActor, false, false, false, 0, size.x, size.y, 0, 0, 0,
+        physics, FixtureType.FixtureType_Trigger, null, false, false, collisionFlag, collisionMask, BodyType.DYNAMIC, true);
+    damageActor.components.push(physicsComponent);
+
+    return damageActor;
 }

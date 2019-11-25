@@ -13,6 +13,10 @@ import EnemyAIComponent from "./EnemyAIComponent";
 import GamePhysics, {ActorFixtureDef} from "../../../GamePhysics";
 import {FixtureType} from "../../../enums/FixtureType";
 import Point from "../../../utils/Point";
+import {createAreaDamageActor} from "../../../utils/Converters";
+import {CollisionFlag} from "../../../enums/CollisionFlag";
+import {DamageType} from "../../../enums/DamageType";
+import EventData_Request_New_Actor from "../../../events/EventData_Request_New_Actor";
 
 export default class AttackAIStateComponent extends EnemyAIStateComponent implements AnimationObserver {
     public static NAME = 'AttackAIStateComponent';
@@ -26,11 +30,15 @@ export default class AttackAIStateComponent extends EnemyAIStateComponent implem
     animationComponent: AnimationComponent;
     renderComponent: ActorRenderComponent;
     enemyAIComponent: EnemyAIComponent;
+    physics: GamePhysics;
 
     constructor(owner: Actor, anim: Animation, frameAttackIndex: number, positionComponent: PositionComponent,
                 animationComponent: AnimationComponent, renderComponent: ActorRenderComponent,
                 enemyAIComponent: EnemyAIComponent, physics: GamePhysics,
                 agroSounds: Sounds[] = [], attackSound: Sounds | undefined = undefined,
+                private damage = 10,
+                private attackAreaSize = new Point(130, 50),
+                private damageDuration = 150,
                 private agroSoundChance = 0.5,
                 areaRadius = 90) {
         super(owner, false, 10);
@@ -44,11 +52,14 @@ export default class AttackAIStateComponent extends EnemyAIStateComponent implem
         this.attackSound = attackSound;
         animationComponent.animationObservers.push(this);
         enemyAIComponent.states.push(this);
+        this.physics = physics;
         const ownerBody = physics.actorBodies.get(owner);
         if (ownerBody) {
             const fixDef = new ActorFixtureDef();
             fixDef.isSensor = true;
             fixDef.fixtureType = FixtureType.FixtureType_EnemyAIMeleeSensor;
+            fixDef.collisionFlag = CollisionFlag.CollisionFlag_Trigger;
+            fixDef.collisionMask = CollisionFlag.CollisionFlag_Controller;
             fixDef.size = new Point(areaRadius * 2, areaRadius);
             physics.AddActorFixtureToBody(ownerBody, fixDef);
         } else {
@@ -154,16 +165,10 @@ export default class AttackAIStateComponent extends EnemyAIStateComponent implem
     }
 
     private VOnAttackFrame() {
-        // TODO: attack logic
-        // ActorTemplates::CreateAreaDamage(
-        //     m_pPositionComponent->GetPosition() + offset,
-        //     pAttack->attackAreaSize,
-        //     pAttack->damage,
-        //     CollisionFlag_EnemyAIAttack,
-        //     "Rectangle",
-        //     DamageType_MeleeAttack,
-        //     dir,
-        //     m_pOwner->GetGUID());
+        const actor = createAreaDamageActor(new Point(this.positionComponent.position.x, this.positionComponent.position.y),
+            this.attackAreaSize, this.damage, CollisionFlag.CollisionFlag_EnemyAIAttack, DamageType.DamageType_MeleeAttack, this.owner,
+            this.physics, this.damageDuration);
+        EventMgr.getInstance().VTriggerEvent(new EventData_Request_New_Actor(actor));
     }
 
     OnEnemyEnterAgroRange(pEnemy: Actor) {

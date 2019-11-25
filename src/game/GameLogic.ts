@@ -31,6 +31,8 @@ import ClawControllableComponent from "./actors/components/ClawControllableCompo
 import PositionComponent from "./actors/components/PositionComponent";
 import AudioMgr from "./audio/AudioMgr";
 import {Sounds} from "./enums/Sounds";
+import EventData_Request_New_Actor from "./events/EventData_Request_New_Actor";
+import EventData_Request_Delete_Actor from "./events/EventData_Request_Delete_Actor";
 
 export default class GameLogic {
     actors: Actor[] = [];
@@ -42,6 +44,8 @@ export default class GameLogic {
         EventMgr.getInstance().VAddListener((e) => this.onActorStartMoveDelegate(e), EventData_Actor_Start_Move.NAME);
         EventMgr.getInstance().VAddListener((e) => this.onLevelLoadedDelegate(e), EventData_Level_Loaded.NAME);
         EventMgr.getInstance().VAddListener((e) => this.onActorAttackDelegate(e), EventData_Actor_Attack.NAME);
+        EventMgr.getInstance().VAddListener((e) => this.onActorCreateDelegate(e), EventData_Request_New_Actor.NAME);
+        EventMgr.getInstance().VAddListener((e) => this.onActorDeleteDelegate(e), EventData_Request_Delete_Actor.NAME);
     }
 
     VOnUpdate(diff: number) {
@@ -199,6 +203,26 @@ export default class GameLogic {
         const controllableComponent = event.a.getComponent(ClawControllableComponent.NAME) as ClawControllableComponent;
         if (controllableComponent) {
             controllableComponent.OnAttack();
+        }
+    }
+
+    private onActorCreateDelegate(e: IEventData) {
+        const event = e as EventData_Request_New_Actor;
+        const actor = event.a;
+        if (actor) {
+            this.actors.push(actor);
+        }
+    }
+
+    private onActorDeleteDelegate(e: IEventData) {
+        const event = e as EventData_Request_Delete_Actor;
+        const actor = event.a;
+        if (actor) {
+            this.actors = this.actors.filter((a) => a !== actor);
+            if (this.gamePhysics)
+            {
+                this.gamePhysics.VRemoveActor(actor);
+            }
         }
     }
 }

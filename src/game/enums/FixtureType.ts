@@ -32,3 +32,26 @@ export enum FixtureType
     FixtureType_Trigger_RollAreaSensor,
     FixtureType_Max,
 }
+
+export function fixtureTypeToString(f: FixtureType) {
+    switch (f) {
+        case FixtureType.FixtureType_None:
+            return "FixtureType_None";
+        case FixtureType.FixtureType_Solid:
+            return "FixtureType_Solid";
+        case FixtureType.FixtureType_Death:
+            return "FixtureType_Death";
+        case FixtureType.FixtureType_FootSensor:
+            return "FixtureType_FootSensor";
+        case FixtureType.FixtureType_Controller:
+            return "FixtureType_Controller";
+        case FixtureType.FixtureType_Trigger:
+            return "FixtureType_Trigger";
+        case FixtureType.FixtureType_EnemyAI:
+            return "FixtureType_EnemyAI";
+        case FixtureType.FixtureType_EnemyAIMeleeSensor:
+            return "FixtureType_EnemyAIMeleeSensor";
+        default:
+            return "What???";
+    }
+}
