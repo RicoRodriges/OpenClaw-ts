@@ -8,6 +8,7 @@ import EventData_Request_Play_Sound from "../../../events/EventData_Request_Play
 
 export abstract class PickupComponent extends ActorComponent implements TriggerObserver {
     public static NAME = 'PickupComponent';
+    actorsInTheArea = new Set<Actor>();
 
     abstract VOnApply(a: Actor): boolean;
 
@@ -18,16 +19,20 @@ export abstract class PickupComponent extends ActorComponent implements TriggerO
     }
 
     VOnActorEnteredTrigger(pActorWhoEntered: Actor, triggerType: FixtureType) {
-        if (this.VOnApply(pActorWhoEntered)) {
-            this.triggerComponent.Destroy();
+        if (!this.actorsInTheArea.has(pActorWhoEntered)) {
+            if (this.VOnApply(pActorWhoEntered)) {
+                this.triggerComponent.Destroy();
 
-            if (this.pickup != null) {
-                EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(this.pickup));
+                if (this.pickup != null) {
+                    EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(this.pickup));
+                }
             }
+            this.actorsInTheArea.add(pActorWhoEntered);
         }
     }
 
     VOnActorLeftTrigger(pActorWhoLeft: Actor, triggerType: FixtureType) {
+        this.actorsInTheArea.delete(pActorWhoLeft);
     }
 
     getName(): string {

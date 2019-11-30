@@ -10,4 +10,6 @@ export enum Animations {
     idleOfficer = 'officer_idle',
     runOfficer = 'officer_run',
     swordAttackOfficer = 'officer_swordAttack',
+    damageOfficer = 'damageOfficer',
+    deathOfficer = 'deathOfficer',
 }

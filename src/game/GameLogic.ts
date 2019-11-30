@@ -90,6 +90,10 @@ export default class GameLogic {
         spriteDefinitions = spriteDefinitions.concat(fallAnimDefinitions);
         const swordAttackAnimDefinitions = createSpriteDefinitions(levelData.player.swordAttackAnim, Animations.swordAttack);
         spriteDefinitions = spriteDefinitions.concat(swordAttackAnimDefinitions);
+        const clawDamage1AnimDefinitions = createSpriteDefinitions(levelData.player.damage1Anim, Animations.damage1);
+        spriteDefinitions = spriteDefinitions.concat(clawDamage1AnimDefinitions);
+        const clawDamage2AnimDefinitions = createSpriteDefinitions(levelData.player.damage2Anim, Animations.damage2);
+        spriteDefinitions = spriteDefinitions.concat(clawDamage2AnimDefinitions);
         const swordAttackJumpAnimDefinitions = createSpriteDefinitions(levelData.player.swordAttackJumpAnim, Animations.swordAttackJump);
         spriteDefinitions = spriteDefinitions.concat(swordAttackJumpAnimDefinitions);
         const idleOfficerAnimDefinitions = createSpriteDefinitions(levelData.officer.idleAnim, Animations.idleOfficer);
@@ -98,6 +102,10 @@ export default class GameLogic {
         spriteDefinitions = spriteDefinitions.concat(runOfficerAnimDefinitions);
         const swordAttackOfficerAnimDefinitions = createSpriteDefinitions(levelData.officer.swordAttackAnim, Animations.swordAttackOfficer);
         spriteDefinitions = spriteDefinitions.concat(swordAttackOfficerAnimDefinitions);
+        const damageOfficerAnimDefinitions = createSpriteDefinitions(levelData.officer.damageAnim, Animations.damageOfficer);
+        spriteDefinitions = spriteDefinitions.concat(damageOfficerAnimDefinitions);
+        const deathOfficerAnimDefinitions = createSpriteDefinitions(levelData.officer.deathAnim, Animations.deathOfficer);
+        spriteDefinitions = spriteDefinitions.concat(deathOfficerAnimDefinitions);
 
         const resources = ResourceMgr.getInstance();
         spriteDefinitions.forEach((s) => {
@@ -117,12 +125,20 @@ export default class GameLogic {
         resources.addAnimation(Animations.swordAttack, swordAttackAnim);
         const swordAttackJumpAnim = createAnimation(levelData.player.swordAttackJumpAnim, Animations.swordAttackJump);
         resources.addAnimation(Animations.swordAttackJump, swordAttackJumpAnim);
+        const clawDamage1Anim = createAnimation(levelData.player.damage1Anim, Animations.damage1);
+        resources.addAnimation(Animations.damage1, clawDamage1Anim);
+        const clawDamage2Anim = createAnimation(levelData.player.damage2Anim, Animations.damage2);
+        resources.addAnimation(Animations.damage2, clawDamage2Anim);
         const idleOfficerAnim = createAnimation(levelData.officer.idleAnim, Animations.idleOfficer);
         resources.addAnimation(Animations.idleOfficer, idleOfficerAnim);
         const runOfficerAnim = createAnimation(levelData.officer.runAnim, Animations.runOfficer);
         resources.addAnimation(Animations.runOfficer, runOfficerAnim);
         const swordAttackOfficerAnim = createAnimation(levelData.officer.swordAttackAnim, Animations.swordAttackOfficer);
         resources.addAnimation(Animations.swordAttackOfficer, swordAttackOfficerAnim);
+        const damageOfficerAnim = createAnimation(levelData.officer.damageAnim, Animations.damageOfficer);
+        resources.addAnimation(Animations.damageOfficer, damageOfficerAnim);
+        const deathOfficerAnim = createAnimation(levelData.officer.deathAnim, Animations.deathOfficer);
+        resources.addAnimation(Animations.deathOfficer, deathOfficerAnim);
 
         // Load sounds
         loadAllSounds(levelData.sounds);
@@ -139,6 +155,8 @@ export default class GameLogic {
         levelData.officerInstances.forEach((o) => {
             const officerActor = createOfficerActor(this.gamePhysics as GamePhysics, o.spawnX, o.spawnY, idleOfficerAnim, runOfficerAnim,
                 swordAttackOfficerAnim, levelData.officer.speed, o.borderLeft, o.borderRight, camera,
+                [damageOfficerAnim], [Sounds.officer_damage1, Sounds.officer_damage2],
+                deathOfficerAnim, [Sounds.officer_killed1, Sounds.officer_killed2],
                 Sounds.officer_swordAttack, [Sounds.officer_agro1, Sounds.officer_agro2], [Sounds.officer_idle1, Sounds.officer_idle2]);
             this.actors.push(officerActor);
         });

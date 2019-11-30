@@ -411,4 +411,8 @@ export default class PhysicsComponent extends ActorComponent {
     RestoreGravityScale() {
         this.physics.VSetGravityScale(this.owner, this.gravityScale);
     }
+
+    Destroy() {
+        this.physics.VRemoveActor(this.owner);
+    }
 }

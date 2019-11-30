@@ -18,7 +18,7 @@ export abstract class EnemyAIStateComponent extends ActorComponent {
 
     abstract VOnStateEnter(pPreviousState: EnemyAIStateComponent): void;
 
-    abstract VOnStateLeave(pNextState: EnemyAIStateComponent): void;
+    abstract VOnStateLeave(pNextState: EnemyAIStateComponent | null): void;
 
     abstract VGetStateType(): EnemyAIState;
 

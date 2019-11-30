@@ -26,6 +26,9 @@ import {DamageType} from "../enums/DamageType";
 import {BodyType} from "../enums/BodyType";
 import TriggerComponent from "../actors/components/TriggerComponent";
 import AreaDamageComponent from "../actors/components/loot/AreaDamageComponent";
+import TakeDamageAIStateComponent from "../actors/components/enemy/TakeDamageAIStateComponent";
+import HealthComponent from "../actors/components/HealthComponent";
+import {Animations} from "../enums/Animations";
 
 export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, anim: Animation): Actor {
     const claw = new Actor();
@@ -35,7 +38,9 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
     claw.components.push(animationComponent);
     const renderComponent = new ActorRenderComponent(claw);
     claw.components.push(renderComponent);
-    const controllableComponent = new ClawControllableComponent(claw, animationComponent, renderComponent, physics);
+    const healthComponent = new HealthComponent(claw, 100, 100, true);
+    claw.components.push(healthComponent);
+    const controllableComponent = new ClawControllableComponent(claw, animationComponent, renderComponent, physics, healthComponent, [Sounds.claw_killEnemy], 0.4, 1800, [Animations.damage1, Animations.damage2], [Sounds.claw_damage1, Sounds.claw_damage2, Sounds.claw_damage3, Sounds.claw_damage4]);
     claw.components.push(controllableComponent);
     const collisionMask = CollisionFlag.CollisionFlag_EnemyAIAttack | CollisionFlag.CollisionFlag_Solid | CollisionFlag.CollisionFlag_Ground |
     CollisionFlag.CollisionFlag_Trigger | CollisionFlag.CollisionFlag_DamageAura;
@@ -74,6 +79,8 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
 
 export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY: number, idle: Animation, run: Animation,
                                    attack: Animation, speed: number, leftBorder: number, rightBorder: number, camera: CameraNode,
+                                   damageAnims: Animation[], damageSounds: Sounds[],
+                                   deathAnim: Animation, deathSounds: Sounds[],
                                    attackSound: Sounds, agroSounds: Sounds[] = [],
                                    idleSounds: Sounds[] = []) {
     const officer = new Actor();
@@ -88,12 +95,16 @@ export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY:
         0, 0.0, 0.5, physics, FixtureType.FixtureType_EnemyAI, null, false, true,
         CollisionFlag.CollisionFlag_DynamicActor, collisionMask);
     officer.components.push(physicsComponent);
-    const enemyAIComponent = new EnemyAIComponent(officer);
+    const healthComponent = new HealthComponent(officer, 15, 15);
+    officer.components.push(healthComponent);
+    const enemyAIComponent = new EnemyAIComponent(officer, healthComponent, deathAnim, deathSounds, physicsComponent, animationComponent, positionComponent, Sounds.splash);
     officer.components.push(enemyAIComponent);
     const patrolComponent = new PatrolEnemyAIStateComponent(officer, physics, positionComponent, animationComponent, renderComponent, enemyAIComponent, speed, leftBorder, rightBorder, idle, run, camera, idleSounds);
     officer.components.push(patrolComponent);
     const attackAIStateComponent = new AttackAIStateComponent(officer, attack, 3, positionComponent, animationComponent, renderComponent, enemyAIComponent, physics, agroSounds, attackSound);
     officer.components.push(attackAIStateComponent);
+    const takeDamageAIStateComponent = new TakeDamageAIStateComponent(officer, damageAnims, damageSounds, animationComponent, enemyAIComponent);
+    officer.components.push(takeDamageAIStateComponent);
 
     enemyAIComponent.EnterBestState(true);
     return officer;
@@ -211,7 +222,7 @@ export function createAreaDamageActor(pos: Point, size: Point, damage: number, c
     const triggerComponent = new TriggerComponent(damageActor);
     damageActor.components.push(triggerComponent);
 
-    const areaDamageComponent = new AreaDamageComponent(damageActor, triggerComponent, null, damageDuration);
+    const areaDamageComponent = new AreaDamageComponent(damageActor, triggerComponent, null, damage, damageType, actor, damageDuration);
     damageActor.components.push(areaDamageComponent);
 
     const physicsComponent = new PhysicsComponent(damageActor, false, false, false, 0, size.x, size.y, 0, 0, 0,

@@ -331,6 +331,60 @@ export default {
                     delay: 80,
                 },
             ]
+        },
+        deathAnim: {
+            src: 'sprites/officer.png',
+            srcWidth: 1196,
+            srcHeight: 1169,
+            map: [
+                {
+                    id: 0,
+                    x: 584,
+                    y: 901,
+                    cx: 51,
+                    cy: 56,
+                    w: 103,
+                    h: 114,
+                    delay: 1000000,
+                },
+            ]
+        },
+        damageAnim: {
+            src: 'sprites/officer.png',
+            srcWidth: 1196,
+            srcHeight: 1169,
+            map: [
+                {
+                    id: 0,
+                    x: 138,
+                    y: 904,
+                    cx: 37,
+                    cy: 65,
+                    w: 68,
+                    h: 111,
+                    delay: 100,
+                },
+                {
+                    id: 1,
+                    x: 141,
+                    y: 1030,
+                    cx: 42,
+                    cy: 61,
+                    w: 87,
+                    h: 107,
+                    delay: 200,
+                },
+                {
+                    id: 2,
+                    x: 138,
+                    y: 904,
+                    cx: 37,
+                    cy: 65,
+                    w: 68,
+                    h: 111,
+                    delay: 100,
+                },
+            ]
         }
     },
     player: {
@@ -635,6 +689,60 @@ export default {
                     delay: 70
                 },
             ]
+        },
+        damage1Anim: {
+            src: 'sprites/claw.png',
+            srcWidth: 1141,
+            srcHeight: 2707,
+            map: [
+                {
+                    id: 0,
+                    x: 8,
+                    y: 2602,
+                    cx: 56,
+                    cy: 43,
+                    w: 76,
+                    h: 102,
+                    delay: 500,
+                },
+                {
+                    id: 0,
+                    x: 8,
+                    y: 2602,
+                    cx: 56,
+                    cy: 43,
+                    w: 76,
+                    h: 102,
+                    delay: 1,
+                },
+            ]
+        },
+        damage2Anim: {
+            src: 'sprites/claw.png',
+            srcWidth: 1141,
+            srcHeight: 2707,
+            map: [
+                {
+                    id: 0,
+                    x: 5,
+                    y: 2504,
+                    cx: 54,
+                    cy: 28,
+                    w: 83,
+                    h: 86,
+                    delay: 500,
+                },
+                {
+                    id: 0,
+                    x: 5,
+                    y: 2504,
+                    cx: 54,
+                    cy: 28,
+                    w: 83,
+                    h: 86,
+                    delay: 1,
+                },
+            ]
         }
     },
     sounds: [
@@ -661,6 +769,46 @@ export default {
         {
             name: Sounds.officer_idle2,
             src: 'sounds/officer_idle2.mp3'
+        },
+        {
+            name: Sounds.splash,
+            src: 'sounds/splash.mp3'
+        },
+        {
+            name: Sounds.officer_killed1,
+            src: 'sounds/officer_killed1.mp3'
+        },
+        {
+            name: Sounds.officer_killed2,
+            src: 'sounds/officer_killed2.mp3'
+        },
+        {
+            name: Sounds.officer_damage1,
+            src: 'sounds/officer_damage1.mp3'
+        },
+        {
+            name: Sounds.officer_damage2,
+            src: 'sounds/officer_damage2.mp3'
+        },
+        {
+            name: Sounds.claw_damage1,
+            src: 'sounds/claw_damage1.mp3'
+        },
+        {
+            name: Sounds.claw_damage2,
+            src: 'sounds/claw_damage2.mp3'
+        },
+        {
+            name: Sounds.claw_damage3,
+            src: 'sounds/claw_damage3.mp3'
+        },
+        {
+            name: Sounds.claw_damage4,
+            src: 'sounds/claw_damage4.mp3'
+        },
+        {
+            name: Sounds.claw_killEnemy,
+            src: 'sounds/claw_killEnemy.mp3'
         },
     ]
 };

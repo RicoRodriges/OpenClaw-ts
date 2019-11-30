@@ -20,8 +20,9 @@ import {CollisionFlag} from "../../enums/CollisionFlag";
 import {DamageType} from "../../enums/DamageType";
 import EventData_Request_New_Actor from "../../events/EventData_Request_New_Actor";
 import GamePhysics from "../../GamePhysics";
+import HealthComponent, {HealthObserver} from "./HealthComponent";
 
-export default class ClawControllableComponent extends ActorComponent implements AnimationObserver {
+export default class ClawControllableComponent extends ActorComponent implements AnimationObserver, HealthObserver {
     public static NAME = 'ClawControllableComponent';
     state = ClawState.ClawState_Falling;
     frozen = false;
@@ -31,12 +32,16 @@ export default class ClawControllableComponent extends ActorComponent implements
     direction = Direction.Direction_Right;
     takeDamageTimeLeft = 0;
 
-    constructor(owner: Actor, animationComponent: AnimationComponent, renderComponent: ActorRenderComponent, physics: GamePhysics) {
+    constructor(owner: Actor, animationComponent: AnimationComponent, renderComponent: ActorRenderComponent, physics: GamePhysics,
+                private healthComponent: HealthComponent, private onKillSounds: Sounds[], private soundChance = 0.4,
+                private takeDamageDuration: number, private damageAnims: Animations[],
+                private damageSounds: Sounds[]) {
         super(owner);
         this.animationComponent = animationComponent;
         this.renderComponent = renderComponent;
         this.physics = physics;
         animationComponent.animationObservers.push(this);
+        healthComponent.observers.push(this);
     }
 
     VUpdate(diff: number) {
@@ -44,14 +49,13 @@ export default class ClawControllableComponent extends ActorComponent implements
         if (this.takeDamageTimeLeft > 0) {
             this.takeDamageTimeLeft -= diff;
             if (this.takeDamageTimeLeft <= 0) {
-                // TODO!!!!!!!!
-                //m_pHealthComponent->SetInvulnerable(false);
+                this.healthComponent.isInvulnerable = false;
                 this.takeDamageTimeLeft = 0;
             }
         }
     }
 
-    private setAnimation(name: string) {
+    private setAnimation(name: Animations) {
         if (this.animationComponent) {
             const anim = ResourceMgr.getInstance().getAnimation(name);
             if (anim) {
@@ -208,7 +212,7 @@ export default class ClawControllableComponent extends ActorComponent implements
     }
 
     VOnAnimationLooped(animation: Animation) {
-        if (animation.name === Animations.damage1 || animation.name === Animations.damage2) {
+        if (this.damageAnims.find((a) => a === animation.name) !== undefined) {
             this.SetCurrentPhysicsState();
         } else if ((animation.name === Animations.swordAttack ||
             // TODO: another animations
@@ -241,11 +245,42 @@ export default class ClawControllableComponent extends ActorComponent implements
     }
 
     private IsAttackingOrShooting() {
-        return this.state == ClawState.ClawState_Shooting ||
-            this.state == ClawState.ClawState_JumpShooting ||
-            this.state == ClawState.ClawState_DuckShooting ||
-            this.state == ClawState.ClawState_Attacking ||
-            this.state == ClawState.ClawState_DuckAttacking ||
-            this.state == ClawState.ClawState_JumpAttacking;
+        return this.state === ClawState.ClawState_Shooting ||
+            this.state === ClawState.ClawState_JumpShooting ||
+            this.state === ClawState.ClawState_DuckShooting ||
+            this.state === ClawState.ClawState_Attacking ||
+            this.state === ClawState.ClawState_DuckAttacking ||
+            this.state === ClawState.ClawState_JumpAttacking;
+    }
+
+    OnClawKilledEnemy(damageType: DamageType, enemy: Actor) {
+        if (this.onKillSounds.length > 0 && Math.random() < this.soundChance) {
+            const i = Math.floor(Math.random() * 100) % this.onKillSounds.length;
+            EventMgr.getInstance().VQueueEvent(new EventData_Request_Play_Sound(this.onKillSounds[i]));
+        }
+    }
+
+    VOnHealthChanged(oldHealth: number, newHealth: number, damageType: DamageType, sourceActor: Actor): void {
+        if (/*newHealth > 0 &&*/ oldHealth > newHealth) {
+            if (this.damageAnims.length > 0 && this.animationComponent) {
+                const i = Math.round(Math.random() * 100) % this.damageAnims.length;
+                this.setAnimation(this.damageAnims[i]);
+            }
+
+            if (this.damageSounds.length > 0) {
+                const i = Math.round(Math.random() * 100) % this.damageSounds.length;
+                EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(this.damageSounds[i]));
+            }
+
+            this.healthComponent.isInvulnerable = true;
+            this.takeDamageTimeLeft = this.takeDamageDuration;
+            this.physics.VSetGravityScale(this.owner, 0);
+
+            this.state = ClawState.ClawState_TakingDamage;
+        }
+    }
+
+    VOnHealthBelowZero(damageType: DamageType, sourceActor: Actor) {
+        this.healthComponent.AddHealth(100, DamageType.DamageType_None, this.owner);
     }
 }

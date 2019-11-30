@@ -421,7 +421,6 @@ export default class GamePhysics {
             const impulseV = new Box2D.b2Vec2(impulse.x / GamePhysics.METERS_TO_PIXELS, impulse.y / GamePhysics.METERS_TO_PIXELS);
             const center = body.GetWorldCenter();
             body.ApplyLinearImpulse(impulseV, center);
-            // TODO: Box2D.destroy(center);
             Box2D.destroy(impulseV);
         }
     }
@@ -521,9 +520,6 @@ export class ActorBodyDef {
     friction = 1.0;
     density = 1.0;
     restitution = 0.0;
-    prefabType = '';
-    // TODO: This is a bit hacky - used for ducking
-    isActive = true;
     fixtureList: ActorFixtureDef[] = [];
 }
 

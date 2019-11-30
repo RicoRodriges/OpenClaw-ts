@@ -1,8 +1,18 @@
 export enum Sounds {
+    splash = 'splash',
     officer_idle1 = 'officer_idle1',
     officer_idle2 = 'officer_idle2',
     officer_agro1 = 'officer_agro1',
     officer_agro2 = 'officer_agro2',
+    officer_damage2 = 'officer_damage2',
+    officer_damage1 = 'officer_damage1',
+    officer_killed2 = 'officer_killed2',
+    officer_killed1 = 'officer_killed1',
     officer_swordAttack = 'officer_swordAttack',
     claw_swordAttack = 'claw_swordAttack',
+    claw_killEnemy= 'claw_killEnemy',
+    claw_damage4 = 'claw_damage4',
+    claw_damage3 = 'claw_damage3',
+    claw_damage2 = 'claw_damage2',
+    claw_damage1 = 'claw_damage1',
 }
