@@ -3,12 +3,11 @@ import GameView from "./GameView";
 import GamePhysics from "./GamePhysics";
 import EventMgr from "./events/EventMgr";
 import {
-    createAnimation,
     createClawActor,
     createCollisionObjectsAndScene,
     createOfficerActor,
     createSpriteDefinitions,
-    loadAllSounds
+    loadAllSounds, loadAnimationWithSprites
 } from "./utils/Converters";
 import ActorController from "./ActorController";
 import ScreenElementScene from "./user-interface/ScreenElementScene";
@@ -20,7 +19,6 @@ import EventData_Actor_Start_Move from "./events/EventData_Actor_Start_Move";
 import PhysicsComponent from "./actors/components/PhysicsComponent";
 import levelData from "./LevelData";
 import {ActorRenderComponent} from "./actors/components/RenderComponent";
-import {SpriteDefinition} from "../components/SvgSpriteDefinitionComponent";
 import ResourceMgr from "./ResourceMgr";
 import EventData_Level_Loaded from "./events/EventData_Level_Loaded";
 import TitleSceneNode from "./scene/TitleSceneNode";
@@ -77,68 +75,15 @@ export default class GameLogic {
         //this.gamePhysics.addStaticBody(undefined, new Rect(0, 600, 600, 1));
 
         // Create sprite definitions
-        let spriteDefinitions: SpriteDefinition[] = [];
         const tileDefinitions = createSpriteDefinitions(levelData.tiles, 'tile');
-        spriteDefinitions = spriteDefinitions.concat(tileDefinitions);
-        const idleAnimDefinitions = createSpriteDefinitions(levelData.player.idleAnim, Animations.idle);
-        spriteDefinitions = spriteDefinitions.concat(idleAnimDefinitions);
-        const runAnimDefinitions = createSpriteDefinitions(levelData.player.runAnim, Animations.run);
-        spriteDefinitions = spriteDefinitions.concat(runAnimDefinitions);
-        const jumpAnimDefinitions = createSpriteDefinitions(levelData.player.jumpAnim, Animations.jump);
-        spriteDefinitions = spriteDefinitions.concat(jumpAnimDefinitions);
-        const fallAnimDefinitions = createSpriteDefinitions(levelData.player.fallAnim, Animations.fall);
-        spriteDefinitions = spriteDefinitions.concat(fallAnimDefinitions);
-        const swordAttackAnimDefinitions = createSpriteDefinitions(levelData.player.swordAttackAnim, Animations.swordAttack);
-        spriteDefinitions = spriteDefinitions.concat(swordAttackAnimDefinitions);
-        const clawDamage1AnimDefinitions = createSpriteDefinitions(levelData.player.damage1Anim, Animations.damage1);
-        spriteDefinitions = spriteDefinitions.concat(clawDamage1AnimDefinitions);
-        const clawDamage2AnimDefinitions = createSpriteDefinitions(levelData.player.damage2Anim, Animations.damage2);
-        spriteDefinitions = spriteDefinitions.concat(clawDamage2AnimDefinitions);
-        const swordAttackJumpAnimDefinitions = createSpriteDefinitions(levelData.player.swordAttackJumpAnim, Animations.swordAttackJump);
-        spriteDefinitions = spriteDefinitions.concat(swordAttackJumpAnimDefinitions);
-        const idleOfficerAnimDefinitions = createSpriteDefinitions(levelData.officer.idleAnim, Animations.idleOfficer);
-        spriteDefinitions = spriteDefinitions.concat(idleOfficerAnimDefinitions);
-        const runOfficerAnimDefinitions = createSpriteDefinitions(levelData.officer.runAnim, Animations.runOfficer);
-        spriteDefinitions = spriteDefinitions.concat(runOfficerAnimDefinitions);
-        const swordAttackOfficerAnimDefinitions = createSpriteDefinitions(levelData.officer.swordAttackAnim, Animations.swordAttackOfficer);
-        spriteDefinitions = spriteDefinitions.concat(swordAttackOfficerAnimDefinitions);
-        const damageOfficerAnimDefinitions = createSpriteDefinitions(levelData.officer.damageAnim, Animations.damageOfficer);
-        spriteDefinitions = spriteDefinitions.concat(damageOfficerAnimDefinitions);
-        const deathOfficerAnimDefinitions = createSpriteDefinitions(levelData.officer.deathAnim, Animations.deathOfficer);
-        spriteDefinitions = spriteDefinitions.concat(deathOfficerAnimDefinitions);
-
         const resources = ResourceMgr.getInstance();
-        spriteDefinitions.forEach((s) => {
+        tileDefinitions.forEach((s) => {
             resources.loadSprite(s.id, s.src, s.src, s.rect.x, s.rect.y, s.rect.w, s.rect.h);
         });
 
         // Create animations
-        const idleAnim = createAnimation(levelData.player.idleAnim, Animations.idle);
-        resources.addAnimation(Animations.idle, idleAnim);
-        const runAnim = createAnimation(levelData.player.runAnim, Animations.run);
-        resources.addAnimation(Animations.run, runAnim);
-        const jumpAnim = createAnimation(levelData.player.jumpAnim, Animations.jump);
-        resources.addAnimation(Animations.jump, jumpAnim);
-        const fallAnim = createAnimation(levelData.player.fallAnim, Animations.fall);
-        resources.addAnimation(Animations.fall, fallAnim);
-        const swordAttackAnim = createAnimation(levelData.player.swordAttackAnim, Animations.swordAttack);
-        resources.addAnimation(Animations.swordAttack, swordAttackAnim);
-        const swordAttackJumpAnim = createAnimation(levelData.player.swordAttackJumpAnim, Animations.swordAttackJump);
-        resources.addAnimation(Animations.swordAttackJump, swordAttackJumpAnim);
-        const clawDamage1Anim = createAnimation(levelData.player.damage1Anim, Animations.damage1);
-        resources.addAnimation(Animations.damage1, clawDamage1Anim);
-        const clawDamage2Anim = createAnimation(levelData.player.damage2Anim, Animations.damage2);
-        resources.addAnimation(Animations.damage2, clawDamage2Anim);
-        const idleOfficerAnim = createAnimation(levelData.officer.idleAnim, Animations.idleOfficer);
-        resources.addAnimation(Animations.idleOfficer, idleOfficerAnim);
-        const runOfficerAnim = createAnimation(levelData.officer.runAnim, Animations.runOfficer);
-        resources.addAnimation(Animations.runOfficer, runOfficerAnim);
-        const swordAttackOfficerAnim = createAnimation(levelData.officer.swordAttackAnim, Animations.swordAttackOfficer);
-        resources.addAnimation(Animations.swordAttackOfficer, swordAttackOfficerAnim);
-        const damageOfficerAnim = createAnimation(levelData.officer.damageAnim, Animations.damageOfficer);
-        resources.addAnimation(Animations.damageOfficer, damageOfficerAnim);
-        const deathOfficerAnim = createAnimation(levelData.officer.deathAnim, Animations.deathOfficer);
-        resources.addAnimation(Animations.deathOfficer, deathOfficerAnim);
+        levelData.player.anims.forEach((anim) => loadAnimationWithSprites(anim));
+        levelData.officer.anims.forEach((anim) => loadAnimationWithSprites(anim));
 
         // Load sounds
         loadAllSounds(levelData.sounds);
@@ -146,17 +91,17 @@ export default class GameLogic {
         AudioMgr.getInstance();
 
         // Create claw actor
-        const claw = createClawActor(this.gamePhysics, levelData.player.spawnX, levelData.player.spawnY, idleAnim);
+        const claw = createClawActor(this.gamePhysics, levelData.player.spawnX, levelData.player.spawnY, Animations.idle);
         this.actors.push(claw);
 
         const camera = new CameraNode(0, 0, w, h, claw);
 
         // Create enemy actors
         levelData.officerInstances.forEach((o) => {
-            const officerActor = createOfficerActor(this.gamePhysics as GamePhysics, o.spawnX, o.spawnY, idleOfficerAnim, runOfficerAnim,
-                swordAttackOfficerAnim, levelData.officer.speed, o.borderLeft, o.borderRight, camera,
-                [damageOfficerAnim], [Sounds.officer_damage1, Sounds.officer_damage2],
-                deathOfficerAnim, [Sounds.officer_killed1, Sounds.officer_killed2],
+            const officerActor = createOfficerActor(this.gamePhysics as GamePhysics, o.spawnX, o.spawnY, Animations.idleOfficer,
+                Animations.runOfficer, Animations.swordAttackOfficer, levelData.officer.speed, o.borderLeft, o.borderRight, camera,
+                [Animations.damageOfficer], [Sounds.officer_damage1, Sounds.officer_damage2],
+                Animations.deathOfficer, [Sounds.officer_killed1, Sounds.officer_killed2],
                 Sounds.officer_swordAttack, [Sounds.officer_agro1, Sounds.officer_agro2], [Sounds.officer_idle1, Sounds.officer_idle2]);
             this.actors.push(officerActor);
         });

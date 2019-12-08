@@ -1,5 +1,6 @@
 import {CollisionType} from "./enums/CollisionType";
 import {Sounds} from "./enums/Sounds";
+import {Animations} from "./enums/Animations";
 
 export class CollisionInfo {
     constructor(public x: number, public y: number, public w: number, public h: number,
@@ -127,7 +128,9 @@ export default {
     ],
     officer: {
         speed: 1.3,
-        runAnim: {
+        anims: [
+        {
+            name: Animations.runOfficer,
             src: 'sprites/officer_run.png',
             w: 101,
             h: 126,
@@ -184,7 +187,8 @@ export default {
                 },
             ]
         },
-        idleAnim: {
+        {
+            name: Animations.idleOfficer,
             src: 'sprites/officer_idle.png',
             w: 64,
             h: 128,
@@ -235,7 +239,8 @@ export default {
                 },
             ]
         },
-        swordAttackAnim: {
+        {
+            name: Animations.swordAttackOfficer,
             src: 'sprites/officer.png',
             srcWidth: 320,
             srcHeight: 128,
@@ -332,7 +337,8 @@ export default {
                 },
             ]
         },
-        deathAnim: {
+        {
+            name: Animations.deathOfficer,
             src: 'sprites/officer.png',
             srcWidth: 1196,
             srcHeight: 1169,
@@ -349,7 +355,8 @@ export default {
                 },
             ]
         },
-        damageAnim: {
+        {
+            name: Animations.damageOfficer,
             src: 'sprites/officer.png',
             srcWidth: 1196,
             srcHeight: 1169,
@@ -386,11 +393,14 @@ export default {
                 },
             ]
         }
+        ]
     },
     player: {
         spawnX: 64 * 3,
         spawnY: 80,
-        idleAnim: {
+        anims: [
+        {
+            name: Animations.idle,
             src: 'sprites/claw_idle.png',
             w: 74,
             h: 116,
@@ -447,7 +457,8 @@ export default {
                 },
             ]
         },
-        runAnim: {
+        {
+            name: Animations.run,
             src: 'sprites/claw_run.png',
             w: 107,
             h: 109,
@@ -516,7 +527,8 @@ export default {
                 },
             ]
         },
-        jumpAnim: {
+        {
+            name: Animations.jump,
             src: 'sprites/claw_jump.png',
             w: 94,
             h: 104,
@@ -567,7 +579,8 @@ export default {
                 },
             ]
         },
-        fallAnim: {
+        {
+            name: Animations.fall,
             src: 'sprites/claw_fall.png',
             w: 87,
             h: 106,
@@ -600,7 +613,8 @@ export default {
                 },
             ]
         },
-        swordAttackAnim: {
+        {
+            name: Animations.swordAttack,
             src: 'sprites/claw_swordAttack.png',
             w: 161,
             h: 110,
@@ -651,7 +665,8 @@ export default {
                 },
             ]
         },
-        swordAttackJumpAnim: {
+        {
+            name: Animations.swordAttackJump,
             src: 'sprites/claw_swordAttackJump.png',
             w: 149,
             h: 107,
@@ -690,7 +705,8 @@ export default {
                 },
             ]
         },
-        damage1Anim: {
+        {
+            name: Animations.damage1,
             src: 'sprites/claw.png',
             srcWidth: 1141,
             srcHeight: 2707,
@@ -717,7 +733,8 @@ export default {
                 },
             ]
         },
-        damage2Anim: {
+        {
+            name: Animations.damage2,
             src: 'sprites/claw.png',
             srcWidth: 1141,
             srcHeight: 2707,
@@ -744,6 +761,7 @@ export default {
                 },
             ]
         }
+        ]
     },
     sounds: [
         {
@@ -833,6 +851,7 @@ export interface Tile {
 }
 
 export interface AnimationTiles extends Tiles {
+    name: Animations;
     map: AnimationTile[];
 }
 

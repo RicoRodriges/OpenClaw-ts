@@ -30,7 +30,12 @@ import TakeDamageAIStateComponent from "../actors/components/enemy/TakeDamageAIS
 import HealthComponent from "../actors/components/HealthComponent";
 import {Animations} from "../enums/Animations";
 
-export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, anim: Animation): Actor {
+export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, animName: Animations): Actor {
+    const anim = ResourceMgr.getInstance().getAnimation(animName);
+    if (!anim) {
+        console.error(`Animation ${animName} does not exist`);
+        throw new Error(`Animation ${animName} does not exist`);
+    }
     const claw = new Actor();
     const positionComponent = new PositionComponent(claw, new Point(spawnX, spawnY));
     claw.components.push(positionComponent);
@@ -60,11 +65,6 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
     // XML_ADD_TEXT_ELEMENT("Lives", "0", pLifeComponent);
     // pClawActor->LinkEndChild(pLifeComponent);
     //
-    // TiXmlElement* pHealthComponent = new TiXmlElement("HealthComponent");
-    // XML_ADD_TEXT_ELEMENT("Health", "0", pHealthComponent);
-    // XML_ADD_TEXT_ELEMENT("MaxHealth", "100", pHealthComponent);
-    // pClawActor->LinkEndChild(pHealthComponent);
-    //
     // TiXmlElement* pAmmoComponent = new TiXmlElement("AmmoComponent");
     // XML_ADD_TEXT_ELEMENT("Pistol", "0", pAmmoComponent);
     // XML_ADD_TEXT_ELEMENT("Magic", "0", pAmmoComponent);
@@ -77,12 +77,22 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
     return claw;
 }
 
-export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY: number, idle: Animation, run: Animation,
-                                   attack: Animation, speed: number, leftBorder: number, rightBorder: number, camera: CameraNode,
-                                   damageAnims: Animation[], damageSounds: Sounds[],
-                                   deathAnim: Animation, deathSounds: Sounds[],
+export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY: number, idleName: Animations, runName: Animations,
+                                   attackName: Animations, speed: number, leftBorder: number, rightBorder: number, camera: CameraNode,
+                                   damageAnimNames: Animations[], damageSounds: Sounds[],
+                                   deathAnimName: Animations, deathSounds: Sounds[],
                                    attackSound: Sounds, agroSounds: Sounds[] = [],
                                    idleSounds: Sounds[] = []) {
+    const resources = ResourceMgr.getInstance();
+    const run = resources.getAnimation(runName);
+    const idle = resources.getAnimation(idleName);
+    const attack = resources.getAnimation(attackName);
+    const deathAnim = resources.getAnimation(deathAnimName);
+    const damageAnims = damageAnimNames.map((name) => resources.getAnimation(name)) as Animation[];
+    if (!run || !idle || !attack || !deathAnim || damageAnims.some((a) => !a)) {
+        console.error('Some of officer animations do not exist');
+        throw new Error('Some of officer animations do not exist');
+    }
     const officer = new Actor();
     const positionComponent = new PositionComponent(officer, new Point(spawnX, spawnY));
     officer.components.push(positionComponent);
@@ -127,7 +137,8 @@ export function createSpriteDefinitions(tiles: Tiles, spriteNamePrefix: string):
     });
 }
 
-export function createAnimation(tiles: AnimationTiles, animationName: string): Animation {
+export function createAnimation(tiles: AnimationTiles): Animation {
+    const animationName = tiles.name;
     const frames = tiles.map.map((t) => {
         const w = tiles.w !== undefined ? tiles.w : t.w !== undefined ? t.w : 0;
         const h = tiles.h !== undefined ? tiles.h : t.h !== undefined ? t.h : 0;
@@ -136,6 +147,16 @@ export function createAnimation(tiles: AnimationTiles, animationName: string): A
         return new Frame(new Image(offsetX, offsetY, w, h, `${animationName}${t.id}`), t.delay);
     });
     return new Animation(animationName, frames);
+}
+
+export function loadAnimationWithSprites(tiles: AnimationTiles) {
+    const animationName = tiles.name;
+    const resources = ResourceMgr.getInstance();
+    createSpriteDefinitions(tiles, animationName)
+        .forEach((s) => {
+            resources.loadSprite(s.id, s.src, s.src, s.rect.x, s.rect.y, s.rect.w, s.rect.h);
+        });
+    resources.addAnimation(animationName, createAnimation(tiles));
 }
 
 export function createCollisionObjectsAndScene(physics: GamePhysics, tiles: CollisionTiles,
