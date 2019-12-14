@@ -3,25 +3,16 @@ import Actor from "../Actor";
 import Point from "../../utils/Point";
 import {Direction} from "../../enums/Direction";
 import GamePhysics, {ActorBodyDef} from "../../GamePhysics";
-import PositionComponent from "./PositionComponent";
 import gameProperties from "../../GameProperties";
 import ClawControllableComponent from "./ClawControllableComponent";
-import {FixtureType} from "../../enums/FixtureType";
-import {CollisionFlag} from "../../enums/CollisionFlag";
-import {BodyType} from "../../enums/BodyType";
 
 export default class PhysicsComponent extends ActorComponent {
     static NAME = 'PhysicsComponent';
 
-    canClimb = false;
-    canBounce = false;
     canJump = false;
     maxJumpHeight = 0;
     gravityScale = 0;
-    friction = 0;
-    density = 0;
 
-    bodySize = new Point(0, 0);
     numFootContacts = 0;
 
     isClimbing = false;
@@ -35,12 +26,12 @@ export default class PhysicsComponent extends ActorComponent {
 
     fallHeight = 0;
 
-    hasConstantSpeed?: boolean;
-    constantSpeed?: Point;
+    // hasConstantSpeed?: boolean;
+    // constantSpeed?: Point;
 
     currentSpeed = new Point(0, 0);
     externalSourceSpeed?: Point;
-    externalConveyorBeltSpeed?: Point;
+    // externalConveyorBeltSpeed?: Point;
 
     climbingSpeed = new Point(0, 0);
 
@@ -55,50 +46,28 @@ export default class PhysicsComponent extends ActorComponent {
 
     // Actor body definition for physics body creation
     actorBodyDef = new ActorBodyDef();
-    clampToGround?: boolean;
+    // clampToGround?: boolean;
 
     // Spring caused us to go up
     isForcedUp = false;
     forcedUpHeight = 0;
 
-    topLadderB2Contact?: any;
-    movingPlatformB2Contact?: any;
+    // topLadderB2Contact?: any;
+    // movingPlatformB2Contact?: any;
 
     overlappingKinematicBodiesList: any[] = [];
-    overlappingLaddersList?: any[];
-    overlappingGroundsList?: any[];
+    // overlappingLaddersList?: any[];
+    // overlappingGroundsList?: any[];
 
-    constructor(public owner: Actor, canClimb: boolean, canBounce: boolean, canJump: boolean, maxJumpHeight: number,
-                width: number, height: number, gravityScale: number, friction: number, density: number,
-                physics: GamePhysics, fixtureType: FixtureType, controllableComponent: ClawControllableComponent | null = null, createFootSensor = false, makeCapsule = false,
-                collisionFlag = CollisionFlag.CollisionFlag_All, collisionMask = 0xFFFF, bodyType = BodyType.DYNAMIC, makeSensor = false) {
+    constructor(public owner: Actor, canJump: boolean, maxJumpHeight: number, bodyDef: ActorBodyDef,
+                physics: GamePhysics, controllableComponent: ClawControllableComponent | null = null) {
         super(owner);
-        this.canClimb = canClimb;
-        this.canBounce = canBounce;
-        this.canJump = canClimb;
+        this.canJump = canJump;
         this.maxJumpHeight = maxJumpHeight;
-        this.actorBodyDef.size.x = width;
-        this.bodySize.x = width;
-        this.actorBodyDef.size.y = height;
-        this.bodySize.y = height;
-        this.gravityScale = gravityScale;
-        this.actorBodyDef.gravityScale = gravityScale;
-        this.friction = friction;
-        this.density = density;
-        this.physics = physics;
-        this.actorBodyDef.density = density;
-        this.actorBodyDef.friction = friction;
-        this.actorBodyDef.addFootSensor = createFootSensor;
-        this.actorBodyDef.makeCapsule = makeCapsule;
-        const posComp = owner.getComponent(PositionComponent.NAME) as PositionComponent;
-        this.actorBodyDef.position.x = posComp.position.x;
-        this.actorBodyDef.position.y = posComp.position.y;
+        this.actorBodyDef = bodyDef;
         this.actorBodyDef.actor = owner;
-        this.actorBodyDef.fixtureType = fixtureType;
-        this.actorBodyDef.collisionFlag = collisionFlag;
-        this.actorBodyDef.collisionMask = collisionMask;
-        this.actorBodyDef.bodyType = bodyType;
-        this.actorBodyDef.makeSensor = makeSensor;
+        this.gravityScale = this.actorBodyDef.gravityScale;
+        this.physics = physics;
         physics.VAddActorBody(this.actorBodyDef);
         this.controllableComponent = controllableComponent;
     }
@@ -204,8 +173,6 @@ export default class PhysicsComponent extends ActorComponent {
             }
 
             let applyForce = true;
-            const disableGravity = false;
-            const gravity = this.physics.GetGravity();
             velocity = this.getVelocity();
 
             const maxJumpSpeed = -1.0 * Math.abs(gameProperties.player.maxJumpSpeed);
@@ -239,8 +206,6 @@ export default class PhysicsComponent extends ActorComponent {
                 this.isStopped = false;
             }
 
-            const wasRunning = this.isRunning;
-            const wasStopped = this.isStopped;
             const prevDirection = this.direction;
             let currDirection = this.direction;
 

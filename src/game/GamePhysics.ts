@@ -388,6 +388,14 @@ export default class GamePhysics {
         }
         Box2D.destroy(b2Vec2);
         Box2D.destroy(bodyDef);
+
+        if (bDef.actor) {
+            if (bDef.setInitialSpeed) {
+                this.VSetLinearSpeed(bDef.actor, bDef.initialSpeed);
+            } else if (bDef.setInitialImpulse) {
+                this.VApplyLinearImpulse(bDef.actor, bDef.initialSpeed);
+            }
+        }
     }
 
     AddActorFixtureToBody(body: any, pFixtureDef: ActorFixtureDef) {
@@ -504,14 +512,14 @@ export class ActorBodyDef {
     bodyType = BodyType.DYNAMIC;
     addFootSensor = false;
     makeCapsule = false;
-    makeBullet = false;
+    // makeBullet = false;
     makeSensor = false;
     fixtureType = FixtureType.FixtureType_None;
     position = new Point(0, 0);
-    positionOffset = new Point(0, 0);
-    collisionShape = 'Rectangle';
+    // positionOffset = new Point(0, 0);
+    // collisionShape = 'Rectangle';
     size = new Point(0, 0);
-    gravityScale = 1.0;
+    gravityScale = 0;
     setInitialSpeed = false;
     setInitialImpulse = false;
     initialSpeed = new Point(0, 0);
@@ -525,10 +533,10 @@ export class ActorBodyDef {
 
 export class ActorFixtureDef {
     fixtureType = FixtureType.FixtureType_None;
-    collisionShape = 'Rectangle';
+    // collisionShape = 'Rectangle';
     isSensor = false;
     size = new Point(0, 0);
-    offset = new Point(0, 0);
+    // offset = new Point(0, 0);
 
     friction = 0;
     density = 0;

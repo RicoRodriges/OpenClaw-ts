@@ -2,7 +2,7 @@ import Actor from "../actors/Actor";
 import PositionComponent from "../actors/components/PositionComponent";
 import Point from "./Point";
 import PhysicsComponent from "../actors/components/PhysicsComponent";
-import GamePhysics from "../GamePhysics";
+import GamePhysics, {ActorBodyDef, ActorFixtureDef} from "../GamePhysics";
 import {ActorRenderComponent, TileId, TileRenderComponent} from "../actors/components/RenderComponent";
 import AnimationComponent from "../actors/components/AnimationComponent";
 import Animation from "../graphics/Animation";
@@ -48,10 +48,20 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
     const controllableComponent = new ClawControllableComponent(claw, animationComponent, renderComponent, physics, healthComponent, [Sounds.claw_killEnemy], 0.4, 1800, [Animations.damage1, Animations.damage2], [Sounds.claw_damage1, Sounds.claw_damage2, Sounds.claw_damage3, Sounds.claw_damage4]);
     claw.components.push(controllableComponent);
     const collisionMask = CollisionFlag.CollisionFlag_EnemyAIAttack | CollisionFlag.CollisionFlag_Solid | CollisionFlag.CollisionFlag_Ground |
-    CollisionFlag.CollisionFlag_Trigger | CollisionFlag.CollisionFlag_DamageAura;
-    const physicsComponent = new PhysicsComponent(claw, true, false, true, gameProperties.player.maxJumpHeight, gameProperties.player.stayW, gameProperties.player.stayH,
-        4.0, 0.0, 0.5, physics, FixtureType.FixtureType_Controller, controllableComponent, true, false,
-        CollisionFlag.CollisionFlag_Controller, collisionMask);
+    CollisionFlag.CollisionFlag_Trigger | CollisionFlag.CollisionFlag_DamageAura | CollisionFlag.CollisionFlag_Pickup;
+    const actorBodyDef = new ActorBodyDef();
+    actorBodyDef.size.x = gameProperties.player.stayW;
+    actorBodyDef.size.y = gameProperties.player.stayH;
+    actorBodyDef.gravityScale = 4.0;
+    actorBodyDef.friction = 0;
+    actorBodyDef.density = 0.5;
+    actorBodyDef.position.x = spawnX;
+    actorBodyDef.position.y = spawnY;
+    actorBodyDef.fixtureType = FixtureType.FixtureType_Controller;
+    actorBodyDef.addFootSensor = true;
+    actorBodyDef.collisionFlag = CollisionFlag.CollisionFlag_Controller;
+    actorBodyDef.collisionMask = collisionMask;
+    const physicsComponent = new PhysicsComponent(claw, true, gameProperties.player.maxJumpHeight, actorBodyDef, physics, controllableComponent);
     claw.components.push(physicsComponent);
 
     //pClawActor->LinkEndChild(CreateCollisionComponent(40, 100));
@@ -101,9 +111,19 @@ export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY:
     const renderComponent = new ActorRenderComponent(officer);
     officer.components.push(renderComponent);
     const collisionMask = CollisionFlag.CollisionFlag_ClawAttack | CollisionFlag.CollisionFlag_Solid | CollisionFlag.CollisionFlag_Ground | CollisionFlag.CollisionFlag_Trigger;
-    const physicsComponent = new PhysicsComponent(officer, false, false, false, 0, gameProperties.player.stayW, gameProperties.player.stayH,
-        0, 0.0, 0.5, physics, FixtureType.FixtureType_EnemyAI, null, false, true,
-        CollisionFlag.CollisionFlag_DynamicActor, collisionMask);
+    const actorBodyDef = new ActorBodyDef();
+    actorBodyDef.size.x = gameProperties.player.stayW;
+    actorBodyDef.size.y = gameProperties.player.stayH;
+    actorBodyDef.position.x = spawnX;
+    actorBodyDef.position.y = spawnY;
+    actorBodyDef.gravityScale = 0;
+    actorBodyDef.friction = 0;
+    actorBodyDef.density = 0.5;
+    actorBodyDef.fixtureType = FixtureType.FixtureType_EnemyAI;
+    actorBodyDef.makeCapsule = true;
+    actorBodyDef.collisionFlag = CollisionFlag.CollisionFlag_DynamicActor;
+    actorBodyDef.collisionMask = collisionMask;
+    const physicsComponent = new PhysicsComponent(officer, false, 0, actorBodyDef, physics);
     officer.components.push(physicsComponent);
     const healthComponent = new HealthComponent(officer, 15, 15);
     officer.components.push(healthComponent);
@@ -230,12 +250,11 @@ export function createAreaDamageActor(pos: Point, size: Point, damage: number, c
 
     let collisionMask = 0;
     if (collisionFlag === CollisionFlag.CollisionFlag_ClawAttack) {
-        collisionMask = (CollisionFlag.CollisionFlag_Crate | CollisionFlag.CollisionFlag_DynamicActor);
+        collisionMask = CollisionFlag.CollisionFlag_DynamicActor;
     } else if (collisionFlag === CollisionFlag.CollisionFlag_EnemyAIAttack) {
         collisionMask = (CollisionFlag.CollisionFlag_Controller | CollisionFlag.CollisionFlag_InvisibleController);
     } else if (collisionFlag === CollisionFlag.CollisionFlag_Explosion) {
-        collisionMask = (CollisionFlag.CollisionFlag_Crate |
-            CollisionFlag.CollisionFlag_PowderKeg |
+        collisionMask = (CollisionFlag.CollisionFlag_PowderKeg |
             CollisionFlag.CollisionFlag_DynamicActor |
             CollisionFlag.CollisionFlag_Controller |
             CollisionFlag.CollisionFlag_InvisibleController);
@@ -246,8 +265,19 @@ export function createAreaDamageActor(pos: Point, size: Point, damage: number, c
     const areaDamageComponent = new AreaDamageComponent(damageActor, triggerComponent, null, damage, damageType, actor, damageDuration);
     damageActor.components.push(areaDamageComponent);
 
-    const physicsComponent = new PhysicsComponent(damageActor, false, false, false, 0, size.x, size.y, 0, 0, 0,
-        physics, FixtureType.FixtureType_Trigger, null, false, false, collisionFlag, collisionMask, BodyType.DYNAMIC, true);
+    const actorBodyDef = new ActorBodyDef();
+    actorBodyDef.size.x = size.x;
+    actorBodyDef.size.y = size.y;
+    actorBodyDef.position.x = pos.x;
+    actorBodyDef.position.y = pos.y;
+    actorBodyDef.gravityScale = 0;
+    actorBodyDef.friction = 0;
+    actorBodyDef.density = 0;
+    actorBodyDef.fixtureType = FixtureType.FixtureType_Trigger;
+    actorBodyDef.collisionFlag = collisionFlag;
+    actorBodyDef.collisionMask = collisionMask;
+    actorBodyDef.makeSensor = true;
+    const physicsComponent = new PhysicsComponent(damageActor, false, 0, actorBodyDef, physics);
     damageActor.components.push(physicsComponent);
 
     return damageActor;
