@@ -15,4 +15,6 @@ export enum Sounds {
     claw_damage3 = 'claw_damage3',
     claw_damage2 = 'claw_damage2',
     claw_damage1 = 'claw_damage1',
+    treasure_ring = 'treasure_ring',
+    treasure_coin = 'treasure_coin',
 }

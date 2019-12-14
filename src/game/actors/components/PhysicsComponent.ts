@@ -45,7 +45,7 @@ export default class PhysicsComponent extends ActorComponent {
     doNothingTimeout = 0;
 
     // Actor body definition for physics body creation
-    actorBodyDef = new ActorBodyDef();
+    public actorBodyDef = new ActorBodyDef();
     // clampToGround?: boolean;
 
     // Spring caused us to go up

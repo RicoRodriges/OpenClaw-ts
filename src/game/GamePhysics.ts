@@ -180,7 +180,7 @@ export default class GamePhysics {
         def.bodyType = BodyType.STATIC;
         def.fixtureType = FixtureType.FixtureType_Solid;
         def.collisionFlag = CollisionFlag.CollisionFlag_Solid;
-        def.collisionMask = CollisionFlag.CollisionFlag_Controller | CollisionFlag.CollisionFlag_DynamicActor;
+        def.collisionMask = CollisionFlag.CollisionFlag_Controller | CollisionFlag.CollisionFlag_DynamicActor | CollisionFlag.CollisionFlag_Pickup;
         def.position = new Point(pos.x, pos.y);
         def.size = new Point(pos.w, pos.h);
         def.actor = a;
@@ -295,6 +295,10 @@ export default class GamePhysics {
     }
 
     VAddActorBody(bDef: ActorBodyDef) {
+        if (this.world.IsLocked()) {
+            this.VQueueAddActorBody(bDef);
+            return;
+        }
         const bodyDef = new Box2D.b2BodyDef();
         const b2Vec2 = new Box2D.b2Vec2(0, 0);
 

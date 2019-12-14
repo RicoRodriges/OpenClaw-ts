@@ -12,4 +12,9 @@ export enum Animations {
     swordAttackOfficer = 'officer_swordAttack',
     damageOfficer = 'damageOfficer',
     deathOfficer = 'deathOfficer',
+    treasureRingRed = 'ringRed',
+    treasureRingGreed = 'ringGreen',
+    treasureRingBlue = 'ringBlue',
+    treasureRingPink = 'ringPink',
+    treasureCoin = 'coin',
 }

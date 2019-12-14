@@ -9,16 +9,17 @@ export default class AnimationComponent extends ActorComponent {
     public animationObservers: AnimationObserver[] = [];
     time: number;
 
-    constructor(owner: Actor, public anim: Animation, public current = 0) {
+    constructor(owner: Actor, private renderComponent: ActorRenderComponent,
+                public anim: Animation, public current = 0) {
         super(owner);
+        this.renderComponent.setCurrentImage(this.anim.frames[0].image);
         this.time = 0;
     }
 
     VUpdate(diff: number) {
-        const renderComponent = this.owner.getComponent(ActorRenderComponent.NAME) as ActorRenderComponent;
-        if (renderComponent) {
+        if (this.renderComponent) {
             if (this.anim.frames.length === 1) {
-                renderComponent.setCurrentImage(this.anim.frames[0].image);
+                this.renderComponent.setCurrentImage(this.anim.frames[0].image);
             } else {
                 this.time += diff;
                 const oldFrame = this.anim.frames[this.current];
@@ -28,7 +29,7 @@ export default class AnimationComponent extends ActorComponent {
                     this.current = newCurrent;
                     const currentFrame = this.anim.frames[this.current];
                     this.VOnAnimationFrameChanged(this.anim, oldFrame, currentFrame);
-                    renderComponent.setCurrentImage(this.anim.frames[this.current].image);
+                    this.renderComponent.setCurrentImage(this.anim.frames[this.current].image);
                     if (newCurrent === 0) {
                         this.VOnAnimationLooped(this.anim);
                     }

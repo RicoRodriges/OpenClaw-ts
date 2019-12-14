@@ -7,7 +7,7 @@ import {ActorRenderComponent, TileId, TileRenderComponent} from "../actors/compo
 import AnimationComponent from "../actors/components/AnimationComponent";
 import Animation from "../graphics/Animation";
 import Frame from "../graphics/Frame";
-import {AnimationTiles, CollisionTiles, SoundInfo, Tiles} from "../LevelData";
+import {AnimationTiles, CollisionTiles, LootInfo, SoundInfo, Tiles} from "../LevelData";
 import {SpriteDefinition} from "../../components/SvgSpriteDefinitionComponent";
 import Rect from "./Rect";
 import Image from "../graphics/Image";
@@ -29,6 +29,12 @@ import AreaDamageComponent from "../actors/components/loot/AreaDamageComponent";
 import TakeDamageAIStateComponent from "../actors/components/enemy/TakeDamageAIStateComponent";
 import HealthComponent from "../actors/components/HealthComponent";
 import {Animations} from "../enums/Animations";
+import TreasurePickupComponent from "../actors/components/loot/TreasurePickupComponent";
+import LootComponent from "../actors/components/LootComponent";
+import {PickupType} from "../enums/PickupType";
+import ScoreComponent from "../actors/components/ScoreComponent";
+import EventMgr from "../events/EventMgr";
+import EventData_Request_New_Actor from "../events/EventData_Request_New_Actor";
 
 export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, animName: Animations): Actor {
     const anim = ResourceMgr.getInstance().getAnimation(animName);
@@ -39,16 +45,16 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
     const claw = new Actor();
     const positionComponent = new PositionComponent(claw, new Point(spawnX, spawnY));
     claw.components.push(positionComponent);
-    const animationComponent = new AnimationComponent(claw, anim);
-    claw.components.push(animationComponent);
     const renderComponent = new ActorRenderComponent(claw);
     claw.components.push(renderComponent);
+    const animationComponent = new AnimationComponent(claw, renderComponent, anim);
+    claw.components.push(animationComponent);
     const healthComponent = new HealthComponent(claw, 100, 100, true);
     claw.components.push(healthComponent);
     const controllableComponent = new ClawControllableComponent(claw, animationComponent, renderComponent, physics, healthComponent, [Sounds.claw_killEnemy], 0.4, 1800, [Animations.damage1, Animations.damage2], [Sounds.claw_damage1, Sounds.claw_damage2, Sounds.claw_damage3, Sounds.claw_damage4]);
     claw.components.push(controllableComponent);
     const collisionMask = CollisionFlag.CollisionFlag_EnemyAIAttack | CollisionFlag.CollisionFlag_Solid | CollisionFlag.CollisionFlag_Ground |
-    CollisionFlag.CollisionFlag_Trigger | CollisionFlag.CollisionFlag_DamageAura | CollisionFlag.CollisionFlag_Pickup;
+        CollisionFlag.CollisionFlag_Trigger | CollisionFlag.CollisionFlag_DamageAura | CollisionFlag.CollisionFlag_Pickup;
     const actorBodyDef = new ActorBodyDef();
     actorBodyDef.size.x = gameProperties.player.stayW;
     actorBodyDef.size.y = gameProperties.player.stayH;
@@ -63,6 +69,9 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
     actorBodyDef.collisionMask = collisionMask;
     const physicsComponent = new PhysicsComponent(claw, true, gameProperties.player.maxJumpHeight, actorBodyDef, physics, controllableComponent);
     claw.components.push(physicsComponent);
+
+    const scoreComponent = new ScoreComponent(claw, 0);
+    claw.components.push(scoreComponent);
 
     //pClawActor->LinkEndChild(CreateCollisionComponent(40, 100));
     //pClawActor->LinkEndChild(ActorTemplates::CreateFollowableComponent(Point(-5, -80), "/GAME/IMAGES/EXCLAMATION/*", ""));
@@ -92,7 +101,8 @@ export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY:
                                    damageAnimNames: Animations[], damageSounds: Sounds[],
                                    deathAnimName: Animations, deathSounds: Sounds[],
                                    attackSound: Sounds, agroSounds: Sounds[] = [],
-                                   idleSounds: Sounds[] = []) {
+                                   idleSounds: Sounds[] = [],
+                                   loot: Map<PickupType, number>) {
     const resources = ResourceMgr.getInstance();
     const run = resources.getAnimation(runName);
     const idle = resources.getAnimation(idleName);
@@ -106,10 +116,10 @@ export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY:
     const officer = new Actor();
     const positionComponent = new PositionComponent(officer, new Point(spawnX, spawnY));
     officer.components.push(positionComponent);
-    const animationComponent = new AnimationComponent(officer, run);
-    officer.components.push(animationComponent);
     const renderComponent = new ActorRenderComponent(officer);
     officer.components.push(renderComponent);
+    const animationComponent = new AnimationComponent(officer, renderComponent, run);
+    officer.components.push(animationComponent);
     const collisionMask = CollisionFlag.CollisionFlag_ClawAttack | CollisionFlag.CollisionFlag_Solid | CollisionFlag.CollisionFlag_Ground | CollisionFlag.CollisionFlag_Trigger;
     const actorBodyDef = new ActorBodyDef();
     actorBodyDef.size.x = gameProperties.player.stayW;
@@ -135,9 +145,94 @@ export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY:
     officer.components.push(attackAIStateComponent);
     const takeDamageAIStateComponent = new TakeDamageAIStateComponent(officer, damageAnims, damageSounds, animationComponent, enemyAIComponent);
     officer.components.push(takeDamageAIStateComponent);
+    const lootComponent = new LootComponent(officer, loot, healthComponent, positionComponent, physics);
+    officer.components.push(lootComponent);
 
     enemyAIComponent.EnterBestState(true);
     return officer;
+}
+
+export function lootToMap(loot: LootInfo[]) {
+    const map = new Map<PickupType, number>();
+    loot.forEach((l) => map.set(l.type, l.count));
+    return map;
+}
+
+export function createTreasureActor(x: number, y: number, w: number, h: number,
+                                    type: Animations, physics: GamePhysics, isStatic: boolean,
+                                    pickupSound: Sounds, scorePoints: number) {
+    const resources = ResourceMgr.getInstance();
+    const anim = resources.getAnimation(type);
+    if (!anim) {
+        console.error('Resources were not found');
+        throw new Error('Resources were not found');
+    }
+    const treasure = new Actor();
+    const positionComponent = new PositionComponent(treasure, new Point(x, y));
+    treasure.components.push(positionComponent);
+    const renderComponent = new ActorRenderComponent(treasure);
+    treasure.components.push(renderComponent);
+    const currentFrame = anim.frames.length === 1 ? 0 : (Math.round(Math.random() * 100) % anim.frames.length);
+    const animationComponent = new AnimationComponent(treasure, renderComponent, anim, currentFrame);
+    treasure.components.push(animationComponent);
+    const triggerComponent = new TriggerComponent(treasure);
+    treasure.components.push(triggerComponent);
+
+    let speedX = 0.5 + ((Math.random() * 1000) % 100) / 50.0;
+    const speedY = -(1 + ((Math.random() * 1000) % 100) / 50.0);
+
+    if ((Math.random() * 100) % 2 === 1) {
+        speedX *= -1;
+    }
+
+    const bodyDef = new ActorBodyDef();
+    if (isStatic) {
+        bodyDef.bodyType = BodyType.STATIC;
+        bodyDef.makeSensor = true;
+    } else {
+        bodyDef.bodyType = BodyType.DYNAMIC;
+        bodyDef.makeSensor = false;
+    }
+
+    bodyDef.fixtureType = FixtureType.FixtureType_Pickup;
+    bodyDef.size.x = w;
+    bodyDef.size.y = h;
+    bodyDef.position.x = x;
+    bodyDef.position.y = y;
+    bodyDef.gravityScale = 0.8;
+    bodyDef.setInitialSpeed = true;
+    bodyDef.initialSpeed.x = speedX;
+    bodyDef.initialSpeed.y = speedY;
+    bodyDef.collisionFlag = CollisionFlag.CollisionFlag_Pickup;
+    bodyDef.collisionMask = (CollisionFlag.CollisionFlag_Death | CollisionFlag.CollisionFlag_Ground | CollisionFlag.CollisionFlag_Solid);
+    bodyDef.density = 10.0;
+    bodyDef.friction = 0.18;
+    bodyDef.restitution = 0.5;
+
+    const fixtureDef = new ActorFixtureDef();
+    fixtureDef.size.x = w;
+    fixtureDef.size.y = h;
+    fixtureDef.fixtureType = FixtureType.FixtureType_Trigger;
+    fixtureDef.collisionFlag = CollisionFlag.CollisionFlag_Pickup;
+    fixtureDef.collisionMask = CollisionFlag.CollisionFlag_Controller;
+    fixtureDef.isSensor = true;
+    bodyDef.fixtureList.push(fixtureDef);
+    const physicsComponent = new PhysicsComponent(treasure, false, 0, bodyDef, physics);
+    treasure.components.push(physicsComponent);
+    const treasurePickupComponent = new TreasurePickupComponent(treasure, triggerComponent, pickupSound, scorePoints, physics, positionComponent);
+    treasure.components.push(treasurePickupComponent);
+
+    EventMgr.getInstance().VTriggerEvent(new EventData_Request_New_Actor(treasure));
+
+    // if (!isStatic)
+    // {
+    //     const healthComponent = new HealthComponent(treasure, 1, 1);
+    //     treasure.components.push(healthComponent);
+    //     const destroyableComponent = new DestroyableComponent(treasure, animationComponent, healthComponent, physics, pickupSounds);
+    //     treasure.components.push(destroyableComponent);
+    // }
+
+    return treasure;
 }
 
 export function createSpriteDefinitions(tiles: Tiles, spriteNamePrefix: string): SpriteDefinition[] {

@@ -2,6 +2,11 @@
 
 import Rect from "./utils/Rect";
 import Animation from "./graphics/Animation";
+import {TreasureDef} from "./LevelData";
+import {PickupType} from "./enums/PickupType";
+import {popRandomItem} from "./utils/Util";
+import {Sounds} from "./enums/Sounds";
+import {Animations} from "./enums/Animations";
 
 export default class ResourceMgr {
     private static self = new ResourceMgr();
@@ -11,6 +16,7 @@ export default class ResourceMgr {
     private images = new Map<string, CanvasImageSource>();
     private sprites = new Map<string, SpriteInfo>();
     private animations = new Map<string, Animation>();
+    private treasures = new Map<PickupType, Treasure[]>();
     private sounds = new Map<string, HTMLAudioElement>();
     private loadingGraphics = new Map<string, Promise<CanvasImageSource>>();
     private loadingSounds = new Map<string, Promise<HTMLAudioElement>>();
@@ -88,6 +94,21 @@ export default class ResourceMgr {
         return this.loadingGraphics.size === 0 && this.loadingSounds.size === 0;
     }
 
+    loadTreasures(treasures: TreasureDef[]) {
+        treasures.forEach((t) => {
+            const treasureEntity = this.treasures.get(t.type) || [];
+            this.treasures.set(t.type, treasureEntity);
+            t.anims.forEach((a) => treasureEntity.push(new Treasure(t.w, t.h, a.name, t.score, t.pickupSound)));
+        });
+    }
+
+    getTreasure(type: PickupType): Treasure | null {
+        const treasures = this.treasures.get(type);
+        if (treasures && treasures.length > 0) {
+            return popRandomItem(treasures);
+        }
+        return null;
+    }
 }
 
 export class Sprite {
@@ -107,5 +128,11 @@ class SpriteInfo {
     constructor(imgName: string, x: number, y: number, width: number, height: number) {
         this.imgName = imgName;
         this.rect = new Rect(x, y, width, height);
+    }
+}
+
+export class Treasure {
+    constructor(public w: number, public h: number, public anim: Animations, public score: number,
+                public sounds: Sounds) {
     }
 }

@@ -1,6 +1,7 @@
 import {CollisionType} from "./enums/CollisionType";
 import {Sounds} from "./enums/Sounds";
 import {Animations} from "./enums/Animations";
+import {PickupType} from "./enums/PickupType";
 
 export class CollisionInfo {
     constructor(public x: number, public y: number, public w: number, public h: number,
@@ -124,6 +125,16 @@ export default {
             spawnY: 2*64,
             borderLeft: 6*64 + 20,
             borderRight: 11*64 - 20,
+            loot: [
+                {
+                    type: PickupType.RING,
+                    count: 5
+                },
+                {
+                    type: PickupType.COIN,
+                    count: 5
+                }
+            ]
         }
     ],
     officer: {
@@ -763,6 +774,196 @@ export default {
         }
         ]
     },
+    treasureDef: [
+        {
+            type: PickupType.RING,
+            pickupSound: Sounds.treasure_ring,
+            score: 1000,
+            w: 22,
+            h: 24,
+            anims: [
+                {
+                    name: Animations.treasureRingRed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 1,
+                            y: 252,
+                            cx: 11,
+                            cy: 12,
+                            w: 22,
+                            h: 24,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureRingBlue,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 25,
+                            y: 252,
+                            cx: 11,
+                            cy: 12,
+                            w: 22,
+                            h: 24,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureRingGreed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 49,
+                            y: 252,
+                            cx: 11,
+                            cy: 12,
+                            w: 22,
+                            h: 24,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureRingPink,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 73,
+                            y: 252,
+                            cx: 11,
+                            cy: 12,
+                            w: 22,
+                            h: 24,
+                            delay: 500000,
+                        },
+                    ]
+                }
+            ]
+        },
+        {
+            type: PickupType.COIN,
+            pickupSound: Sounds.treasure_coin,
+            w: 28,
+            h: 29,
+            score: 100,
+            anims: [
+                {
+                    name: Animations.treasureCoin,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 1 + 30 * 0,
+                            y: 35,
+                            cx: 0,
+                            cy: 0,
+                            w: 28,
+                            h: 29,
+                            delay: 100,
+                        },
+                        {
+                            id: 1,
+                            x: 1 + 30 * 1,
+                            y: 35,
+                            cx: 0,
+                            cy: 0,
+                            w: 28,
+                            h: 29,
+                            delay: 100,
+                        },
+                        {
+                            id: 2,
+                            x: 1 + 30 * 2,
+                            y: 35,
+                            cx: 0,
+                            cy: 0,
+                            w: 28,
+                            h: 29,
+                            delay: 100,
+                        },
+                        {
+                            id: 3,
+                            x: 1 + 30 * 3,
+                            y: 35,
+                            cx: 0,
+                            cy: 0,
+                            w: 28,
+                            h: 29,
+                            delay: 100,
+                        },
+                        {
+                            id: 4,
+                            x: 1 + 30 * 4,
+                            y: 35,
+                            cx: 0,
+                            cy: 0,
+                            w: 28,
+                            h: 29,
+                            delay: 100,
+                        },
+                        {
+                            id: 5,
+                            x: 1 + 30 * 5,
+                            y: 35,
+                            cx: 0,
+                            cy: 0,
+                            w: 28,
+                            h: 29,
+                            delay: 100,
+                        },
+                        {
+                            id: 6,
+                            x: 1 + 30 * 6,
+                            y: 35,
+                            cx: 0,
+                            cy: 0,
+                            w: 28,
+                            h: 29,
+                            delay: 100,
+                        },
+                        {
+                            id: 7,
+                            x: 1 + 30 * 7,
+                            y: 35,
+                            cx: 0,
+                            cy: 0,
+                            w: 28,
+                            h: 29,
+                            delay: 100,
+                        },
+                        {
+                            id: 8,
+                            x: 1 + 30 * 8,
+                            y: 35,
+                            cx: 0,
+                            cy: 0,
+                            w: 28,
+                            h: 29,
+                            delay: 100,
+                        },
+                    ]
+                }
+            ]
+        }
+    ],
     sounds: [
         {
             name: Sounds.claw_swordAttack,
@@ -828,6 +1029,14 @@ export default {
             name: Sounds.claw_killEnemy,
             src: 'sounds/claw_killEnemy.mp3'
         },
+        {
+            name: Sounds.treasure_ring,
+            src: 'sounds/rings.mp3'
+        },
+        {
+            name: Sounds.treasure_coin,
+            src: 'sounds/coin.mp3'
+        },
     ]
 };
 
@@ -870,4 +1079,18 @@ export interface CollisionTile extends Tile {
 export interface SoundInfo {
     name: string;
     src: string;
+}
+
+export interface TreasureDef {
+    type: PickupType;
+    score: number;
+    w: number;
+    h: number;
+    anims: AnimationTiles[];
+    pickupSound: Sounds;
+}
+
+export interface LootInfo {
+    type: PickupType;
+    count: number;
 }

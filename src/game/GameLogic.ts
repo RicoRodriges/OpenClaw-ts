@@ -7,7 +7,7 @@ import {
     createCollisionObjectsAndScene,
     createOfficerActor,
     createSpriteDefinitions,
-    loadAllSounds, loadAnimationWithSprites
+    loadAllSounds, loadAnimationWithSprites, lootToMap
 } from "./utils/Converters";
 import ActorController from "./ActorController";
 import ScreenElementScene from "./user-interface/ScreenElementScene";
@@ -17,7 +17,7 @@ import SceneNode from "./scene/SceneNode";
 import {IEventData} from "./events/IEventData";
 import EventData_Actor_Start_Move from "./events/EventData_Actor_Start_Move";
 import PhysicsComponent from "./actors/components/PhysicsComponent";
-import levelData from "./LevelData";
+import levelData, {TreasureDef} from "./LevelData";
 import {ActorRenderComponent} from "./actors/components/RenderComponent";
 import ResourceMgr from "./ResourceMgr";
 import EventData_Level_Loaded from "./events/EventData_Level_Loaded";
@@ -84,6 +84,10 @@ export default class GameLogic {
         // Create animations
         levelData.player.anims.forEach((anim) => loadAnimationWithSprites(anim));
         levelData.officer.anims.forEach((anim) => loadAnimationWithSprites(anim));
+        levelData.treasureDef.forEach((t: TreasureDef) => t.anims.forEach((anim) => loadAnimationWithSprites(anim)));
+
+        // Load treasure definitions
+        resources.loadTreasures(levelData.treasureDef);
 
         // Load sounds
         loadAllSounds(levelData.sounds);
@@ -102,13 +106,15 @@ export default class GameLogic {
                 Animations.runOfficer, Animations.swordAttackOfficer, levelData.officer.speed, o.borderLeft, o.borderRight, camera,
                 [Animations.damageOfficer], [Sounds.officer_damage1, Sounds.officer_damage2],
                 Animations.deathOfficer, [Sounds.officer_killed1, Sounds.officer_killed2],
-                Sounds.officer_swordAttack, [Sounds.officer_agro1, Sounds.officer_agro2], [Sounds.officer_idle1, Sounds.officer_idle2]);
+                Sounds.officer_swordAttack, [Sounds.officer_agro1, Sounds.officer_agro2], [Sounds.officer_idle1, Sounds.officer_idle2],
+                lootToMap(o.loot));
             this.actors.push(officerActor);
         });
 
         // Create scene nodes for every actors
         const actorSceneNodes: ActorSceneNode[] = [];
         const actorNodes = new Map<Actor, SceneNode>();
+        // TODO: refactor
         this.actors.forEach((a) => {
             const renderComponent = a.getComponent(ActorRenderComponent.NAME) as ActorRenderComponent;
             const positionComponent = a.getComponent(PositionComponent.NAME) as PositionComponent;
@@ -174,6 +180,24 @@ export default class GameLogic {
         const actor = event.a;
         if (actor) {
             this.actors.push(actor);
+            // TODO: refactor
+            const renderComponent = actor.getComponent(ActorRenderComponent.NAME) as ActorRenderComponent;
+            if (renderComponent) {
+                const positionComponent = actor.getComponent(PositionComponent.NAME) as PositionComponent;
+                if (positionComponent) {
+                    const physicComponent = actor.getComponent(PhysicsComponent.NAME) as PhysicsComponent;
+                    if (physicComponent) {
+                        const actorSceneNode = new ActorSceneNode(actor, positionComponent.position.x, positionComponent.position.y,
+                            // TODO: remove this hack
+                            physicComponent.actorBodyDef.size.x, physicComponent.actorBodyDef.size.y, renderComponent);
+                        if (this.gameView) {
+                            const ses = this.gameView.screenElements[0] as ScreenElementScene;
+                            ses.actorNodes.set(actor, actorSceneNode);
+                            ses.root.childrenList.push(actorSceneNode);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -182,9 +206,20 @@ export default class GameLogic {
         const actor = event.a;
         if (actor) {
             this.actors = this.actors.filter((a) => a !== actor);
-            if (this.gamePhysics)
-            {
+            if (this.gamePhysics) {
                 this.gamePhysics.VRemoveActor(actor);
+            }
+            // TODO: refactor
+            const renderComponent = actor.getComponent(ActorRenderComponent.NAME) as ActorRenderComponent;
+            if (renderComponent && this.gameView) {
+                if (this.gameView) {
+                    const ses = this.gameView.screenElements[0] as ScreenElementScene;
+                    const node = ses.actorNodes.get(actor);
+                    if (node) {
+                        ses.root.childrenList = ses.root.childrenList.filter((n) => n !== node);
+                        ses.actorNodes.delete(actor);
+                    }
+                }
             }
         }
     }
