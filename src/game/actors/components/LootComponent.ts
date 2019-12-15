@@ -7,6 +7,8 @@ import PositionComponent from "./PositionComponent";
 import {createTreasureActor} from "../../utils/Converters";
 import ResourceMgr from "../../ResourceMgr";
 import GamePhysics from "../../GamePhysics";
+import EventMgr from "../../events/EventMgr";
+import EventData_Request_New_Actor from "../../events/EventData_Request_New_Actor";
 
 export default class LootComponent extends ActorComponent implements HealthObserver {
     public static NAME = 'LootComponent';
@@ -28,7 +30,8 @@ export default class LootComponent extends ActorComponent implements HealthObser
                     const treasure = resources.getTreasure(t);
                     if (!treasure)
                         break;
-                    createTreasureActor(pos.x, pos.y, treasure.w, treasure.h, treasure.anim, this.physics, false, treasure.sounds, treasure.score);
+                    const actor = createTreasureActor(pos.x, pos.y, treasure.w, treasure.h, treasure.anim, this.physics, false, treasure.sounds, treasure.score);
+                    EventMgr.getInstance().VTriggerEvent(new EventData_Request_New_Actor(actor));
                 }
             });
             this.loot.clear();

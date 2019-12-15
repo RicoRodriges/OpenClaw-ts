@@ -33,8 +33,6 @@ import TreasurePickupComponent from "../actors/components/loot/TreasurePickupCom
 import LootComponent from "../actors/components/LootComponent";
 import {PickupType} from "../enums/PickupType";
 import ScoreComponent from "../actors/components/ScoreComponent";
-import EventMgr from "../events/EventMgr";
-import EventData_Request_New_Actor from "../events/EventData_Request_New_Actor";
 
 export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, animName: Animations): Actor {
     const anim = ResourceMgr.getInstance().getAnimation(animName);
@@ -178,10 +176,10 @@ export function createTreasureActor(x: number, y: number, w: number, h: number,
     const triggerComponent = new TriggerComponent(treasure);
     treasure.components.push(triggerComponent);
 
-    let speedX = 0.5 + ((Math.random() * 1000) % 100) / 50.0;
-    const speedY = -(1 + ((Math.random() * 1000) % 100) / 50.0);
+    let speedX = 0.5 + ((Math.random() * 1000) % 100) / 20.0;
+    const speedY = -(1 + ((Math.random() * 1000) % 100) / 20.0);
 
-    if ((Math.random() * 100) % 2 === 1) {
+    if (Math.round(Math.random() * 100) & 2) {
         speedX *= -1;
     }
 
@@ -221,8 +219,6 @@ export function createTreasureActor(x: number, y: number, w: number, h: number,
     treasure.components.push(physicsComponent);
     const treasurePickupComponent = new TreasurePickupComponent(treasure, triggerComponent, pickupSound, scorePoints, physics, positionComponent);
     treasure.components.push(treasurePickupComponent);
-
-    EventMgr.getInstance().VTriggerEvent(new EventData_Request_New_Actor(treasure));
 
     // if (!isStatic)
     // {
