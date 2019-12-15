@@ -137,6 +137,22 @@ export default {
             ]
         }
     ],
+    crateInstances: [
+        {
+            spawnX: 13*64,
+            spawnY: 7*64,
+            loot: [
+                {
+                    type: PickupType.RING,
+                    count: 5
+                },
+                {
+                    type: PickupType.COIN,
+                    count: 5
+                }
+            ]
+        }
+    ],
     officer: {
         speed: 1.3,
         anims: [
@@ -964,6 +980,162 @@ export default {
             ]
         }
     ],
+    levelItems: [
+        {
+            name: Animations.candle,
+            src: 'sprites/level 1 Objects.png',
+            srcWidth: 1399,
+            srcHeight: 857,
+            map: [
+                {
+                    id: 0,
+                    x: 1,
+                    y: 731,
+                    cx: 25,
+                    cy: 62,
+                    w: 51,
+                    h: 124,
+                    delay: 300,
+                },
+                {
+                    id: 1,
+                    x: 57,
+                    y: 733,
+                    cx: 25,
+                    cy: 62,
+                    w: 51,
+                    h: 124,
+                    delay: 300,
+                },
+                {
+                    id: 2,
+                    x: 113,
+                    y: 733,
+                    cx: 25,
+                    cy: 62,
+                    w: 51,
+                    h: 124,
+                    delay: 300,
+                },
+                {
+                    id: 3,
+                    x: 165,
+                    y: 731,
+                    cx: 25,
+                    cy: 62,
+                    w: 51,
+                    h: 124,
+                    delay: 300,
+                },
+            ]
+        },
+        {
+            name: Animations.crate,
+            src: 'sprites/level 1 Objects.png',
+            srcWidth: 1399,
+            srcHeight: 857,
+            map: [
+                {
+                    id: 0,
+                    x: 1,
+                    y: 224,
+                    cx: 0,
+                    cy: 0,
+                    w: 56,
+                    h: 54,
+                    delay: 3000000000,
+                },
+            ]
+        },
+        {
+            name: Animations.crate_destroying,
+            src: 'sprites/level 1 Objects.png',
+            srcWidth: 1399,
+            srcHeight: 857,
+            map: [
+                {
+                    id: 0,
+                    x: 1,
+                    y: 224,
+                    cx: 0,
+                    cy: 0,
+                    w: 56,
+                    h: 54,
+                    delay: 70,
+                },
+                {
+                    id: 1,
+                    x: 61,
+                    y: 224,
+                    cx: 0,
+                    cy: 0,
+                    w: 56,
+                    h: 54,
+                    delay: 70,
+                },
+                {
+                    id: 2,
+                    x: 121,
+                    y: 224,
+                    cx: 0,
+                    cy: 0,
+                    w: 60,
+                    h: 61,
+                    delay: 70,
+                },
+                {
+                    id: 3,
+                    x: 186,
+                    y: 224,
+                    cx: 0,
+                    cy: 0,
+                    w: 74,
+                    h: 70,
+                    delay: 70,
+                },
+                {
+                    id: 4,
+                    x: 264,
+                    y: 224,
+                    cx: 0,
+                    cy: 0,
+                    w: 116,
+                    h: 74,
+                    delay: 70,
+                },
+                {
+                    id: 5,
+                    x: 384,
+                    y: 224,
+                    cx: 0,
+                    cy: 0,
+                    w: 132,
+                    h: 58,
+                    delay: 70,
+                },
+                {
+                    id: 6,
+                    x: 521,
+                    y: 224,
+                    cx: 0,
+                    cy: 0,
+                    w: 132,
+                    h: 58,
+                    delay: 70,
+                },
+                {
+                    id: 7,
+                    x: 656,
+                    y: 224,
+                    cx: 0,
+                    cy: 0,
+                    w: 131,
+                    h: 55,
+                    delay: 70,
+                },
+            ]
+        }
+    ],
     sounds: [
         {
             name: Sounds.claw_swordAttack,
@@ -1036,6 +1208,14 @@ export default {
         {
             name: Sounds.treasure_coin,
             src: 'sounds/coin.mp3'
+        },
+        {
+            name: Sounds.crate_break1,
+            src: 'sounds/cratebreak1.mp3'
+        },
+        {
+            name: Sounds.crate_break2,
+            src: 'sounds/cratebreak2.mp3'
         },
     ]
 };

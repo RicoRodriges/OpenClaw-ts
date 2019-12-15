@@ -33,6 +33,7 @@ import TreasurePickupComponent from "../actors/components/loot/TreasurePickupCom
 import LootComponent from "../actors/components/LootComponent";
 import {PickupType} from "../enums/PickupType";
 import ScoreComponent from "../actors/components/ScoreComponent";
+import DestroyableComponent from "../actors/components/DestroyableComponent";
 
 export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, animName: Animations): Actor {
     const anim = ResourceMgr.getInstance().getAnimation(animName);
@@ -231,6 +232,51 @@ export function createTreasureActor(x: number, y: number, w: number, h: number,
     return treasure;
 }
 
+export function createLootBoxActor(x: number, y: number, w: number, h: number,
+                                   img: Animations, destroyAnim: Animations, physics: GamePhysics,
+                                   destroySounds: Sounds[],
+                                   loot: Map<PickupType, number>) {
+    const resources = ResourceMgr.getInstance();
+    const anim = resources.getAnimation(img);
+    if (!anim) {
+        console.error('Resources were not found');
+        throw new Error('Resources were not found');
+    }
+    const box = new Actor();
+    const positionComponent = new PositionComponent(box, new Point(x, y));
+    box.components.push(positionComponent);
+    const renderComponent = new ActorRenderComponent(box);
+    box.components.push(renderComponent);
+    const animationComponent = new AnimationComponent(box, renderComponent, anim);
+    box.components.push(animationComponent);
+
+    const healthComponent = new HealthComponent(box, 1, 1);
+    box.components.push(healthComponent);
+    const destroyableComponent = new DestroyableComponent(box, animationComponent, healthComponent, physics, destroySounds, destroyAnim);
+    box.components.push(destroyableComponent);
+
+    const bodyDef = new ActorBodyDef();
+    bodyDef.bodyType = BodyType.DYNAMIC;
+    bodyDef.makeSensor = false;
+    bodyDef.fixtureType = FixtureType.FixtureType_Crate;
+    bodyDef.size.x = w;
+    bodyDef.size.y = h;
+    bodyDef.position.x = x;
+    bodyDef.position.y = y;
+    bodyDef.gravityScale = 1;
+    bodyDef.collisionFlag = CollisionFlag.CollisionFlag_Crate;
+    bodyDef.collisionMask = (CollisionFlag.CollisionFlag_ClawAttack | CollisionFlag.CollisionFlag_Ground | CollisionFlag.CollisionFlag_Solid);
+    bodyDef.density = 0;
+    bodyDef.friction = 0;
+    bodyDef.restitution = 0;
+    const physicsComponent = new PhysicsComponent(box, false, 0, bodyDef, physics);
+    box.components.push(physicsComponent);
+    const lootComponent = new LootComponent(box, loot, healthComponent, positionComponent, physics);
+    box.components.push(lootComponent);
+
+    return box;
+}
+
 export function createSpriteDefinitions(tiles: Tiles, spriteNamePrefix: string): SpriteDefinition[] {
     const src = tiles.src;
     const srcWidth = tiles.srcWidth;
@@ -341,7 +387,7 @@ export function createAreaDamageActor(pos: Point, size: Point, damage: number, c
 
     let collisionMask = 0;
     if (collisionFlag === CollisionFlag.CollisionFlag_ClawAttack) {
-        collisionMask = CollisionFlag.CollisionFlag_DynamicActor;
+        collisionMask = CollisionFlag.CollisionFlag_DynamicActor | CollisionFlag.CollisionFlag_Crate;
     } else if (collisionFlag === CollisionFlag.CollisionFlag_EnemyAIAttack) {
         collisionMask = (CollisionFlag.CollisionFlag_Controller | CollisionFlag.CollisionFlag_InvisibleController);
     } else if (collisionFlag === CollisionFlag.CollisionFlag_Explosion) {

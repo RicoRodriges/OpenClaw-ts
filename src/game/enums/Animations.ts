@@ -17,4 +17,7 @@ export enum Animations {
     treasureRingBlue = 'ringBlue',
     treasureRingPink = 'ringPink',
     treasureCoin = 'coin',
+    candle = 'candle',
+    crate = 'crate',
+    crate_destroying = 'crate_destroying',
 }

@@ -5,9 +5,12 @@ import EventMgr from "./events/EventMgr";
 import {
     createClawActor,
     createCollisionObjectsAndScene,
+    createLootBoxActor,
     createOfficerActor,
     createSpriteDefinitions,
-    loadAllSounds, loadAnimationWithSprites, lootToMap
+    loadAllSounds,
+    loadAnimationWithSprites,
+    lootToMap
 } from "./utils/Converters";
 import ActorController from "./ActorController";
 import ScreenElementScene from "./user-interface/ScreenElementScene";
@@ -85,6 +88,7 @@ export default class GameLogic {
         levelData.player.anims.forEach((anim) => loadAnimationWithSprites(anim));
         levelData.officer.anims.forEach((anim) => loadAnimationWithSprites(anim));
         levelData.treasureDef.forEach((t: TreasureDef) => t.anims.forEach((anim) => loadAnimationWithSprites(anim)));
+        levelData.levelItems.forEach((anim) => loadAnimationWithSprites(anim));
 
         // Load treasure definitions
         resources.loadTreasures(levelData.treasureDef);
@@ -109,6 +113,14 @@ export default class GameLogic {
                 Sounds.officer_swordAttack, [Sounds.officer_agro1, Sounds.officer_agro2], [Sounds.officer_idle1, Sounds.officer_idle2],
                 lootToMap(o.loot));
             this.actors.push(officerActor);
+        });
+
+        // Create crate actors
+        levelData.crateInstances.forEach((o) => {
+            // TODO: remove w and h
+            const crate = createLootBoxActor(o.spawnX, o.spawnY, 56, 54, Animations.crate, Animations.crate_destroying,
+                this.gamePhysics as GamePhysics, [Sounds.crate_break1, Sounds.crate_break2], lootToMap(o.loot));
+            this.actors.push(crate);
         });
 
         // Create scene nodes for every actors
