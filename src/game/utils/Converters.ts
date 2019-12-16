@@ -296,11 +296,13 @@ export function createSpriteDefinitions(tiles: Tiles, spriteNamePrefix: string):
 
 export function createAnimation(tiles: AnimationTiles): Animation {
     const animationName = tiles.name;
+    const ox = tiles.ox !== undefined ? tiles.ox : 0;
+    const oy = tiles.oy !== undefined ? tiles.oy : 0;
     const frames = tiles.map.map((t) => {
         const w = tiles.w !== undefined ? tiles.w : t.w !== undefined ? t.w : 0;
         const h = tiles.h !== undefined ? tiles.h : t.h !== undefined ? t.h : 0;
-        const offsetX = t.cx !== undefined ? (w / 2 - t.cx) : 0;
-        const offsetY = t.cy !== undefined ? (h / 2 - t.cy) : 0;
+        const offsetX = t.cx !== undefined ? (w / 2 - (t.cx + ox)) : 0;
+        const offsetY = t.cy !== undefined ? (h / 2 - (t.cy + oy)) : 0;
         return new Frame(new Image(offsetX, offsetY, w, h, `${animationName}${t.id}`), t.delay);
     });
     return new Animation(animationName, frames);

@@ -43,10 +43,7 @@ export default class AnimationComponent extends ActorComponent {
             this.time = 0;
             this.current = 0;
             this.anim = anim;
-            const renderComponent = this.owner.getComponent(ActorRenderComponent.NAME) as ActorRenderComponent;
-            if (renderComponent) {
-                renderComponent.setCurrentImage(this.anim.frames[this.current].image);
-            }
+            this.renderComponent.setCurrentImage(this.anim.frames[this.current].image);
         }
     }
 

@@ -69,7 +69,7 @@ export default class DestroyableComponent extends ActorComponent implements Anim
     }
 
     private DeleteActor() {
-        EventMgr.getInstance().VQueueEvent(new EventData_Request_Delete_Actor(this.owner));
+        EventMgr.getInstance().VTriggerEvent(new EventData_Request_Delete_Actor(this.owner));
     }
 
     getName() {
