@@ -3,11 +3,12 @@ import GameView from "./GameView";
 import GamePhysics from "./GamePhysics";
 import EventMgr from "./events/EventMgr";
 import {
+    createBgtilesAndScene,
     createClawActor,
     createCollisionObjectsAndScene,
     createLootBoxActor,
     createOfficerActor,
-    createSpriteDefinitions,
+    createSpriteDefinitions, createSpriteDefinitionsFromGridTiles,
     loadAllSounds,
     loadAnimationWithSprites,
     lootToMap
@@ -34,6 +35,7 @@ import AudioMgr from "./audio/AudioMgr";
 import {Sounds} from "./enums/Sounds";
 import EventData_Request_New_Actor from "./events/EventData_Request_New_Actor";
 import EventData_Request_Delete_Actor from "./events/EventData_Request_Delete_Actor";
+import GameProperties from "./GameProperties";
 
 export default class GameLogic {
     actors: Actor[] = [];
@@ -75,14 +77,20 @@ export default class GameLogic {
 
     VLoadGame(w: number, h: number) {
         this.gamePhysics = new GamePhysics();
-        //this.gamePhysics.addStaticBody(undefined, new Rect(0, 600, 600, 1));
 
         // Create sprite definitions
-        const tileDefinitions = createSpriteDefinitions(levelData.tiles, 'tile');
+        const tileSetName = 'tile';
+        const bgTileSetName = 'bgtile';
+        const tileDefinitions = createSpriteDefinitions(levelData.tiles, tileSetName);
+        const bgtileDefinitions = createSpriteDefinitionsFromGridTiles(levelData.bgtiles, bgTileSetName);
+
+        const allTiles = [tileDefinitions, bgtileDefinitions];
         const resources = ResourceMgr.getInstance();
-        tileDefinitions.forEach((s) => {
-            resources.loadSprite(s.id, s.src, s.src, s.rect.x, s.rect.y, s.rect.w, s.rect.h);
-        });
+        allTiles.forEach((t) =>
+            t.forEach((s) =>
+                resources.loadSprite(s.id, s.src, s.src, s.rect.x, s.rect.y, s.rect.w, s.rect.h)
+            )
+        );
 
         // Create animations
         levelData.player.anims.forEach((anim) => loadAnimationWithSprites(anim));
@@ -140,10 +148,14 @@ export default class GameLogic {
         });
 
         // Create tile physics objects and scene node
-        const tilesSceneNode = createCollisionObjectsAndScene(this.gamePhysics, levelData.tiles, levelData.map);
+        const tilesSceneNode = createCollisionObjectsAndScene(this.gamePhysics, levelData.tiles, tileSetName, levelData.map);
+        const bgtilesSceneNode = createBgtilesAndScene(levelData.bgtiles, 0.5, bgTileSetName);
 
         // Add all scene nodes to root
         const rootNode = new SceneNode();
+        if (!GameProperties.debug) {
+            rootNode.childrenList.push(bgtilesSceneNode);
+        }
         rootNode.childrenList.push(tilesSceneNode);
         rootNode.childrenList.push(...actorSceneNodes);
 

@@ -103,6 +103,19 @@ export default {
             },
         ]
     },
+    bgtiles: {
+        src: 'sprites/Level 1.png',
+        srcWidth: 715,
+        srcHeight: 974,
+        w: 64,
+        h: 64,
+        x_start: 196,
+        y_start: 455,
+        x_count: 8,
+        y_count: 8,
+        space_x: 1,
+        space_y: 1,
+    },
     map: [
         [6   , 6   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 6   , 6],
         [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
@@ -1458,6 +1471,20 @@ export interface Tile {
     cy?: number;
     w?: number;
     h?: number;
+}
+
+export interface GridTile {
+    src: string;
+    srcWidth: number;
+    srcHeight: number;
+    w: number;
+    h: number;
+    x_start: number;
+    y_start: number;
+    x_count: number;
+    y_count: number;
+    space_x: number;
+    space_y: number;
 }
 
 export interface AnimationTiles extends Tiles {

@@ -7,7 +7,7 @@ import {ActorRenderComponent, TileId, TileRenderComponent} from "../actors/compo
 import AnimationComponent from "../actors/components/AnimationComponent";
 import Animation from "../graphics/Animation";
 import Frame from "../graphics/Frame";
-import {AnimationTiles, CollisionTiles, LootInfo, SoundInfo, Tiles} from "../LevelData";
+import {AnimationTiles, CollisionTiles, GridTile, LootInfo, SoundInfo, Tiles} from "../LevelData";
 import {SpriteDefinition} from "../../components/SvgSpriteDefinitionComponent";
 import Rect from "./Rect";
 import Image from "../graphics/Image";
@@ -294,6 +294,35 @@ export function createSpriteDefinitions(tiles: Tiles, spriteNamePrefix: string):
     });
 }
 
+export function createSpriteDefinitionsFromGridTiles(tiles: GridTile, spriteNamePrefix: string): SpriteDefinition[] {
+    const src = tiles.src;
+    const srcWidth = tiles.srcWidth;
+    const srcHeight = tiles.srcHeight;
+    const w = tiles.w;
+    const h = tiles.h;
+    const x_start = tiles.x_start;
+    const y_start = tiles.y_start;
+    const x_count = tiles.x_count;
+    const y_count = tiles.y_count;
+    const x_space = tiles.space_x;
+    const y_space = tiles.space_y;
+    const spriteDef: SpriteDefinition[] = [];
+    for (let x = 0; x < x_count; ++x) {
+        for (let y = 0; y < y_count; ++y) {
+            spriteDef.push(
+                {
+                    id: `${spriteNamePrefix}${x + y * x_count}`,
+                    rect: new Rect(x * (w + x_space) + x_start, y * (h + y_space)  + y_start, w, h),
+                    srcWidth: srcWidth,
+                    srcHeight: srcHeight,
+                    src: src
+                }
+            );
+        }
+    }
+    return spriteDef;
+}
+
 export function createAnimation(tiles: AnimationTiles): Animation {
     const animationName = tiles.name;
     const ox = tiles.ox !== undefined ? tiles.ox : 0;
@@ -318,7 +347,7 @@ export function loadAnimationWithSprites(tiles: AnimationTiles) {
     resources.addAnimation(animationName, createAnimation(tiles));
 }
 
-export function createCollisionObjectsAndScene(physics: GamePhysics, tiles: CollisionTiles,
+export function createCollisionObjectsAndScene(physics: GamePhysics, tiles: CollisionTiles, tileSetName: string,
                                                mapElement: (number | null)[][] | (number | null)[][][]): TilesSceneNode {
     const tilesMap: TileId[][][] = [];
     for (let y = 0; y < mapElement.length; ++y) {
@@ -344,7 +373,19 @@ export function createCollisionObjectsAndScene(physics: GamePhysics, tiles: Coll
         }
     }
     const tileRenderComponent = new TileRenderComponent(new Actor(), tiles.w || 0, tiles.h || 0, tilesMap);
-    return new TilesSceneNode(tileRenderComponent);
+    return new TilesSceneNode(tileRenderComponent, tileSetName);
+}
+
+export function createBgtilesAndScene(tiles: GridTile, zIndex: number, tileSetName: string): TilesSceneNode {
+    const tilesMap: TileId[][][] = [];
+    for (let y = 0; y < tiles.y_count; ++y) {
+        for (let x = 0; x < tiles.x_count; ++x) {
+            const val = x + y * tiles.x_count;
+            setElement(val, y, x, tilesMap);
+        }
+    }
+    const tileRenderComponent = new TileRenderComponent(new Actor(), tiles.w, tiles.h, tilesMap, zIndex, true);
+    return new TilesSceneNode(tileRenderComponent, tileSetName);
 }
 
 function setElement(val: number, y: number, x: number, arr: TileId[][][]) {

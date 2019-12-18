@@ -5,7 +5,8 @@ import ResourceMgr from "../ResourceMgr";
 
 export default class TilesSceneNode extends SceneNode {
 
-    constructor(renderComponent: TileRenderComponent) {
+    constructor(renderComponent: TileRenderComponent,
+                private tileSetName: string) {
         super();
         this.renderComponent = renderComponent;
     }
@@ -15,9 +16,13 @@ export default class TilesSceneNode extends SceneNode {
 
         const tileWidth = renderComponent.tileWidth;
         const tileHeight = renderComponent.tileHeight;
+        const zIndex = renderComponent.zIndex;
+        const isRepeated = renderComponent.repeated;
         const cameraRect = scene.camera.getCameraRect(scene);
-        const cameraOffsetX = cameraRect.x < tileWidth ? tileWidth : cameraRect.x;
-        const cameraOffsetY = cameraRect.y < tileHeight ? tileHeight : cameraRect.y;
+        const cameraX = Math.floor(cameraRect.x * zIndex);
+        const cameraY = Math.floor(cameraRect.y * zIndex);
+        const cameraOffsetX = cameraX < tileWidth ? tileWidth : cameraX;
+        const cameraOffsetY = cameraY < tileHeight ? tileHeight : cameraY;
 
         const startX = Math.floor(cameraOffsetX / tileWidth - 1);
         const startY = Math.floor(cameraOffsetY / tileHeight - 1);
@@ -30,37 +35,26 @@ export default class TilesSceneNode extends SceneNode {
             return;
         }
 
-        // const res = [];
-        for (let y = startY; y <= endY && y < renderComponent.tiles.length; ++y) {
-            if (renderComponent.tiles[y]) {
-                for (let x = startX; x <= endX && x < renderComponent.tiles[y].length; ++x) {
-                    if (renderComponent.tiles[y][x]) {
-                        for (let n = 0; n < renderComponent.tiles[y][x].length; ++n) {
-                            const sprite = resources.getSprite(`tile${renderComponent.tiles[y][x][n].id}`);
+        const yTiles = renderComponent.tiles;
+        for (let y = startY; y <= endY && (isRepeated || y < yTiles.length); ++y) {
+            const xTiles = renderComponent.tiles[y % yTiles.length];
+            if (xTiles) {
+                for (let x = startX; x <= endX && (isRepeated || x < xTiles.length); ++x) {
+                    const tiles = xTiles[x % xTiles.length];
+                    if (tiles) {
+                        for (let n = 0; n < tiles.length; ++n) {
+                            const sprite = resources.getSprite(`${this.tileSetName}${tiles[n].id}`);
                             if (!sprite) {
                                 continue;
                             }
 
                             ctx.drawImage(sprite.img,
                                 sprite.rect.x, sprite.rect.y, sprite.rect.w, sprite.rect.h,
-                                x * tileWidth - tileWidth / 2 - cameraRect.x, y * tileHeight - tileHeight / 2 - cameraRect.y, tileWidth, tileHeight);
-                            //
-                            //
-                            // res.push(
-                            //     <rect key={`${x}_${y}`}
-                            //           x={x * tileWidth + cameraRect.x}
-                            //           y={y * tileHeight + cameraRect.y}
-                            //           width={tileWidth}
-                            //           height={tileHeight}
-                            //         //transform={`scale(${scaleX} ${scaleY})`}
-                            //           fill={`url(#tile${renderComponent.tiles[y][x][n].id})`}
-                            //     />
-                            // );
+                                x * tileWidth - tileWidth / 2 - cameraX, y * tileHeight - tileHeight / 2 - cameraY, tileWidth, tileHeight);
                         }
                     }
                 }
             }
         }
-        // return res;
     }
 }

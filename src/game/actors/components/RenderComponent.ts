@@ -3,7 +3,17 @@ import Image from "../../graphics/Image";
 import Actor from "../Actor";
 
 export default abstract class RenderComponent extends ActorComponent {
+    VIsVisible(): boolean {
+        return true;
+    }
 
+    isMirrored() {
+        return false;
+    }
+
+    isYInverted() {
+        return false;
+    }
 }
 
 export class ActorRenderComponent extends RenderComponent {
@@ -15,16 +25,8 @@ export class ActorRenderComponent extends RenderComponent {
         super(owner);
     }
 
-    VIsVisible(): boolean {
-        return true;
-    }
-
     isMirrored() {
         return this.mirror;
-    }
-
-    isYInverted() {
-        return false;
     }
 
     setCurrentImage(img: Image) {
@@ -38,35 +40,18 @@ export class ActorRenderComponent extends RenderComponent {
     getName(): string {
         return ActorRenderComponent.NAME;
     }
-
-    VUpdate(diff: number) {
-    }
 }
 
 export class TileRenderComponent extends RenderComponent {
     public static readonly NAME = 'TileRenderComponent';
 
-    constructor(owner: Actor, public tileWidth: number, public tileHeight: number, public tiles: TileId[][][]) {
+    constructor(owner: Actor, public tileWidth: number, public tileHeight: number,
+                public tiles: TileId[][][], public zIndex = 1, public repeated = false) {
         super(owner);
-    }
-
-    VIsVisible(): boolean {
-        return true;
-    }
-
-    isMirrored() {
-        return false;
-    }
-
-    isYInverted() {
-        return false;
     }
 
     getName(): string {
         return TileRenderComponent.NAME;
-    }
-
-    VUpdate(diff: number) {
     }
 }
 
