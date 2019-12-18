@@ -23,48 +23,38 @@ export default {
                 id: 1,
                 x: 65 * 1,
                 y: 65 * 0,
-                collisions: [
-                    new CollisionInfo(32, 56, 32, 64 - 56, CollisionType.CollisionType_Solid)
-                ]
+                collisions: []
             },
             {
                 id: 2,
                 x: 65 * 2,
                 y: 65 * 0,
-                collisions: [
-                    new CollisionInfo(0, 56, 64, 64 - 56, CollisionType.CollisionType_Solid)
-                ]
+                collisions: []
             },
             {
                 id: 3,
                 x: 65 * 3,
                 y: 65 * 0,
-                collisions: [
-                    new CollisionInfo(0, 56, 64, 64 - 56, CollisionType.CollisionType_Solid)
-                ]
+                collisions: []
             },
             {
                 id: 4,
                 x: 65 * 4,
                 y: 65 * 0,
-                collisions: [
-                    new CollisionInfo(0, 56, 30, 64 - 56, CollisionType.CollisionType_Solid)
-                ]
+                collisions: []
             },
             {
                 id: 5,
                 x: 65 * 1,
                 y: 65 * 1,
-                collisions: [
-                    new CollisionInfo(32, 0, 32, 64, CollisionType.CollisionType_Solid)
-                ]
+                collisions: []
             },
             {
                 id: 6,
                 x: 65 * 2,
                 y: 65 * 1,
                 collisions: [
-                    new CollisionInfo(0, 0, 64, 64, CollisionType.CollisionType_Solid)
+                    new CollisionInfo(-32, -12, 64 + 32*2, 64 + 12*2, CollisionType.CollisionType_Solid)
                 ]
             },
             {
@@ -72,34 +62,26 @@ export default {
                 x: 65 * 3,
                 y: 65 * 1,
                 collisions: [
-                    new CollisionInfo(0, 0, 64, 64, CollisionType.CollisionType_Solid)
+                    new CollisionInfo(-32, -12, 64 + 32*2, 64 + 12*2, CollisionType.CollisionType_Solid)
                 ]
             },
             {
                 id: 8,
                 x: 65 * 4,
                 y: 65 * 1,
-                collisions: [
-                    new CollisionInfo(0, 0, 30, 64, CollisionType.CollisionType_Solid)
-                ]
+                collisions: []
             },
             {
                 id: 9,
                 x: 65 * 1,
                 y: 65 * 2,
-                collisions: [
-                    new CollisionInfo(0, 56, 32, 64 - 56, CollisionType.CollisionType_Solid),
-                    new CollisionInfo(32, 0, 32, 64, CollisionType.CollisionType_Solid)
-                ]
+                collisions: []
             },
             {
                 id: 10,
                 x: 65 * 4,
                 y: 65 * 2,
-                collisions: [
-                    new CollisionInfo(30, 56, 64 - 30, 64 - 56, CollisionType.CollisionType_Solid),
-                    new CollisionInfo(0, 0, 30, 64, CollisionType.CollisionType_Solid)
-                ]
+                collisions: []
             },
         ]
     },

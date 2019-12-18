@@ -182,8 +182,10 @@ export default class GamePhysics {
         def.collisionFlag = CollisionFlag.CollisionFlag_Solid;
         def.collisionMask = CollisionFlag.CollisionFlag_Controller | CollisionFlag.CollisionFlag_DynamicActor |
             CollisionFlag.CollisionFlag_Pickup | CollisionFlag.CollisionFlag_Crate;
-        def.position = new Point(pos.x, pos.y);
-        def.size = new Point(pos.w, pos.h);
+        def.position.x = pos.x;
+        def.position.y = pos.y;
+        def.size.x = pos.w;
+        def.size.y = pos.h;
         def.actor = a;
         this.VAddActorBody(def);
     }

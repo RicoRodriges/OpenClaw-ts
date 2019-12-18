@@ -312,7 +312,7 @@ export function createSpriteDefinitionsFromGridTiles(tiles: GridTile, spriteName
             spriteDef.push(
                 {
                     id: `${spriteNamePrefix}${x + y * x_count}`,
-                    rect: new Rect(x * (w + x_space) + x_start, y * (h + y_space)  + y_start, w, h),
+                    rect: new Rect(x * (w + x_space) + x_start, y * (h + y_space) + y_start, w, h),
                     srcWidth: srcWidth,
                     srcHeight: srcHeight,
                     src: src
@@ -349,13 +349,27 @@ export function loadAnimationWithSprites(tiles: AnimationTiles) {
 
 export function createCollisionObjectsAndScene(physics: GamePhysics, tiles: CollisionTiles, tileSetName: string,
                                                mapElement: (number | null)[][] | (number | null)[][][]): TilesSceneNode {
+    let y_from = -1;
+    let x_from = -1;
+    let x_to = -1;
+    let tileId = -1;
     const tilesMap: TileId[][][] = [];
     for (let y = 0; y < mapElement.length; ++y) {
+        if (y_from !== -1) {
+            // flush tiles
+            createPhysicsObjectFromTiles(tileId, y_from, x_from, x_to, tiles, physics);
+            y_from = -1;
+        }
         if (mapElement[y]) {
             for (let x = 0; x < mapElement[y].length; ++x) {
                 if (mapElement[y][x] !== null) {
                     if (Array.isArray(mapElement[y][x])) {
                         const arr = mapElement[y][x] as (number | null)[];
+                        if (y_from !== -1) {
+                            // flush tiles
+                            createPhysicsObjectFromTiles(tileId, y_from, x_from, x_to, tiles, physics);
+                            y_from = -1;
+                        }
                         for (let n = 0; n < arr.length; ++n) {
                             const val = arr[n];
                             if (val !== null) {
@@ -365,12 +379,30 @@ export function createCollisionObjectsAndScene(physics: GamePhysics, tiles: Coll
                         }
                     } else {
                         const val = mapElement[y][x] as number;
+                        if (y_from === -1) {
+                            // save to merge
+                            y_from = y;
+                            x_from = x;
+                            x_to = x;
+                            tileId = val;
+                        } else if (tileId === val) {
+                            // save to merge
+                            x_to = x;
+                        } else {
+                            createPhysicsObjectFromTiles(tileId, y_from, x_from, x_to, tiles, physics);
+                            x_from = x;
+                            x_to = x;
+                            tileId = val;
+                        }
                         setElement(val, y, x, tilesMap);
-                        createPhysicsObjectFromTile(val, y, x, tiles, physics);
                     }
                 }
             }
         }
+    }
+    if (y_from !== -1) {
+        // flush tiles
+        createPhysicsObjectFromTiles(tileId, y_from, x_from, x_to, tiles, physics);
     }
     const tileRenderComponent = new TileRenderComponent(new Actor(), tiles.w || 0, tiles.h || 0, tilesMap);
     return new TilesSceneNode(tileRenderComponent, tileSetName);
@@ -404,14 +436,22 @@ function setElement(val: number, y: number, x: number, arr: TileId[][][]) {
 }
 
 function createPhysicsObjectFromTile(tileId: number, y: number, x: number, tiles: CollisionTiles, physics: GamePhysics) {
+    return createPhysicsObjectFromTiles(tileId, y, x, x, tiles, physics);
+}
+
+function createPhysicsObjectFromTiles(tileId: number, y: number, x_from: number, x_to: number, tiles: CollisionTiles, physics: GamePhysics) {
     const tile = tiles.map.find((t) => t.id === tileId);
     if (tile && tile.collisions && tile.collisions.length > 0) {
         const tileWidth = tiles.w || tile.w || 0;
         const tileHeight = tiles.h || tile.h || 0;
         tile.collisions.forEach((c) => {
-            const worldX = x * tileWidth + c.x;
-            const worldY = y * tileHeight + c.y;
-            physics.addStaticBody(undefined, new Rect(worldX, worldY, c.w, c.h));
+            const worldX_from = x_from * tileWidth - tileWidth / 2 + c.x;
+            const worldX_to = x_to * tileWidth - tileWidth / 2 + c.x + c.w;
+            const worldY_from = y * tileHeight - tileHeight / 2 + c.y;
+            const worldY_to = y * tileHeight - tileHeight / 2 + c.y + c.h;
+            const w = worldX_to - worldX_from;
+            const h = worldY_to - worldY_from;
+            physics.addStaticBody(undefined, new Rect(worldX_from + w / 2, worldY_from + h / 2, w, h));
         });
     }
 }
