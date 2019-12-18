@@ -1192,7 +1192,520 @@ export default {
                     ]
                 }
             ]
-        }
+        },
+        {
+            type: PickupType.CHALICE,
+            pickupSound: Sounds.treasure_chalice,
+            score: 1000,
+            w: 26,
+            h: 33,
+            anims: [
+                {
+                    name: Animations.treasureChaliceRed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 1,
+                            y: 0,
+                            cx: 13,
+                            cy: 16,
+                            w: 26,
+                            h: 33,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureChaliceBlue,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 29,
+                            y: 0,
+                            cx: 13,
+                            cy: 16,
+                            w: 26,
+                            h: 33,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureChaliceGreed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 57,
+                            y: 0,
+                            cx: 13,
+                            cy: 16,
+                            w: 26,
+                            h: 33,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureChalicePink,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 85,
+                            y: 0,
+                            cx: 13,
+                            cy: 16,
+                            w: 26,
+                            h: 33,
+                            delay: 500000,
+                        },
+                    ]
+                },
+            ]
+        },
+        {
+            type: PickupType.CROSS,
+            pickupSound: Sounds.treasure_cross,
+            score: 1000,
+            w: 25,
+            h: 37,
+            anims: [
+                {
+                    name: Animations.treasureCrossRed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 1,
+                            y: 65,
+                            cx: 12,
+                            cy: 18,
+                            w: 25,
+                            h: 37,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureCrossBlue,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 29,
+                            y: 65,
+                            cx: 12,
+                            cy: 18,
+                            w: 25,
+                            h: 37,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureCrossGreed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 57,
+                            y: 65,
+                            cx: 12,
+                            cy: 18,
+                            w: 25,
+                            h: 37,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureCrossPink,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 85,
+                            y: 65,
+                            cx: 12,
+                            cy: 18,
+                            w: 25,
+                            h: 37,
+                            delay: 500000,
+                        },
+                    ]
+                },
+            ]
+        },
+        {
+            type: PickupType.CROWN,
+            pickupSound: Sounds.treasure_crown,
+            score: 1000,
+            w: 36,
+            h: 30,
+            anims: [
+                {
+                    name: Animations.treasureCrownRed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 1,
+                            y: 104,
+                            cx: 18,
+                            cy: 15,
+                            w: 36,
+                            h: 30,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureCrownBlue,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 39,
+                            y: 104,
+                            cx: 18,
+                            cy: 15,
+                            w: 36,
+                            h: 30,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureCrownGreed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 77,
+                            y: 104,
+                            cx: 18,
+                            cy: 15,
+                            w: 36,
+                            h: 30,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureCrownPink,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 115,
+                            y: 104,
+                            cx: 18,
+                            cy: 15,
+                            w: 36,
+                            h: 30,
+                            delay: 500000,
+                        },
+                    ]
+                },
+            ]
+        },
+        {
+            type: PickupType.GECKO,
+            pickupSound: Sounds.treasure_gecko,
+            score: 1000,
+            w: 36,
+            h: 36,
+            anims: [
+                {
+                    name: Animations.treasureGeckoRed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 1,
+                            y: 176,
+                            cx: 18,
+                            cy: 18,
+                            w: 36,
+                            h: 36,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureGeckoBlue,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 39,
+                            y: 176,
+                            cx: 18,
+                            cy: 18,
+                            w: 36,
+                            h: 36,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureGeckoGreed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 77,
+                            y: 176,
+                            cx: 18,
+                            cy: 18,
+                            w: 36,
+                            h: 36,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureGeckoPink,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 115,
+                            y: 176,
+                            cx: 18,
+                            cy: 18,
+                            w: 36,
+                            h: 36,
+                            delay: 500000,
+                        },
+                    ]
+                },
+            ]
+        },
+        {
+            type: PickupType.SKULL,
+            pickupSound: Sounds.treasure_skull,
+            score: 1000,
+            w: 34,
+            h: 35,
+            anims: [
+                {
+                    name: Animations.treasureSkullRed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 1,
+                            y: 214,
+                            cx: 17,
+                            cy: 17,
+                            w: 34,
+                            h: 35,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureSkullBlue,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 37,
+                            y: 214,
+                            cx: 17,
+                            cy: 17,
+                            w: 34,
+                            h: 35,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureSkullGreed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 73,
+                            y: 214,
+                            cx: 17,
+                            cy: 17,
+                            w: 34,
+                            h: 35,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureSkullPink,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 109,
+                            y: 214,
+                            cx: 17,
+                            cy: 17,
+                            w: 34,
+                            h: 35,
+                            delay: 500000,
+                        },
+                    ]
+                },
+            ]
+        },
+        {
+            type: PickupType.SCEPTER,
+            pickupSound: Sounds.treasure_scepter,
+            score: 1000,
+            w: 36,
+            h: 36,
+            anims: [
+                {
+                    name: Animations.treasureScepterRed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 1,
+                            y: 280,
+                            cx: 18,
+                            cy: 18,
+                            w: 36,
+                            h: 36,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureScepterBlue,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 39,
+                            y: 280,
+                            cx: 18,
+                            cy: 18,
+                            w: 36,
+                            h: 36,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureScepterGreed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 77,
+                            y: 280,
+                            cx: 18,
+                            cy: 18,
+                            w: 36,
+                            h: 36,
+                            delay: 500000,
+                        },
+                    ]
+                },
+                {
+                    name: Animations.treasureScepterPink,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 115,
+                            y: 280,
+                            cx: 18,
+                            cy: 18,
+                            w: 36,
+                            h: 36,
+                            delay: 500000,
+                        },
+                    ]
+                },
+            ]
+        },
+        {
+            type: PickupType.GOLD_BAR,
+            pickupSound: Sounds.treasure_goldbar,
+            score: 1000,
+            w: 40,
+            h: 26,
+            anims: [
+                {
+                    name: Animations.treasureScepterRed,
+                    src: 'sprites/treasure.png',
+                    srcWidth: 313,
+                    srcHeight: 365,
+                    map: [
+                        {
+                            id: 0,
+                            x: 190,
+                            y: 326,
+                            cx: 20,
+                            cy: 18,
+                            w: 40,
+                            h: 26,
+                            delay: 500000,
+                        },
+                    ]
+                },
+            ]
+        },
     ],
     levelItems: [
         {
@@ -1422,6 +1935,34 @@ export default {
         {
             name: Sounds.treasure_coin,
             src: 'sounds/coin.mp3'
+        },
+        {
+            name: Sounds.treasure_chalice,
+            src: 'sounds/pickup1.mp3'
+        },
+        {
+            name: Sounds.treasure_cross,
+            src: 'sounds/cross.mp3'
+        },
+        {
+            name: Sounds.treasure_crown,
+            src: 'sounds/pickup2.mp3'
+        },
+        {
+            name: Sounds.treasure_gecko,
+            src: 'sounds/pickup1.mp3'
+        },
+        {
+            name: Sounds.treasure_skull,
+            src: 'sounds/pickup2.mp3'
+        },
+        {
+            name: Sounds.treasure_scepter,
+            src: 'sounds/scepter.mp3'
+        },
+        {
+            name: Sounds.treasure_goldbar,
+            src: 'sounds/treasure.mp3'
         },
         {
             name: Sounds.crate_break1,

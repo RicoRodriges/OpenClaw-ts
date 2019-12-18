@@ -1,4 +1,11 @@
 export enum PickupType {
     COIN,
-    RING
+    RING,
+    CHALICE,
+    SKULL,
+    CROSS,
+    CROWN,
+    GECKO,
+    SCEPTER,
+    GOLD_BAR,
 }

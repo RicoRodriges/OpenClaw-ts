@@ -17,6 +17,13 @@ export enum Sounds {
     claw_damage1 = 'claw_damage1',
     treasure_ring = 'treasure_ring',
     treasure_coin = 'treasure_coin',
+    treasure_chalice = 'treasure_chalice',
+    treasure_cross = 'treasure_cross',
+    treasure_crown = 'treasure_crown',
+    treasure_gecko = 'treasure_gecko',
+    treasure_skull = 'treasure_skull',
+    treasure_scepter = 'treasure_scepter',
+    treasure_goldbar = 'treasure_goldbar',
     crate_break1 = 'crate_break1',
     crate_break2 = 'crate_break2',
 }
