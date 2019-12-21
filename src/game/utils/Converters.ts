@@ -275,7 +275,8 @@ export function createLootBoxActor(x: number, y: number, w: number, h: number,
     bodyDef.position.y = y;
     bodyDef.gravityScale = 1;
     bodyDef.collisionFlag = CollisionFlag.CollisionFlag_Crate;
-    bodyDef.collisionMask = (CollisionFlag.CollisionFlag_ClawAttack | CollisionFlag.CollisionFlag_Ground | CollisionFlag.CollisionFlag_Solid);
+    bodyDef.collisionMask = (CollisionFlag.CollisionFlag_ClawAttack | CollisionFlag.CollisionFlag_Ground |
+        CollisionFlag.CollisionFlag_Solid | CollisionFlag.CollisionFlag_Crate);
     bodyDef.density = 0;
     bodyDef.friction = 0;
     bodyDef.restitution = 0;

@@ -188,9 +188,9 @@ export default {
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 3   , 4   , null, null, null, null, null, null, 5   , 15  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 28
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, 16  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 2   , 3   , 4   , null, 1   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 29
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 2   , 2   , 3   , 4   , null, null, null, null, 5   , 6   , 15  , 6   , 6   , 6   , 15  , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 30
-        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, 16  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 31
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, 16  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 15  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 31
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 3   , 4   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, 16  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 32
-        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 16  , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 33
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 16  , 6   , 6   , 6   , 15  , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 33
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 2   , 3   , 4   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 16  , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 34
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 3   , 4   , null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 35
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 2   , 2   , 2   , 3   , 4   , null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 36
@@ -251,11 +251,32 @@ export default {
             x: 32 * 64 + 32,
             y: 30 * 64 + 32,
         },
+        {
+            obj: Animations.floor_lamp,
+            x: 41 * 64 + 32,
+            y: 31 * 64 + 32,
+        },
+        {
+            obj: Animations.floor_lamp,
+            x: 48 * 64 + 32,
+            y: 33 * 64 + 32,
+        },
 
         {
             obj: Animations.candle,
             x: 11 * 64,
             y: 25 * 64,
+        },
+        {
+            obj: Animations.candle,
+            x: 32 * 64,
+            y: 34 * 64,
+        },
+
+        {
+            obj: Animations.candle,
+            x: 49 * 64,
+            y: 37 * 64,
         },
 
         {
@@ -267,6 +288,11 @@ export default {
             obj: Animations.hand,
             x: 34 * 64,
             y: 35 * 64,
+        },
+        {
+            obj: Animations.hand,
+            x: 46 * 64,
+            y: 38 * 64,
         },
 
         {
@@ -387,8 +413,16 @@ export default {
     ],
     crateInstances: [
         {
-            spawnX: 20*64,
-            spawnY: 23*64,
+            spawnX: 25*64 - 44,
+            spawnY: 25*64,
+        },
+        {
+            spawnX: 24*64 - 22,
+            spawnY: 25*64,
+        },
+        {
+            spawnX: 23*64,
+            spawnY: 25*64,
             loot: [
                 {
                     type: PickupType.RING,
@@ -399,7 +433,23 @@ export default {
                     count: 5
                 }
             ]
-        }
+        },
+        {
+            spawnX: 25*64 - 44,
+            spawnY: 24*64,
+        },
+        {
+            spawnX: 24*64 - 22,
+            spawnY: 24*64,
+        },
+        {
+            spawnX: 23*64,
+            spawnY: 24*64,
+        },
+        {
+            spawnX: 24*64 - 22,
+            spawnY: 23*64,
+        },
     ],
     officer: {
         speed: 1.3,
@@ -2300,6 +2350,8 @@ export default {
             src: 'sprites/level 1 Objects.png',
             srcWidth: 1399,
             srcHeight: 857,
+            ox: 8,
+            oy: 10,
             map: [
                 {
                     id: 0,

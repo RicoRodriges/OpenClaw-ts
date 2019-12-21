@@ -112,7 +112,7 @@ export default class GameLogic {
         // Create crate actors
         levelData.crateInstances.forEach((o) => {
             // TODO: remove w and h
-            const crate = createLootBoxActor(o.spawnX, o.spawnY, 56, 54, Animations.crate, Animations.crate_destroying,
+            const crate = createLootBoxActor(o.spawnX, o.spawnY, 42, 42, Animations.crate, Animations.crate_destroying,
                 this.gamePhysics as GamePhysics, [Sounds.crate_break1, Sounds.crate_break2], lootToMap(o.loot));
             this.actors.push(crate);
         });
