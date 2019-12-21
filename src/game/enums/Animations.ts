@@ -51,6 +51,7 @@ export enum Animations {
     hand = 'hand',
     crate = 'crate',
     crate_destroying = 'crate_destroying',
+    level_end = 'level_end',
 
     column_center = 'column_center',
     column_repeated = 'column_repeated',

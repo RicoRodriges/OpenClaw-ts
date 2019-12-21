@@ -93,10 +93,8 @@ export default class GameApp {
                     }
                     Box2D.destroy(shapeAABB);
                     Box2D.destroy(t);
-                    //GameProperties.debug = false;
                 }
             }
         }
-        //debugger;
     }
 }

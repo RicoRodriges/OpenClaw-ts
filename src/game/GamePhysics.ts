@@ -15,7 +15,6 @@ import GameProperties from "./GameProperties";
 
 export default class GamePhysics {
     public static METERS_TO_PIXELS = 75.0;
-    eps = 0.001;
 
     world: any;
     contactListener: any;
@@ -27,10 +26,6 @@ export default class GamePhysics {
         const gravity = new Box2D.b2Vec2(0.0, 9.8);
         this.world = new Box2D.b2World(gravity);
         Box2D.destroy(gravity);
-
-        // const bodyDef = new Box2D.b2BodyDef();
-        // bodyDef.set_type(Box2D.b2_staticBody);
-        // this.world.CreateBody(bodyDef);
 
         this.contactListener = new Box2D.JSContactListener();
         this.contactListener.BeginContact = (contactPtr: any) => {
@@ -247,16 +242,6 @@ export default class GamePhysics {
                                 pPhysicsComponent.setFalling(false);
                                 pPhysicsComponent.setJumping(true);
                                 pPhysicsComponent.heightInAir += Math.abs(bodyPixelPosition.y - actorPixelPosition.y);
-
-                                const jumpPixelsLeft = pPhysicsComponent.maxJumpHeight - pPhysicsComponent.heightInAir;
-
-                                // Jumped past limit
-                                if (pPhysicsComponent.isForcedUp && jumpPixelsLeft < 0) {
-                                    // Set b2Body to its max height
-                                    bodyPixelPosition = new Point(bodyPixelPosition.x, bodyPixelPosition.y + Math.abs(jumpPixelsLeft));
-                                    this.VSetPosition(pGameActor, bodyPixelPosition);
-                                    pPhysicsComponent.SetForceFall();
-                                }
                             }
                         }
                     } else if (Math.abs(bodyPixelPosition.y - actorPixelPosition.y) < 0.01) {

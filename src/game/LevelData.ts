@@ -3397,7 +3397,55 @@ export default {
                     delay: 70,
                 },
             ]
-        }
+        },
+        {
+            name: Animations.level_end,
+            src: 'sprites/warp.png',
+            srcWidth: 756,
+            srcHeight: 196,
+            map: [
+                {
+                    id: 0,
+                    x: 2,
+                    y: 158,
+                    w: 35,
+                    h: 38,
+                    cx: 0,
+                    cy: 3,
+                    delay: 150,
+                },
+                {
+                    id: 1,
+                    x: 42,
+                    y: 158,
+                    w: 38,
+                    h: 38,
+                    cx: 0,
+                    cy: 2,
+                    delay: 150,
+                },
+                {
+                    id: 2,
+                    x: 85,
+                    y: 156,
+                    w: 36,
+                    h: 40,
+                    cx: 0,
+                    cy: 3,
+                    delay: 150,
+                },
+                {
+                    id: 3,
+                    x: 125,
+                    y: 162,
+                    w: 39,
+                    h: 34,
+                    cx: 0,
+                    cy: 0,
+                    delay: 150,
+                },
+            ]
+        },
     ],
     sounds: [
         {

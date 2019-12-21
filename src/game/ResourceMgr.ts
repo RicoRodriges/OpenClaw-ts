@@ -1,5 +1,3 @@
-//import Image from "./graphics/Image";
-
 import Rect from "./utils/Rect";
 import Animation from "./graphics/Animation";
 import {TreasureDef} from "./LevelData";

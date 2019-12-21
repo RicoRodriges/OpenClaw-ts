@@ -15,7 +15,6 @@ export default class PhysicsComponent extends ActorComponent {
 
     numFootContacts = 0;
 
-    isClimbing = false;
     isStopped = false;
     isRunning = false;
     direction = Direction.Direction_Right;
@@ -26,14 +25,7 @@ export default class PhysicsComponent extends ActorComponent {
 
     fallHeight = 0;
 
-    // hasConstantSpeed?: boolean;
-    // constantSpeed?: Point;
-
     currentSpeed = new Point(0, 0);
-    externalSourceSpeed?: Point;
-    // externalConveyorBeltSpeed?: Point;
-
-    climbingSpeed = new Point(0, 0);
 
     // Hackerino to prevent loop jumping with space pressed
     ignoreJump = false;
@@ -44,20 +36,7 @@ export default class PhysicsComponent extends ActorComponent {
 
     doNothingTimeout = 0;
 
-    // Actor body definition for physics body creation
     public actorBodyDef = new ActorBodyDef();
-    // clampToGround?: boolean;
-
-    // Spring caused us to go up
-    isForcedUp = false;
-    forcedUpHeight = 0;
-
-    // topLadderB2Contact?: any;
-    // movingPlatformB2Contact?: any;
-
-    overlappingKinematicBodiesList: any[] = [];
-    // overlappingLaddersList?: any[];
-    // overlappingGroundsList?: any[];
 
     constructor(public owner: Actor, canJump: boolean, maxJumpHeight: number, bodyDef: ActorBodyDef,
                 physics: GamePhysics, controllableComponent: ClawControllableComponent | null = null) {
@@ -90,27 +69,9 @@ export default class PhysicsComponent extends ActorComponent {
             this.maxJumpHeight = this.controllableComponent.GetMaxJumpHeight();
         }
 
-        if (this.isForcedUp) {
-            if (this.isFalling) {
-                this.isForcedUp = false;
-                this.forcedUpHeight = 0;
-                this.maxJumpHeight = gameProperties.player.maxJumpHeight;
-            } else {
-                this.maxJumpHeight = this.forcedUpHeight;
-                this.currentSpeed.y = -10;
-            }
-        }
-
-
-        if (this.overlappingKinematicBodiesList.length === 0 && this.externalSourceSpeed) {
-            this.externalSourceSpeed.SetZero();
-        }
-
         if (this.controllableComponent && !this.controllableComponent.InPhysicsCapableState()) {
             this.SetVelocity(new Point(0, 0));
             this.currentSpeed.SetZero();
-            this.climbingSpeed.SetZero();
-            this.isClimbing = false;
 
             return;
         }
@@ -124,7 +85,6 @@ export default class PhysicsComponent extends ActorComponent {
             this.SetVelocity(new Point(0, currSpeed.y));
 
             this.currentSpeed.SetZero();
-            this.climbingSpeed.SetZero();
 
             return;
         }
@@ -192,13 +152,6 @@ export default class PhysicsComponent extends ActorComponent {
                 this.physics.VSetGravityScale(this.owner, 0);
             }
 
-            if (this.isForcedUp) {
-                velocity = this.getVelocity();
-
-                const springSpeed = -1.0 * Math.abs(gameProperties.player.springBoardSpringSpeed);
-                this.SetVelocity(new Point(velocity.x, springSpeed));
-            }
-
             //=====================================================================
 
             if (this.isJumping || this.isFalling) {
@@ -231,7 +184,7 @@ export default class PhysicsComponent extends ActorComponent {
                 {
                     this.controllableComponent.VOnRun();
                 } else if (this.isStopped &&
-                    (((Math.abs(this.getVelocity().y) < 0.01) && (Math.abs(this.getVelocity().x) < 0.01)) || this.overlappingKinematicBodiesList.length > 0) &&
+                    ((Math.abs(this.getVelocity().y) < 0.01) && (Math.abs(this.getVelocity().x) < 0.01)) &&
                     this.IsOnGround()) {
                     this.controllableComponent.VOnStopMoving();
                 }
@@ -308,20 +261,6 @@ export default class PhysicsComponent extends ActorComponent {
         }
     }
 
-    SetForceFall() {
-        this.isRunning = false;
-        this.isForcedUp = false;
-        this.isStopped = false;
-        this.isFalling = true;
-        this.isJumping = false;
-        this.heightInAir = 0;
-        this.ignoreJump = true;
-        this.SetVelocity(new Point(this.getVelocity().x, 0));
-        if (this.controllableComponent) {
-            this.controllableComponent.VOnStartFalling();
-        }
-    }
-
     OnStartFalling() {
         if (this.doNothingTimeout > 0) {
             return;
@@ -353,20 +292,15 @@ export default class PhysicsComponent extends ActorComponent {
     }
 
     OnBeginFootContact() {
-        if (this.numFootContacts === 0)
-        {
-            if (this.controllableComponent && (this.heightInAir > 2 /*|| !m_OverlappingKinematicBodiesList.empty()*/))
-            {
+        if (this.numFootContacts === 0) {
+            if (this.controllableComponent && (this.heightInAir > 2 /*|| !m_OverlappingKinematicBodiesList.empty()*/)) {
                 this.controllableComponent.VOnLandOnGround(this.fallHeight);
             }
         }
 
         this.numFootContacts++;
         //LOG(ToStr(m_HeightInAir));
-        if (!this.isForcedUp)
-        {
-            this.heightInAir = 0;
-        }
+        this.heightInAir = 0;
     }
 
     OnEndFootContact() {
