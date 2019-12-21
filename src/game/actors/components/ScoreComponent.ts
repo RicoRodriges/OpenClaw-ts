@@ -1,5 +1,6 @@
 import ActorComponent from "../ActorComponent";
 import Actor from "../Actor";
+import {PickupType} from "../../enums/PickupType";
 
 export default class ScoreComponent extends ActorComponent {
     public static NAME = 'ScoreComponent';
@@ -12,7 +13,7 @@ export default class ScoreComponent extends ActorComponent {
         return ScoreComponent.NAME;
     }
 
-    AddScorePoints(scorePoints: number) {
+    AddScorePoints(scorePoints: number, pickupType: PickupType) {
         // TODO: implement score
     }
 }

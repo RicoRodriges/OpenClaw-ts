@@ -8,6 +8,7 @@ import EventMgr from "../../../events/EventMgr";
 import EventData_Move_Actor from "../../../events/EventData_Move_Actor";
 import EventData_Request_Delete_Actor from "../../../events/EventData_Request_Delete_Actor";
 import GamePhysics from "../../../GamePhysics";
+import {PickupType} from "../../../enums/PickupType";
 
 export default class TreasurePickupComponent extends PickupComponent {
     public static NAME = 'TreasurePickupComponent';
@@ -16,6 +17,7 @@ export default class TreasurePickupComponent extends PickupComponent {
 
     constructor(owner: Actor, triggerComponent: TriggerComponent, pickup: Sounds | null,
                 private scorePoints: number,
+                private pickupType: PickupType,
                 private physics: GamePhysics,
                 private positionComponent: PositionComponent,
                 private destroyDelay = 1000) {
@@ -41,7 +43,7 @@ export default class TreasurePickupComponent extends PickupComponent {
         if (!this.isPickedUp) {
             const scoreComponent = a.getComponent(ScoreComponent.NAME) as ScoreComponent;
             if (scoreComponent) {
-                scoreComponent.AddScorePoints(this.scorePoints);
+                scoreComponent.AddScorePoints(this.scorePoints, this.pickupType);
                 this.isPickedUp = true;
                 this.physics.VRemoveActor(this.owner);
                 return true;

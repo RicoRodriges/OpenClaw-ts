@@ -169,11 +169,11 @@ export function lootToMap(loot: LootInfo[] | undefined) {
     return map;
 }
 
-export function createTreasureActor(x: number, y: number, w: number, h: number,
-                                    type: Animations, physics: GamePhysics, isStatic: boolean,
+export function createTreasureActor(x: number, y: number, w: number, h: number, type: PickupType,
+                                    animName: Animations, physics: GamePhysics, isStatic: boolean,
                                     pickupSound: Sounds, scorePoints: number) {
     const resources = ResourceMgr.getInstance();
-    const anim = resources.getAnimation(type);
+    const anim = resources.getAnimation(animName);
     if (!anim) {
         console.error('Resources were not found');
         throw new Error('Resources were not found');
@@ -230,7 +230,7 @@ export function createTreasureActor(x: number, y: number, w: number, h: number,
     bodyDef.fixtureList.push(fixtureDef);
     const physicsComponent = new PhysicsComponent(treasure, false, 0, bodyDef, physics);
     treasure.components.push(physicsComponent);
-    const treasurePickupComponent = new TreasurePickupComponent(treasure, triggerComponent, pickupSound, scorePoints, physics, positionComponent);
+    const treasurePickupComponent = new TreasurePickupComponent(treasure, triggerComponent, pickupSound, scorePoints, type, physics, positionComponent);
     treasure.components.push(treasurePickupComponent);
 
     // if (!isStatic)

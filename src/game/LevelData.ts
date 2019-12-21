@@ -3516,6 +3516,10 @@ export default {
             name: Sounds.crate_break2,
             src: 'sounds/cratebreak2.mp3'
         },
+        {
+            name: Sounds.level_music,
+            src: 'sounds/level_music.mp3'
+        },
     ]
 };
 

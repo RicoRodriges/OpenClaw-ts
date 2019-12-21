@@ -1,50 +1,62 @@
 import {IScreenElement} from "./user-interface/IScreenElement";
 import ActorController from "./ActorController";
 import ResourceMgr from "./ResourceMgr";
+import ScreenElementLoadingScreen from "./user-interface/ScreenElementLoadingScreen";
+import ScreenElementMenu from "./user-interface/ScreenElementMenu";
 
 export default class GameView {
     screenElements: IScreenElement[];
-    loadingScreen: IScreenElement[];
+    // screenElementHUD: IScreenElement;
+    loadingScreen: IScreenElement;
+    menuScreen: IScreenElement;
     keyBoardHandler: ActorController;
     isLoading = true;
+    isInGameMenu = true;
 
-    constructor(loadingScreen: IScreenElement[], screenElements: IScreenElement[], keyBoardHandler: ActorController) {
+    constructor(loadingScreen: ScreenElementLoadingScreen,
+                menuScreen: ScreenElementMenu,
+                screenElements: IScreenElement[], keyBoardHandler: ActorController) {
         this.loadingScreen = loadingScreen;
+        this.menuScreen = menuScreen;
         this.screenElements = screenElements;
         this.keyBoardHandler = keyBoardHandler;
     }
 
     onKeyDown(e: KeyboardEvent) {
         if (!this.isLoading) {
-            this.screenElements.forEach((se) => {
-                if (se.isVisible()) {
-                    se.onKeyDown(e as KeyboardEvent);
-                }
-            });
-            this.keyBoardHandler.onKeyDown(e);
+            if (!this.isInGameMenu) {
+                this.screenElements.forEach((se) => {
+                    if (se.isVisible()) {
+                        se.onKeyDown(e as KeyboardEvent);
+                    }
+                });
+                this.keyBoardHandler.onKeyDown(e);
+            } else {
+                this.menuScreen.onKeyDown(e as KeyboardEvent);
+            }
         } else {
-            this.loadingScreen.forEach((se) => {
-                if (se.isVisible()) {
-                    se.onKeyDown(e as KeyboardEvent);
-                }
-            });
+            if (this.loadingScreen.isVisible()) {
+                this.loadingScreen.onKeyDown(e as KeyboardEvent);
+            }
         }
     }
 
     onKeyUp(e: KeyboardEvent) {
         if (!this.isLoading) {
-            this.screenElements.forEach((se) => {
-                if (se.isVisible()) {
-                    se.onKeyUp(e as KeyboardEvent);
-                }
-            });
-            this.keyBoardHandler.onKeyUp(e);
+            if (!this.isInGameMenu) {
+                this.screenElements.forEach((se) => {
+                    if (se.isVisible()) {
+                        se.onKeyUp(e as KeyboardEvent);
+                    }
+                });
+                this.keyBoardHandler.onKeyUp(e);
+            } else {
+                this.menuScreen.onKeyUp(e as KeyboardEvent);
+            }
         } else {
-            this.loadingScreen.forEach((se) => {
-                if (se.isVisible()) {
-                    se.onKeyUp(e as KeyboardEvent);
-                }
-            });
+            if (this.loadingScreen.isVisible()) {
+                this.loadingScreen.onKeyUp(e as KeyboardEvent);
+            }
         }
     }
 
@@ -54,15 +66,19 @@ export default class GameView {
         if (ctx) {
             ctx.clearRect(0, 0, resources.canvasWidth, resources.canvasHeight);
             if (!this.isLoading) {
-                this.screenElements.forEach((s) => s.VOnRender(diff));
+                if (!this.isInGameMenu) {
+                    this.screenElements.forEach((s) => s.VOnRender(diff));
+                } else {
+                    this.menuScreen.VOnRender(diff);
+                }
             } else {
-                this.loadingScreen.forEach((s) => s.VOnRender(diff));
+                this.loadingScreen.VOnRender(diff);
             }
         }
     }
 
     VOnUpdate(diff: number) {
-        if (!this.isLoading) {
+        if (!this.isLoading && !this.isInGameMenu) {
             this.keyBoardHandler.onUpdate(diff);
         }
     }

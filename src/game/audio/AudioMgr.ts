@@ -18,7 +18,12 @@ export default class AudioMgr {
         const event = e as EventData_Request_Play_Sound;
         const audio = ResourceMgr.getInstance().getSound(event.sound);
         if (audio) {
-            new Audio(audio.src).play();
+            const clone = new Audio(audio.src);
+            if (event.repeated) {
+                clone.loop = true;
+            }
+            clone.volume = event.volume;
+            clone.play();
         }
     }
 }

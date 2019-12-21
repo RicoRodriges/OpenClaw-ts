@@ -30,7 +30,7 @@ export default class LootComponent extends ActorComponent implements HealthObser
                     const treasure = resources.getTreasure(t);
                     if (!treasure)
                         break;
-                    const actor = createTreasureActor(pos.x, pos.y, treasure.w, treasure.h, treasure.anim, this.physics, false, treasure.sounds, treasure.score);
+                    const actor = createTreasureActor(pos.x, pos.y, treasure.w, treasure.h, t, treasure.anim, this.physics, false, treasure.sounds, treasure.score);
                     EventMgr.getInstance().VTriggerEvent(new EventData_Request_New_Actor(actor));
                 }
             });

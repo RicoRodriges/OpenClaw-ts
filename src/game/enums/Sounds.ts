@@ -10,7 +10,7 @@ export enum Sounds {
     officer_killed1 = 'officer_killed1',
     officer_swordAttack = 'officer_swordAttack',
     claw_swordAttack = 'claw_swordAttack',
-    claw_killEnemy= 'claw_killEnemy',
+    claw_killEnemy = 'claw_killEnemy',
     claw_killEnemy2 = 'claw_killEnemy2',
     claw_killEnemy3 = 'claw_killEnemy3',
     claw_damage4 = 'claw_damage4',
@@ -28,4 +28,5 @@ export enum Sounds {
     treasure_goldbar = 'treasure_goldbar',
     crate_break1 = 'crate_break1',
     crate_break2 = 'crate_break2',
+    level_music = 'level_music',
 }

@@ -36,6 +36,10 @@ import {Sounds} from "./enums/Sounds";
 import EventData_Request_New_Actor from "./events/EventData_Request_New_Actor";
 import EventData_Request_Delete_Actor from "./events/EventData_Request_Delete_Actor";
 import GameProperties from "./GameProperties";
+import ScreenElementLoadingScreen from "./user-interface/ScreenElementLoadingScreen";
+import EventData_Menu_Exit from "./events/EventData_Menu_Exit";
+import ScreenElementMenu from "./user-interface/ScreenElementMenu";
+import EventData_Request_Play_Sound from "./events/EventData_Request_Play_Sound";
 
 export default class GameLogic {
     actors: Actor[] = [];
@@ -46,6 +50,7 @@ export default class GameLogic {
     constructor() {
         EventMgr.getInstance().VAddListener((e) => this.onActorStartMoveDelegate(e), EventData_Actor_Start_Move.NAME);
         EventMgr.getInstance().VAddListener((e) => this.onLevelLoadedDelegate(e), EventData_Level_Loaded.NAME);
+        EventMgr.getInstance().VAddListener((e) => this.onMenuExitDelegate(e), EventData_Menu_Exit.NAME);
         EventMgr.getInstance().VAddListener((e) => this.onActorAttackDelegate(e), EventData_Actor_Attack.NAME);
         EventMgr.getInstance().VAddListener((e) => this.onActorCreateDelegate(e), EventData_Request_New_Actor.NAME);
         EventMgr.getInstance().VAddListener((e) => this.onActorDeleteDelegate(e), EventData_Request_Delete_Actor.NAME);
@@ -138,7 +143,7 @@ export default class GameLogic {
         levelData.treasureInstances.forEach((o) => {
             const t = resources.getTreasure(o.type);
             if (t && this.gamePhysics) {
-                this.actors.push(createTreasureActor(o.x, o.y, t.w, t.h, t.anim, this.gamePhysics, true, t.sounds, t.score));
+                this.actors.push(createTreasureActor(o.x, o.y, t.w, t.h, o.type, t.anim, this.gamePhysics, true, t.sounds, t.score));
             }
         });
 
@@ -170,28 +175,51 @@ export default class GameLogic {
         rootNode.childrenList.push(tilesSceneNode);
         rootNode.childrenList.push(...actorSceneNodes);
 
-        // Create loading screen scene node
-        const titleSceneNode = new TitleSceneNode('Loading...', 30, 200);
-
-        // Create Loading screen scene
-        // @ts-ignore
-        const loadingScreenElementScene = new ScreenElementScene(titleSceneNode, null, new Map<Actor, SceneNode>());
-
+        // Create main screen with main scene with scene nodes
         const screenElementScene = new ScreenElementScene(rootNode, camera, actorNodes);
-        this.gameView = new GameView([loadingScreenElementScene], [screenElementScene], new ActorController(actorNodes.get(claw) as ActorSceneNode));
+
+        // Create loading screen
+        const loadingSceneNode = new TitleSceneNode('Loading...', 30, 200);
+        const loadingScreenElement = new ScreenElementLoadingScreen(loadingSceneNode, screenElementScene);
+
+        // Create game menu
+        const menuNodes = [
+            new TitleSceneNode('Control:', 30, 30, 20),
+            new TitleSceneNode('Keyboard arrows - move', 30, 60, 20),
+            new TitleSceneNode('Ctrl - attack', 30, 90, 20),
+            new TitleSceneNode('Space - jump', 30, 120, 20),
+            new TitleSceneNode('Monolith Production owns all rights to this game.', 30, 200, 14),
+            new TitleSceneNode('This project was created just for fun and education.', 30, 230, 14),
+            new TitleSceneNode('The major part of implementation was borrowed from the OpenClaw project.', 30, 260, 14),
+            new TitleSceneNode('Have fun!', 30, 290, 14),
+            new TitleSceneNode('Press space to continue.', 30, 340, 30),
+        ];
+        const menuScreenElement = new ScreenElementMenu(menuNodes, screenElementScene);
+
+        this.gameView = new GameView(loadingScreenElement, menuScreenElement,
+            [screenElementScene], new ActorController(actorNodes.get(claw) as ActorSceneNode));
     }
 
     onLevelLoadedDelegate(e: IEventData) {
-        this.running = true;
-
         const view = this.gameView;
         if (view) {
+            view.isInGameMenu = true;
             view.isLoading = false;
         }
 
         // Register keyboard events
         document.body.addEventListener('keydown', (e: any) => this.gameView && this.gameView.onKeyDown(e));
         document.body.addEventListener('keyup', (e: any) => this.gameView && this.gameView.onKeyUp(e));
+    }
+
+    onMenuExitDelegate(e: IEventData) {
+        this.running = true;
+
+        const view = this.gameView;
+        if (view) {
+            view.isInGameMenu = false;
+        }
+        EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(Sounds.level_music, true, 0.2));
     }
 
     onActorStartMoveDelegate(e: IEventData) {
