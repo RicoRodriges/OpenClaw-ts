@@ -8,8 +8,8 @@ export default class ReactClaw extends React.Component {
     state = {dt: 1000 / this.maxFps};
 
     static defaultProps = {
-        w: 600,
-        h: 610
+        w: 640,
+        h: 640
     };
 
     // anim = {count: 8, src: 'sprites/claw_idle.png', w: 592, h: 116};

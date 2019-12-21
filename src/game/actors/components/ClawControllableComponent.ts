@@ -188,8 +188,8 @@ export default class ClawControllableComponent extends ActorComponent implements
                 // animName == "uppercut" ||
                 animation.name === Animations.swordAttackJump)) {
                 const positionComponent = this.owner.getComponent(PositionComponent.NAME) as PositionComponent;
-                if (positionComponent && (animation.name === Animations.swordAttack && animation.frames[2] === currentFrame ||
-                    animation.name === Animations.swordAttackJump && animation.frames[2] === currentFrame)) {
+                if (positionComponent && ((animation.name === Animations.swordAttack && animation.frames[2] === currentFrame) ||
+                    (animation.name === Animations.swordAttackJump && animation.frames[2] === currentFrame))) {
                     let positionOffset = new Point(60, 20);
                     if (animation.name === Animations.swordAttackJump) {
                         positionOffset.y -= 10;

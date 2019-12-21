@@ -1,5 +1,4 @@
 import Actor from "./Actor";
-import Point from "../utils/Point";
 
 export default abstract class ActorComponent {
     protected constructor(public owner: Actor) {
