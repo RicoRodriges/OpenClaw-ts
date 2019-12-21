@@ -18,37 +18,42 @@ export default {
         h: 64,
         map: [
 
-            //floor
+            // start floor left
             {
                 id: 1,
                 x: 65 * 1,
                 y: 65 * 0,
                 collisions: []
             },
+            // floor
             {
                 id: 2,
                 x: 65 * 2,
                 y: 65 * 0,
                 collisions: []
             },
+            // stopping floor right
             {
                 id: 3,
                 x: 65 * 3,
                 y: 65 * 0,
                 collisions: []
             },
+            // stop floor right
             {
                 id: 4,
                 x: 65 * 4,
                 y: 65 * 0,
                 collisions: []
             },
+            // start wall right
             {
                 id: 5,
                 x: 65 * 1,
                 y: 65 * 1,
                 collisions: []
             },
+            // wall
             {
                 id: 6,
                 x: 65 * 2,
@@ -57,6 +62,7 @@ export default {
                     new CollisionInfo(-32, -12, 64 + 32*2, 64 + 12*2, CollisionType.CollisionType_Solid)
                 ]
             },
+            // roof
             {
                 id: 7,
                 x: 65 * 3,
@@ -65,22 +71,74 @@ export default {
                     new CollisionInfo(-32, -12, 64 + 32*2, 64 + 12*2, CollisionType.CollisionType_Solid)
                 ]
             },
+            // left wall and floor
             {
                 id: 8,
                 x: 65 * 4,
                 y: 65 * 1,
                 collisions: []
             },
+            // between floor and right wall
             {
                 id: 9,
                 x: 65 * 1,
                 y: 65 * 2,
                 collisions: []
             },
+            // between left floor and floor
             {
                 id: 10,
                 x: 65 * 4,
                 y: 65 * 2,
+                collisions: []
+            },
+            // up left door
+            {
+                id: 11,
+                x: 391,
+                y: 195,
+                collisions: []
+            },
+            // up right door
+            {
+                id: 12,
+                x: 456,
+                y: 195,
+                collisions: []
+            },
+            // bottom left door
+            {
+                id: 13,
+                x: 391,
+                y: 260,
+                collisions: []
+            },
+            // bottom right door
+            {
+                id: 14,
+                x: 456,
+                y: 260,
+                collisions: []
+            },
+            // wall with candle
+            {
+                id: 15,
+                x: 456,
+                y: 65,
+                collisions: []
+            },
+            // end wall right
+            {
+                id: 16,
+                x: 521,
+                y: 65,
+                collisions: []
+            },
+            // end wall right
+            {
+                id: 17,
+                x: 325,
+                y: 325,
                 collisions: []
             },
         ]
@@ -99,43 +157,238 @@ export default {
         space_y: 1,
     },
     map: [
-        [6   , 6   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 7   , 6   , 6],
-        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
-        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
-        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
-        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
-        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
-        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
-        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
-        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
-        [6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6],
-        [6   , 10  , 2   , 2   , 3   , 4   , null, null, null, null, null, null, 1   , 2   , 2   , 2   , 2   , 9   , 6],
-        [6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6],
-        [6   , 6   , 6   , 6   , 6   , 10  , 2   , 2   , 2   , 2   , 2   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6],
-        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6],
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 0
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 1
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 2
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 3
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 4
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 5
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 6
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 7
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 8
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 9
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 10
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 11
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 11  , 12  , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 12
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 13  , 14  , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 3   , 4   , null, null, null, 1   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 13
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 14
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, 1   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 15
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 16
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, 1   , 2   , 2   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 17
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 18
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 19
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 20
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 15  , 6   , 6   , 6   , 6   , 15  , 6   , 6   , 6   , 6   , 15  , 6   , 6   , 6   , 6   , 15  , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 21
+        [6   , 6   , 6   , 6   , 6   , 6   , 15  , 8   , null, null, null, 16  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 22
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1   , 3   , 4   , null, 1   , 2   , 3   , 4   , null, null, null, null, null, null, null, null, 1   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 23
+        [6   , 6   , 6   , 6   , 6   , 6   , 15  , 11  , 12  , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 8   , null, 5   , 6   , 6   , 10  , 3   , 4   , null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 24
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 13  , 14  , 3   , 4   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1   , 2   , 3   , 4   , null, null, 5   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 10  , 2   , 2   , 2   , 3   , 4   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 25
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 2   , 2   , 17  , 3   , 4   , null, null, null, 1   , 2   , 17  , 2   , 2   , 2   , 2   , 2   , 17  , 2   , 2   , 9   , 6   , 6   , 8   , null, null, 16  , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 26
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, 16  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 27
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 3   , 4   , null, null, null, null, null, null, 5   , 15  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 28
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, 16  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 2   , 3   , 4   , null, 1   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 29
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 2   , 2   , 3   , 4   , null, null, null, null, 5   , 6   , 15  , 6   , 6   , 6   , 15  , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 30
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, 16  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 31
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 3   , 4   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, 16  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 32
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 16  , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 33
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 2   , 3   , 4   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 16  , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 34
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 3   , 4   , null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 35
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 2   , 2   , 2   , 3   , 4   , null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 36
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 37
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 2   , 2   , 2   , 2   , 17  , 2   , 2   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 38
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 39
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 40
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 41
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 42
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 43
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 44
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 45
+        // 0 , 1   , 2   , 3   , 4   , 5   , 6   , 7   , 8   , 9   , 10  , 11  , 12  , 13  , 14  , 15  , 16  , 17  , 18  , 19  , 20  , 21  , 22  , 23  , 24  , 25  , 26  , 27  , 28  , 29  , 30  , 31  , 32  , 33  , 34  , 35  , 36  , 37  , 38  , 39  , 40  , 41  , 42  , 43  , 44  , 45  , 46  , 47  , 48  , 49  , 50  , 51  , 52  , 53  , 54  , 55  , 56  , 57  , 58  , 59  , 60  , 61  , 62  , 63  , 64  , 65  , 66  , 67  , 68  , 69  , 70  , 71  , 72  , 73  , 74
+    ],
+    objectInstances: [
+        {
+            obj: Animations.floor_lamp,
+            x: 6 * 64 + 32,
+            y: 22 * 64 + 32,
+        },
+        {
+            obj: Animations.floor_lamp,
+            x: 6 * 64 + 32,
+            y: 24 * 64 + 32,
+        },
+        {
+            obj: Animations.floor_lamp,
+            x: 14 * 64 + 32,
+            y: 21 * 64 + 32,
+        },
+        {
+            obj: Animations.floor_lamp,
+            x: 19 * 64 + 32,
+            y: 21 * 64 + 32,
+        },
+        {
+            obj: Animations.floor_lamp,
+            x: 24 * 64 + 32,
+            y: 21 * 64 + 32,
+        },
+        {
+            obj: Animations.floor_lamp,
+            x: 29 * 64 + 32,
+            y: 21 * 64 + 32,
+        },
+        {
+            obj: Animations.floor_lamp,
+            x: 25 * 64 + 32,
+            y: 28 * 64 + 32,
+        },
+        {
+            obj: Animations.floor_lamp,
+            x: 28 * 64 + 32,
+            y: 30 * 64 + 32,
+        },
+        {
+            obj: Animations.floor_lamp,
+            x: 32 * 64 + 32,
+            y: 30 * 64 + 32,
+        },
+
+        {
+            obj: Animations.candle,
+            x: 11 * 64,
+            y: 25 * 64,
+        },
+
+        {
+            obj: Animations.hand,
+            x: 29 * 64,
+            y: 35 * 64,
+        },
+        {
+            obj: Animations.hand,
+            x: 34 * 64,
+            y: 35 * 64,
+        },
+
+        {
+            obj: Animations.web_left,
+            x: 7 * 64,
+            y: 22 * 64,
+        },
+        {
+            obj: Animations.web_right,
+            x: 11 * 64,
+            y: 22 * 64,
+        },
+        {
+            obj: Animations.web_big,
+            x: 32 * 64,
+            y: 20 * 64,
+        },
+
+        {
+            obj: Animations.column_center,
+            x: 13 * 64,
+            y: 23 * 64,
+        },
+        {
+            obj: Animations.column_repeated,
+            x: 13 * 64,
+            y: 24 * 64,
+        },
+        {
+            obj: Animations.column_repeated,
+            x: 13 * 64,
+            y: 25 * 64,
+        },
+
+        {
+            obj: Animations.column_center,
+            x: 21 * 64,
+            y: 23 * 64,
+        },
+        {
+            obj: Animations.column_repeated,
+            x: 21 * 64,
+            y: 24 * 64,
+        },
+        {
+            obj: Animations.column_repeated,
+            x: 21 * 64,
+            y: 25 * 64,
+        },
+
+        {
+            obj: Animations.column_center,
+            x: 27 * 64,
+            y: 23 * 64,
+        },
+        {
+            obj: Animations.column_repeated,
+            x: 27 * 64,
+            y: 24 * 64,
+        },
+        {
+            obj: Animations.column_repeated,
+            x: 27 * 64,
+            y: 25 * 64,
+        },
+
+        {
+            obj: Animations.column_center,
+            x: 48 * 64,
+            y: 35 * 64,
+        },
+        {
+            obj: Animations.column_repeated,
+            x: 48 * 64,
+            y: 36 * 64,
+        },
+        {
+            obj: Animations.column_repeated,
+            x: 48 * 64,
+            y: 37 * 64,
+        },
+        // {
+        //     obj: Animations.column_bottom,
+        //     x: 13 * 64,
+        //     y: 26 * 64 - 32,
+        // },
+
+        {
+            obj: Animations.chain,
+            x: 22 * 64,
+            y: 28 * 64,
+        },
+        {
+            obj: Animations.chain,
+            x: 22 * 64 + 35,
+            y: 28 * 64,
+        },
+
+        {
+            obj: Animations.chain,
+            x: 37 * 64,
+            y: 27 * 64,
+        },
+        {
+            obj: Animations.chain,
+            x: 37 * 64 + 35,
+            y: 27 * 64,
+        },
     ],
     officerInstances: [
         {
-            spawnX: 9*64,
-            spawnY: 2*64,
-            borderLeft: 6*64 + 20,
-            borderRight: 11*64 - 20,
-            loot: [
-                {
-                    type: PickupType.RING,
-                    count: 5
-                },
-                {
-                    type: PickupType.COIN,
-                    count: 5
-                }
-            ]
+            spawnX: 12*64,
+            spawnY: 25*64,
+            borderLeft: 11*64,
+            borderRight: 14*64,
+            loot: undefined,
         }
     ],
     crateInstances: [
         {
-            spawnX: 13*64,
-            spawnY: 7*64,
+            spawnX: 20*64,
+            spawnY: 23*64,
             loot: [
                 {
                     type: PickupType.RING,
@@ -474,8 +727,8 @@ export default {
         ]
     },
     player: {
-        spawnX: 64 * 3,
-        spawnY: 80,
+        spawnX: 64 * 8,
+        spawnY: 64 * 24,
         anims: [
         {
             name: Animations.idle,
@@ -1713,6 +1966,7 @@ export default {
             src: 'sprites/level 1 Objects.png',
             srcWidth: 1399,
             srcHeight: 857,
+            oy: -10,
             map: [
                 {
                     id: 0,
@@ -1748,10 +2002,295 @@ export default {
                     id: 3,
                     x: 165,
                     y: 731,
-                    cx: 25,
+                    cx: 26,
                     cy: 62,
                     w: 51,
                     h: 124,
+                    delay: 300,
+                },
+            ]
+        },
+        {
+            name: Animations.chain,
+            src: 'sprites/level 1 Objects.png',
+            srcWidth: 1399,
+            srcHeight: 857,
+            map: [
+                {
+                    id: 0,
+                    x: 4,
+                    y: 478,
+                    w: 20,
+                    h: 72,
+                    cx: 7,
+                    cy: 33,
+                    delay: 300,
+                },
+                {
+                    id: 1,
+                    x: 30,
+                    y: 478,
+                    w: 20,
+                    h: 72,
+                    cx: 9,
+                    cy: 33,
+                    delay: 300,
+                },
+                {
+                    id: 2,
+                    x: 56,
+                    y: 478,
+                    w: 20,
+                    h: 72,
+                    cx: 11,
+                    cy: 33,
+                    delay: 300,
+                },
+                {
+                    id: 3,
+                    x: 80,
+                    y: 478,
+                    w: 21,
+                    h: 72,
+                    cx: 13,
+                    cy: 33,
+                    delay: 300,
+                },
+                {
+                    id: 4,
+                    x: 104,
+                    y: 478,
+                    w: 20,
+                    h: 72,
+                    cx: 11,
+                    cy: 33,
+                    delay: 300,
+                },
+                {
+                    id: 5,
+                    x: 129,
+                    y: 478,
+                    w: 20,
+                    h: 72,
+                    cx: 9,
+                    cy: 33,
+                    delay: 300,
+                },
+                {
+                    id: 6,
+                    x: 153,
+                    y: 478,
+                    w: 20,
+                    h: 72,
+                    cx: 7,
+                    cy: 33,
+                    delay: 300,
+                },
+            ]
+        },
+        {
+            name: Animations.column_center,
+            src: 'sprites/level 1 Objects.png',
+            srcWidth: 1399,
+            srcHeight: 857,
+            map: [
+                {
+                    id: 0,
+                    x: 106,
+                    y: 1,
+                    w: 124,
+                    h: 64,
+                    cx: 59 + 7,
+                    cy: 32,
+                    delay: 3000000,
+                },
+            ]
+        },
+        {
+            name: Animations.column_repeated,
+            src: 'sprites/level 1 Objects.png',
+            srcWidth: 1399,
+            srcHeight: 857,
+            map: [
+                {
+                    id: 0,
+                    x: 154,
+                    y: 67,
+                    w: 22,
+                    h: 64,
+                    cx: 11 + 7,
+                    cy: 32,
+                    delay: 3000000,
+                },
+            ]
+        },
+        {
+            name: Animations.column_bottom,
+            src: 'sprites/level 1 Objects.png',
+            srcWidth: 1399,
+            srcHeight: 857,
+            map: [
+                {
+                    id: 0,
+                    x: 265,
+                    y: 67,
+                    w: 50,
+                    h: 64,
+                    cx: 27 + 7,
+                    cy: 32,
+                    delay: 3000000,
+                },
+            ]
+        },
+        {
+            name: Animations.floor_lamp,
+            src: 'sprites/level 1 Objects.png',
+            srcWidth: 1399,
+            srcHeight: 857,
+            map: [
+                {
+                    id: 0,
+                    x: 217,
+                    y: 527,
+                    w: 16,
+                    h: 27,
+                    cx: 43,
+                    cy: 32,
+                    delay: 150,
+                },
+                {
+                    id: 1,
+                    x: 238,
+                    y: 521,
+                    w: 16,
+                    h: 33,
+                    cx: 43,
+                    cy: 38,
+                    delay: 150,
+                },
+                {
+                    id: 2,
+                    x: 258,
+                    y: 520,
+                    w: 16,
+                    h: 34,
+                    cx: 43,
+                    cy: 39,
+                    delay: 150,
+                },
+                {
+                    id: 3,
+                    x: 276,
+                    y: 525,
+                    w: 16,
+                    h: 29,
+                    cx: 43,
+                    cy: 34,
+                    delay: 150,
+                },
+            ]
+        },
+        {
+            name: Animations.web_big,
+            src: 'sprites/level 1 Objects.png',
+            srcWidth: 1399,
+            srcHeight: 857,
+            ox: 32,
+            oy: 31,
+            map: [
+                {
+                    id: 0,
+                    x: 416,
+                    y: 2,
+                    w: 90,
+                    h: 46,
+                    cx: 0,
+                    cy: 0,
+                    delay: 3000000000,
+                },
+            ]
+        },
+        {
+            name: Animations.web_right,
+            src: 'sprites/level 1 Objects.png',
+            srcWidth: 1399,
+            srcHeight: 857,
+            map: [
+                {
+                    id: 0,
+                    x: 523,
+                    y: 1,
+                    w: 52,
+                    h: 58,
+                    cx: 20,
+                    cy: 36,
+                    delay: 3000000000,
+                },
+            ]
+        },
+        {
+            name: Animations.web_left,
+            src: 'sprites/level 1 Objects.png',
+            srcWidth: 1399,
+            srcHeight: 857,
+            map: [
+                {
+                    id: 0,
+                    x: 595,
+                    y: 0,
+                    w: 52,
+                    h: 58,
+                    cx: 3,
+                    cy: 30,
+                    delay: 3000000000,
+                },
+            ]
+        },
+        {
+            name: Animations.hand,
+            src: 'sprites/level 1 Objects.png',
+            srcWidth: 1399,
+            srcHeight: 857,
+            oy: -32,
+            map: [
+                {
+                    id: 0,
+                    x: 3,
+                    y: 414,
+                    w: 112,
+                    h: 43,
+                    cx: 56,
+                    cy: 32,
+                    delay: 300,
+                },
+                {
+                    id: 1,
+                    x: 118,
+                    y: 414,
+                    w: 112,
+                    h: 55,
+                    cx: 56,
+                    cy: 44,
+                    delay: 300,
+                },
+                {
+                    id: 2,
+                    x: 233,
+                    y: 414,
+                    w: 112,
+                    h: 46,
+                    cx: 56,
+                    cy: 32,
+                    delay: 300,
+                },
+                {
+                    id: 3,
+                    x: 350,
+                    y: 414,
+                    w: 112,
+                    h: 61,
+                    cx: 55,
+                    cy: 50,
                     delay: 300,
                 },
             ]

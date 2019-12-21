@@ -151,9 +151,19 @@ export function createOfficerActor(physics: GamePhysics, spawnX: number, spawnY:
     return officer;
 }
 
-export function lootToMap(loot: LootInfo[]) {
+export function lootToMap(loot: LootInfo[] | undefined) {
     const map = new Map<PickupType, number>();
-    loot.forEach((l) => map.set(l.type, l.count));
+    if (loot) {
+        loot.forEach((l) => map.set(l.type, l.count));
+    } else {
+        [PickupType.RING, PickupType.GOLD_BAR, PickupType.SCEPTER, PickupType.SKULL, PickupType.GECKO,
+            PickupType.CROWN, PickupType.CROSS, PickupType.CHALICE, PickupType.COIN].forEach((t) => {
+            const c = Math.random() * 1000 % 4;
+            if (c) {
+                map.set(t, c);
+            }
+        })
+    }
     return map;
 }
 
@@ -275,6 +285,31 @@ export function createLootBoxActor(x: number, y: number, w: number, h: number,
     box.components.push(lootComponent);
 
     return box;
+}
+
+export function createLevelObjectActor(x: number, y: number, img: Animations) {
+    const resources = ResourceMgr.getInstance();
+    const anim = resources.getAnimation(img);
+    if (!anim) {
+        console.error('Resources were not found');
+        throw new Error('Resources were not found');
+    }
+    const actor = new Actor();
+    const positionComponent = new PositionComponent(actor, new Point(x, y));
+    actor.components.push(positionComponent);
+    const renderComponent = new ActorRenderComponent(actor);
+    actor.components.push(renderComponent);
+    if (anim.frames.length > 1) {
+        const animationComponent = new AnimationComponent(actor, renderComponent, anim);
+        actor.components.push(animationComponent);
+    } else if (anim.frames.length === 1) {
+        renderComponent.image = anim.frames[0].image;
+    } else {
+        const m = `${anim.name} animation does not have frames`;
+        console.error(m);
+        throw new Error(m);
+    }
+    return actor;
 }
 
 export function createSpriteDefinitions(tiles: Tiles, spriteNamePrefix: string): SpriteDefinition[] {

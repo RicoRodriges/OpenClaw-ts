@@ -42,6 +42,16 @@ export enum Animations {
     treasureScepterPink = 'scepterPink',
     treasureCoin = 'coin',
     candle = 'candle',
+    chain = 'chain',
+    floor_lamp = 'floor_lamp',
+    web_big = 'web_big',
+    web_right = 'web_right',
+    web_left = 'web_left',
+    hand = 'hand',
     crate = 'crate',
     crate_destroying = 'crate_destroying',
+
+    column_center = 'column_center',
+    column_repeated = 'column_repeated',
+    column_bottom = 'column_bottom',
 }

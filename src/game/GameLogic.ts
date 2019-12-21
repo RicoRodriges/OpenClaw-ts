@@ -5,7 +5,7 @@ import EventMgr from "./events/EventMgr";
 import {
     createBgtilesAndScene,
     createClawActor,
-    createCollisionObjectsAndScene,
+    createCollisionObjectsAndScene, createLevelObjectActor,
     createLootBoxActor,
     createOfficerActor,
     createSpriteDefinitions, createSpriteDefinitionsFromGridTiles,
@@ -106,6 +106,17 @@ export default class GameLogic {
         // TODO: hack for lazy init
         AudioMgr.getInstance();
 
+        // Create objects on the level
+        levelData.objectInstances.forEach((o) => this.actors.push(createLevelObjectActor(o.x, o.y, o.obj)));
+
+        // Create crate actors
+        levelData.crateInstances.forEach((o) => {
+            // TODO: remove w and h
+            const crate = createLootBoxActor(o.spawnX, o.spawnY, 56, 54, Animations.crate, Animations.crate_destroying,
+                this.gamePhysics as GamePhysics, [Sounds.crate_break1, Sounds.crate_break2], lootToMap(o.loot));
+            this.actors.push(crate);
+        });
+
         // Create claw actor
         const claw = createClawActor(this.gamePhysics, levelData.player.spawnX, levelData.player.spawnY, Animations.idle);
         this.actors.push(claw);
@@ -119,16 +130,8 @@ export default class GameLogic {
                 [Animations.damageOfficer], [Sounds.officer_damage1, Sounds.officer_damage2],
                 Animations.deathOfficer, [Sounds.officer_killed1, Sounds.officer_killed2],
                 Sounds.officer_swordAttack, [Sounds.officer_agro1, Sounds.officer_agro2], [Sounds.officer_idle1, Sounds.officer_idle2],
-                lootToMap(o.loot));
+                lootToMap(o.loot ? o.loot : undefined));
             this.actors.push(officerActor);
-        });
-
-        // Create crate actors
-        levelData.crateInstances.forEach((o) => {
-            // TODO: remove w and h
-            const crate = createLootBoxActor(o.spawnX, o.spawnY, 56, 54, Animations.crate, Animations.crate_destroying,
-                this.gamePhysics as GamePhysics, [Sounds.crate_break1, Sounds.crate_break2], lootToMap(o.loot));
-            this.actors.push(crate);
         });
 
         // Create scene nodes for every actors
