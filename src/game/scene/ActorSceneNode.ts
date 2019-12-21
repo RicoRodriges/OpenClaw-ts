@@ -39,6 +39,10 @@ export default class ActorSceneNode extends SceneNode {
             actorImage.height
         );
 
+        if (!this.intersectWithCamera(renderRect, cameraRect)) {
+            return;
+        }
+
         const resources = ResourceMgr.getInstance();
         const ctx = resources.context;
         if (!ctx) {
@@ -63,5 +67,13 @@ export default class ActorSceneNode extends SceneNode {
         if (canvasTransformation) {
             ctx.restore();
         }
+    }
+
+    private intersectWithCamera(o: Rect, c: Rect) {
+        if (o.x + o.w < 0 || o.y + o.h < 0 ||
+            o.x > c.w || o.y > c.h) {
+            return false;
+        }
+        return true;
     }
 }

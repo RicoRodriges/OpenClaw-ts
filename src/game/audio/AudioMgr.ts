@@ -18,7 +18,7 @@ export default class AudioMgr {
         const event = e as EventData_Request_Play_Sound;
         const audio = ResourceMgr.getInstance().getSound(event.sound);
         if (audio) {
-            audio.play();
+            new Audio(audio.src).play();
         }
     }
 }
