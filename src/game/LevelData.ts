@@ -3465,6 +3465,14 @@ export default {
             src: 'sounds/claw_killEnemy.mp3'
         },
         {
+            name: Sounds.claw_killEnemy2,
+            src: 'sounds/claw_killEnemy2.mp3'
+        },
+        {
+            name: Sounds.claw_killEnemy3,
+            src: 'sounds/claw_killEnemy3.mp3'
+        },
+        {
             name: Sounds.treasure_ring,
             src: 'sounds/rings.mp3'
         },

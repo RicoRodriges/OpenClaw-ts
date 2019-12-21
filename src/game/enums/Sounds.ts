@@ -11,6 +11,8 @@ export enum Sounds {
     officer_swordAttack = 'officer_swordAttack',
     claw_swordAttack = 'claw_swordAttack',
     claw_killEnemy= 'claw_killEnemy',
+    claw_killEnemy2 = 'claw_killEnemy2',
+    claw_killEnemy3 = 'claw_killEnemy3',
     claw_damage4 = 'claw_damage4',
     claw_damage3 = 'claw_damage3',
     claw_damage2 = 'claw_damage2',

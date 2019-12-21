@@ -50,7 +50,9 @@ export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: nu
     claw.components.push(animationComponent);
     const healthComponent = new HealthComponent(claw, 100, 100, true);
     claw.components.push(healthComponent);
-    const controllableComponent = new ClawControllableComponent(claw, animationComponent, renderComponent, physics, healthComponent, [Sounds.claw_killEnemy], 0.4, 1800, [Animations.damage1, Animations.damage2], [Sounds.claw_damage1, Sounds.claw_damage2, Sounds.claw_damage3, Sounds.claw_damage4]);
+    const controllableComponent = new ClawControllableComponent(claw, animationComponent, renderComponent, physics, healthComponent,
+        [Sounds.claw_killEnemy, Sounds.claw_killEnemy2, Sounds.claw_killEnemy3],
+        0.4, 1800, [Animations.damage1, Animations.damage2], [Sounds.claw_damage1, Sounds.claw_damage2, Sounds.claw_damage3, Sounds.claw_damage4]);
     claw.components.push(controllableComponent);
     const collisionMask = CollisionFlag.CollisionFlag_EnemyAIAttack | CollisionFlag.CollisionFlag_Solid | CollisionFlag.CollisionFlag_Ground |
         CollisionFlag.CollisionFlag_Trigger | CollisionFlag.CollisionFlag_DamageAura | CollisionFlag.CollisionFlag_Pickup;
