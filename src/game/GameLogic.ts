@@ -8,7 +8,7 @@ import {
     createCollisionObjectsAndScene, createLevelObjectActor,
     createLootBoxActor,
     createOfficerActor,
-    createSpriteDefinitions, createSpriteDefinitionsFromGridTiles,
+    createSpriteDefinitions, createSpriteDefinitionsFromGridTiles, createTreasureActor,
     loadAllSounds,
     loadAnimationWithSprites,
     lootToMap
@@ -132,6 +132,14 @@ export default class GameLogic {
                 Sounds.officer_swordAttack, [Sounds.officer_agro1, Sounds.officer_agro2], [Sounds.officer_idle1, Sounds.officer_idle2],
                 lootToMap(o.loot ? o.loot : undefined));
             this.actors.push(officerActor);
+        });
+
+        // Create static treasures
+        levelData.treasureInstances.forEach((o) => {
+            const t = resources.getTreasure(o.type);
+            if (t && this.gamePhysics) {
+                this.actors.push(createTreasureActor(o.x, o.y, t.w, t.h, t.anim, this.gamePhysics, true, t.sounds, t.score));
+            }
         });
 
         // Create scene nodes for every actors

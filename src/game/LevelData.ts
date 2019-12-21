@@ -434,6 +434,820 @@ export default {
             y: 16 * 64,
         },
     ],
+    treasureInstances: [
+        {
+            x: 37*64,
+            y: 22*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 37*64 - 25,
+            y: 22*64 - 10,
+            type: PickupType.COIN,
+        },
+        {
+            x: 37*64,
+            y: 22*64 - 20,
+            type: PickupType.COIN,
+        },
+        {
+            x: 37*64 - 25,
+            y: 22*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 37*64,
+            y: 22*64 - 40,
+            type: PickupType.COIN,
+        },
+        {
+            x: 37*64 - 25,
+            y: 22*64 - 50,
+            type: PickupType.COIN,
+        },
+        {
+            x: 37*64,
+            y: 22*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 37*64 - 25,
+            y: 22*64 - 70,
+            type: PickupType.COIN,
+        },
+        {
+            x: 37*64,
+            y: 22*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 37*64 - 25,
+            y: 22*64 - 100,
+            type: PickupType.COIN,
+        },
+        {
+            x: 37*64 - 15,
+            y: 22*64 - 160,
+            type: PickupType.CHALICE,
+        },
+        {
+            x: 38*64 - 25,
+            y: 20*64,
+            type: PickupType.GECKO,
+        },
+        {
+            x: 36*64,
+            y: 20*64,
+            type: PickupType.GECKO,
+        },
+
+
+
+
+        {
+            x: 46*64,
+            y: 22*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 46*64 + 25,
+            y: 22*64 - 10,
+            type: PickupType.COIN,
+        },
+        {
+            x: 46*64,
+            y: 22*64 - 20,
+            type: PickupType.COIN,
+        },
+        {
+            x: 46*64 + 25,
+            y: 22*64 - 30,
+            type: PickupType.COIN,
+        },
+
+        {
+            x: 47*64 + 32,
+            y: 22*64 - 40,
+            type: PickupType.SKULL,
+        },
+        {
+            x: 47*64,
+            y: 22*64 - 25,
+            type: PickupType.CROSS,
+        },
+        {
+            x: 48*64,
+            y: 22*64 - 25,
+            type: PickupType.CROSS,
+        },
+        {
+            x: 47*64 + 32,
+            y: 22*64,
+            type: PickupType.CROSS,
+        },
+
+        {
+            x: 49*64,
+            y: 22*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 49*64 + 25,
+            y: 22*64 - 10,
+            type: PickupType.COIN,
+        },
+        {
+            x: 49*64,
+            y: 22*64 - 20,
+            type: PickupType.COIN,
+        },
+        {
+            x: 49*64 + 25,
+            y: 22*64 - 30,
+            type: PickupType.COIN,
+        },
+
+
+        {
+            x: 52*64,
+            y: 21*64,
+            type: PickupType.SCEPTER,
+        },
+        {
+            x: 53*64,
+            y: 20*64,
+            type: PickupType.SCEPTER,
+        },
+        {
+            x: 54*64,
+            y: 19*64,
+            type: PickupType.SCEPTER,
+        },
+        {
+            x: 55*64,
+            y: 18*64,
+            type: PickupType.SCEPTER,
+        },
+        {
+            x: 56*64,
+            y: 17*64,
+            type: PickupType.SCEPTER,
+        },
+        {
+            x: 57*64,
+            y: 16*64,
+            type: PickupType.SCEPTER,
+        },
+        {
+            x: 58*64,
+            y: 15*64,
+            type: PickupType.SCEPTER,
+        },
+
+
+        {
+            x: 51*64,
+            y: 25*64,
+            type: PickupType.GOLD_BAR,
+        },
+        {
+            x: 51*64,
+            y: 26*64,
+            type: PickupType.CROWN,
+        },
+        {
+            x: 51*64,
+            y: 27*64,
+            type: PickupType.GOLD_BAR,
+        },
+        {
+            x: 51*64,
+            y: 28*64,
+            type: PickupType.CROWN,
+        },
+        {
+            x: 51*64,
+            y: 29*64,
+            type: PickupType.GOLD_BAR,
+        },
+        {
+            x: 51*64,
+            y: 30*64,
+            type: PickupType.CROWN,
+        },
+        {
+            x: 51*64,
+            y: 31*64,
+            type: PickupType.GOLD_BAR,
+        },
+        {
+            x: 51*64,
+            y: 32*64,
+            type: PickupType.CROWN,
+        },
+        {
+            x: 51*64,
+            y: 35*64,
+            type: PickupType.SKULL,
+        },
+        {
+            x: 51*64,
+            y: 36*64,
+            type: PickupType.SCEPTER,
+        },
+        {
+            x: 51*64,
+            y: 37*64,
+            type: PickupType.SKULL,
+        },
+
+
+
+        {
+            x: 49*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 49*64 - 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 49*64 - 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 49*64 - 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 49*64 - 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+        {
+            x: 47*64 + 32,
+            y: 12*64 - 160,
+            type: PickupType.RING,
+        },
+        {
+            x: 46*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 46*64 + 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 46*64 + 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 46*64 + 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 46*64 + 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+
+
+        {
+            x: 45*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 45*64 - 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 45*64 - 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 45*64 - 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 45*64 - 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+        {
+            x: 43*64 + 32,
+            y: 12*64 - 160,
+            type: PickupType.CHALICE,
+        },
+        {
+            x: 42*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 42*64 + 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 42*64 + 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 42*64 + 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 42*64 + 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+
+
+        {
+            x: 41*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 41*64 - 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 41*64 - 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 41*64 - 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 41*64 - 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+        {
+            x: 39*64 + 32,
+            y: 12*64 - 160,
+            type: PickupType.SKULL,
+        },
+        {
+            x: 38*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 38*64 + 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 38*64 + 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 38*64 + 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 38*64 + 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+
+
+        {
+            x: 37*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 37*64 - 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 37*64 - 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 37*64 - 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 37*64 - 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+        {
+            x: 35*64 + 32,
+            y: 12*64 - 160,
+            type: PickupType.CROSS,
+        },
+        {
+            x: 34*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 34*64 + 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 34*64 + 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 34*64 + 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 34*64 + 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+
+
+
+        {
+            x: 33*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 33*64 - 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 33*64 - 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 33*64 - 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 33*64 - 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+        {
+            x: 31*64 + 32,
+            y: 12*64 - 160,
+            type: PickupType.CROWN,
+        },
+        {
+            x: 30*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 30*64 + 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 30*64 + 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 30*64 + 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 30*64 + 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+
+
+        {
+            x: 29*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 29*64 - 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 29*64 - 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 29*64 - 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 29*64 - 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+        {
+            x: 27*64 + 32,
+            y: 12*64 - 160,
+            type: PickupType.GECKO,
+        },
+        {
+            x: 26*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 26*64 + 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 26*64 + 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 26*64 + 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 26*64 + 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+
+
+        {
+            x: 25*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 25*64 - 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 25*64 - 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 25*64 - 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 25*64 - 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+        {
+            x: 23*64 + 32,
+            y: 12*64 - 160,
+            type: PickupType.SCEPTER,
+        },
+        {
+            x: 22*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 22*64 + 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 22*64 + 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 22*64 + 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 22*64 + 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+
+
+
+        {
+            x: 21*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 21*64 - 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 21*64 - 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 21*64 - 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 21*64 - 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+        {
+            x: 19*64 + 32,
+            y: 12*64 - 160,
+            type: PickupType.GOLD_BAR,
+        },
+        {
+            x: 18*64,
+            y: 12*64,
+            type: PickupType.COIN,
+        },
+        {
+            x: 18*64 + 20,
+            y: 12*64 - 30,
+            type: PickupType.COIN,
+        },
+        {
+            x: 18*64 + 40,
+            y: 12*64 - 60,
+            type: PickupType.COIN,
+        },
+        {
+            x: 18*64 + 60,
+            y: 12*64 - 90,
+            type: PickupType.COIN,
+        },
+        {
+            x: 18*64 + 80,
+            y: 12*64 - 120,
+            type: PickupType.COIN,
+        },
+
+        {
+            x: 17*64,
+            y: 12*64,
+            type: PickupType.RING,
+        },
+        {
+            x: 17*64,
+            y: 12*64 - 40,
+            type: PickupType.RING,
+        },
+        {
+            x: 17*64,
+            y: 12*64 - 80,
+            type: PickupType.RING,
+        },
+
+        {
+            x: 16*64,
+            y: 12*64,
+            type: PickupType.CHALICE,
+        },
+        {
+            x: 16*64,
+            y: 12*64 - 40,
+            type: PickupType.CHALICE,
+        },
+        {
+            x: 16*64,
+            y: 12*64 - 80,
+            type: PickupType.CHALICE,
+        },
+
+        {
+            x: 15*64,
+            y: 12*64,
+            type: PickupType.SKULL,
+        },
+        {
+            x: 15*64,
+            y: 12*64 - 40,
+            type: PickupType.SKULL,
+        },
+        {
+            x: 15*64,
+            y: 12*64 - 80,
+            type: PickupType.SKULL,
+        },
+
+        {
+            x: 14*64,
+            y: 12*64,
+            type: PickupType.CROSS,
+        },
+        {
+            x: 14*64,
+            y: 12*64 - 40,
+            type: PickupType.CROSS,
+        },
+        {
+            x: 14*64,
+            y: 12*64 - 80,
+            type: PickupType.CROSS,
+        },
+
+        {
+            x: 13*64,
+            y: 12*64,
+            type: PickupType.CROWN,
+        },
+        {
+            x: 13*64,
+            y: 12*64 - 40,
+            type: PickupType.CROWN,
+        },
+        {
+            x: 13*64,
+            y: 12*64 - 80,
+            type: PickupType.CROWN,
+        },
+
+        {
+            x: 12*64,
+            y: 12*64,
+            type: PickupType.GECKO,
+        },
+        {
+            x: 12*64,
+            y: 12*64 - 40,
+            type: PickupType.GECKO,
+        },
+        {
+            x: 12*64,
+            y: 12*64 - 80,
+            type: PickupType.GECKO,
+        },
+
+        {
+            x: 11*64,
+            y: 12*64,
+            type: PickupType.SCEPTER,
+        },
+        {
+            x: 11*64,
+            y: 12*64 - 40,
+            type: PickupType.SCEPTER,
+        },
+        {
+            x: 11*64,
+            y: 12*64 - 80,
+            type: PickupType.SCEPTER,
+        },
+
+        {
+            x: 10*64,
+            y: 12*64,
+            type: PickupType.GOLD_BAR,
+        },
+        {
+            x: 10*64,
+            y: 12*64 - 40,
+            type: PickupType.GOLD_BAR,
+        },
+        {
+            x: 10*64,
+            y: 12*64 - 80,
+            type: PickupType.GOLD_BAR,
+        },
+    ],
     officerInstances: [
         {
             spawnX: 12*64,
@@ -2121,7 +2935,7 @@ export default {
             h: 26,
             anims: [
                 {
-                    name: Animations.treasureScepterRed,
+                    name: Animations.treasureGoldBar,
                     src: 'sprites/treasure.png',
                     srcWidth: 313,
                     srcHeight: 365,

@@ -40,6 +40,7 @@ export enum Animations {
     treasureScepterGreed = 'scepterGreen',
     treasureScepterBlue = 'scepterBlue',
     treasureScepterPink = 'scepterPink',
+    treasureGoldBar = 'treasureGoldBar',
     treasureCoin = 'coin',
     candle = 'candle',
     chain = 'chain',
