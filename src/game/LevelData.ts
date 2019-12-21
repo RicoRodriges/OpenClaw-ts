@@ -172,15 +172,15 @@ export default {
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 11  , 12  , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 12
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 13  , 14  , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 2   , 3   , 4   , null, null, null, 1   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 13
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 14
-        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, 1   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 15
-        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 16
-        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, 1   , 2   , 2   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 17
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , null, null, null, null, null, null, 1   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 15
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 16
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, 1   , 2   , 2   , 2   , 9   , 6   , 15  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 17
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 18
-        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 19
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1   , 2   , 9   , 6   , 6   , 15  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 19
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 20
-        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 15  , 6   , 6   , 6   , 6   , 15  , 6   , 6   , 6   , 6   , 15  , 6   , 6   , 6   , 6   , 15  , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 21
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 15  , 6   , 6   , 6   , 6   , 15  , 6   , 6   , 6   , 6   , 15  , 6   , 6   , 6   , 6   , 15  , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1   , 2   , 9   , 6   , 15  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 21
         [6   , 6   , 6   , 6   , 6   , 6   , 15  , 8   , null, null, null, 16  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 22
-        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1   , 3   , 4   , null, 1   , 2   , 3   , 4   , null, null, null, null, null, null, null, null, 1   , 2   , 9   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 23
+        [6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1   , 3   , 4   , null, 1   , 2   , 3   , 4   , null, null, null, null, null, null, null, null, 1   , 2   , 9   , 6   , 15  , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 23
         [6   , 6   , 6   , 6   , 6   , 6   , 15  , 11  , 12  , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5   , 6   , 8   , null, 5   , 6   , 6   , 10  , 3   , 4   , null, null, null, null, null, null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 24
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 13  , 14  , 3   , 4   , null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1   , 2   , 3   , 4   , null, null, 5   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 10  , 2   , 2   , 2   , 3   , 4   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 25
         [6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 10  , 2   , 2   , 17  , 3   , 4   , null, null, null, 1   , 2   , 17  , 2   , 2   , 2   , 2   , 2   , 17  , 2   , 2   , 9   , 6   , 6   , 8   , null, null, 16  , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 8   , null, 5   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   , 6   ], // 26
@@ -261,6 +261,16 @@ export default {
             x: 48 * 64 + 32,
             y: 33 * 64 + 32,
         },
+        {
+            obj: Animations.floor_lamp,
+            x: 36 * 64 + 32,
+            y: 23 * 64 + 8,
+        },
+        {
+            obj: Animations.floor_lamp,
+            x: 37 * 64 + 43,
+            y: 23 * 64 + 8,
+        },
 
         {
             obj: Animations.candle,
@@ -277,6 +287,12 @@ export default {
             obj: Animations.candle,
             x: 49 * 64,
             y: 37 * 64,
+        },
+
+        {
+            obj: Animations.candle,
+            x: 49 * 64,
+            y: 24 * 64,
         },
 
         {
@@ -309,6 +325,11 @@ export default {
             obj: Animations.web_big,
             x: 32 * 64,
             y: 20 * 64,
+        },
+        {
+            obj: Animations.web_big,
+            x: 56 * 64,
+            y: 15 * 64,
         },
 
         {
@@ -401,6 +422,17 @@ export default {
             x: 37 * 64 + 35,
             y: 27 * 64,
         },
+
+        {
+            obj: Animations.chain,
+            x: 55 * 64,
+            y: 16 * 64,
+        },
+        {
+            obj: Animations.chain,
+            x: 55 * 64 - 35,
+            y: 16 * 64,
+        },
     ],
     officerInstances: [
         {
@@ -409,7 +441,55 @@ export default {
             borderLeft: 11*64,
             borderRight: 14*64,
             loot: undefined,
-        }
+        },
+        {
+            spawnX: 30*64,
+            spawnY: 34*64,
+            borderLeft: 27*64,
+            borderRight: 32*64,
+        },
+        {
+            spawnX: 34*64,
+            spawnY: 34*64,
+            borderLeft: 33*64,
+            borderRight: 37*64,
+        },
+        {
+            spawnX: 51*64,
+            spawnY: 37*64,
+            borderLeft: 44*64,
+            borderRight: 51*64,
+        },
+        {
+            spawnX: 59*64,
+            spawnY: 12*64,
+            borderLeft: 55*64,
+            borderRight: 59*64,
+        },
+        {
+            spawnX: 59*64,
+            spawnY: 12*64,
+            borderLeft: 53*64,
+            borderRight: 58*64,
+        },
+        {
+            spawnX: 50*64,
+            spawnY: 12*64,
+            borderLeft: 50*64,
+            borderRight: 56*64,
+        },
+        {
+            spawnX: 57*64,
+            spawnY: 12*64,
+            borderLeft: 50*64,
+            borderRight: 59*64,
+        },
+        {
+            spawnX: 54*64,
+            spawnY: 12*64,
+            borderLeft: 51*64,
+            borderRight: 57*64,
+        },
     ],
     crateInstances: [
         {
@@ -449,6 +529,57 @@ export default {
         {
             spawnX: 24*64 - 22,
             spawnY: 23*64,
+        },
+
+
+        {
+            spawnX: 40*64,
+            spawnY: 35*64,
+        },
+        {
+            spawnX: 40*64,
+            spawnY: 34*64,
+        },
+        {
+            spawnX: 41*64,
+            spawnY: 35*64,
+        },
+        {
+            spawnX: 41*64,
+            spawnY: 34*64,
+        },
+
+        {
+            spawnX: 65*64,
+            spawnY: 12*64,
+        },
+        {
+            spawnX: 65*64,
+            spawnY: 11*64,
+        },
+        {
+            spawnX: 65*64,
+            spawnY: 10*64,
+        },
+        {
+            spawnX: 65*64,
+            spawnY: 9*64,
+        },
+        {
+            spawnX: 65*64,
+            spawnY: 8*64,
+        },
+        {
+            spawnX: 65*64,
+            spawnY: 7*64,
+        },
+        {
+            spawnX: 65*64,
+            spawnY: 6*64,
+        },
+        {
+            spawnX: 65*64,
+            spawnY: 5*64,
         },
     ],
     officer: {
