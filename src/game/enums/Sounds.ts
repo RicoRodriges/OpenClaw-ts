@@ -30,4 +30,12 @@ export enum Sounds {
     crate_break1 = 'crate_break1',
     crate_break2 = 'crate_break2',
     level_music = 'level_music',
+
+    // triggers
+    claw_allDay = 'claw_allDay',
+    claw_exercises = 'claw_exercises',
+    claw_goldSmell = 'claw_goldSmell',
+    claw_path = 'claw_path',
+    claw_pointless = 'claw_pointless',
+    claw_soFarSoGood = 'claw_soFarSoGood',
 }

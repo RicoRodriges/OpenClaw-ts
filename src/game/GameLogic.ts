@@ -9,7 +9,7 @@ import {
     createHUDElementActor,
     createLevelObjectActor,
     createLootBoxActor,
-    createOfficerActor,
+    createOfficerActor, createSoundPickupActor,
     createSpriteDefinitions,
     createSpriteDefinitionsFromGridTiles,
     createTreasureActor,
@@ -152,6 +152,13 @@ export default class GameLogic {
             const t = resources.getTreasure(o.type);
             if (t && this.gamePhysics) {
                 this.actors.push(createTreasureActor(o.x, o.y, t.w, t.h, o.type, t.anim, this.gamePhysics, true, t.sounds, t.score));
+            }
+        });
+
+        // Create sound triggers
+        levelData.soundTriggerInstances.forEach((o) => {
+            if (this.gamePhysics) {
+                this.actors.push(createSoundPickupActor(o.x, o.y, o.w, o.h, o.sound, this.gamePhysics));
             }
         });
 

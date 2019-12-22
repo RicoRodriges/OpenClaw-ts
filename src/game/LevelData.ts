@@ -434,6 +434,50 @@ export default {
             y: 16 * 64,
         },
     ],
+    soundTriggerInstances: [
+        {
+            x: 51*64,
+            y: 32*64,
+            w: 64*3,
+            h: 64,
+            sound: Sounds.claw_allDay,
+        },
+        {
+            x: 40*64,
+            y: 12*64,
+            w: 64,
+            h: 64*3,
+            sound: Sounds.claw_goldSmell,
+        },
+        {
+            x: 37*64,
+            y: 29*64,
+            w: 64*3,
+            h: 64,
+            sound: Sounds.claw_path,
+        },
+        {
+            x: 62*64,
+            y: 13*64,
+            w: 64*3,
+            h: 64,
+            sound: Sounds.claw_pointless,
+        },
+        {
+            x: 42*64,
+            y: 21*64,
+            w: 64,
+            h: 64*3,
+            sound: Sounds.claw_soFarSoGood,
+        },
+        {
+            x: 19*64,
+            y: 12*64,
+            w: 64,
+            h: 64*3,
+            sound: Sounds.claw_exercises,
+        },
+    ],
     treasureInstances: [
         {
             x: 37*64,
@@ -3766,6 +3810,30 @@ export default {
         {
             name: Sounds.level_music,
             src: 'sounds/level_music.mp3'
+        },
+        {
+            name: Sounds.claw_soFarSoGood,
+            src: 'sounds/claw_soFarSoGood.mp3'
+        },
+        {
+            name: Sounds.claw_pointless,
+            src: 'sounds/claw_pointless.mp3'
+        },
+        {
+            name: Sounds.claw_path,
+            src: 'sounds/claw_path.mp3'
+        },
+        {
+            name: Sounds.claw_goldSmell,
+            src: 'sounds/claw_goldSmell.mp3'
+        },
+        {
+            name: Sounds.claw_allDay,
+            src: 'sounds/claw_allDay.mp3'
+        },
+        {
+            name: Sounds.claw_exercises,
+            src: 'sounds/claw_exercises.mp3'
         },
     ]
 };

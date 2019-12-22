@@ -40,6 +40,7 @@ import {PickupType} from "../enums/PickupType";
 import ScoreComponent from "../actors/components/ScoreComponent";
 import DestroyableComponent from "../actors/components/DestroyableComponent";
 import HUDSceneNode from "../scene/HUDSceneNode";
+import SoundPickupComponent from "../actors/components/loot/SoundPickupComponent";
 
 export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, animName: Animations): Actor {
     const anim = ResourceMgr.getInstance().getAnimation(animName);
@@ -248,6 +249,31 @@ export function createTreasureActor(x: number, y: number, w: number, h: number, 
     // }
 
     return treasure;
+}
+
+export function createSoundPickupActor(x: number, y: number, w: number, h: number, pickupSound: Sounds, physics: GamePhysics) {
+    const pickupActor = new Actor();
+    const positionComponent = new PositionComponent(pickupActor, new Point(x, y));
+    pickupActor.components.push(positionComponent);
+    const triggerComponent = new TriggerComponent(pickupActor);
+    pickupActor.components.push(triggerComponent);
+
+    const bodyDef = new ActorBodyDef();
+    bodyDef.bodyType = BodyType.STATIC;
+    bodyDef.makeSensor = true;
+    bodyDef.fixtureType = FixtureType.FixtureType_Trigger;
+    bodyDef.size.x = w;
+    bodyDef.size.y = h;
+    bodyDef.position.x = x;
+    bodyDef.position.y = y;
+    bodyDef.gravityScale = 0;
+    bodyDef.collisionFlag = CollisionFlag.CollisionFlag_Pickup;
+    bodyDef.collisionMask = CollisionFlag.CollisionFlag_Controller;
+    const physicsComponent = new PhysicsComponent(pickupActor, false, 0, bodyDef, physics);
+    pickupActor.components.push(physicsComponent);
+    const soundPickupComponent = new SoundPickupComponent(pickupActor, triggerComponent, pickupSound);
+    pickupActor.components.push(soundPickupComponent);
+    return pickupActor;
 }
 
 export function createLootBoxActor(x: number, y: number, w: number, h: number,
