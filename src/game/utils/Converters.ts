@@ -168,7 +168,7 @@ export function lootToMap(loot: LootInfo[] | undefined) {
     } else {
         [PickupType.RING, PickupType.GOLD_BAR, PickupType.SCEPTER, PickupType.SKULL, PickupType.GECKO,
             PickupType.CROWN, PickupType.CROSS, PickupType.CHALICE, PickupType.COIN].forEach((t) => {
-            const c = Math.floor(Math.random() * 1000) % 4;
+            const c = ~~(Math.random() * 1000) % 4;
             if (c) {
                 map.set(t, c);
             }
@@ -205,7 +205,7 @@ export function createTreasureActor(x: number, y: number, w: number, h: number, 
     treasure.components.push(positionComponent);
     const renderComponent = new ActorRenderComponent(treasure);
     treasure.components.push(renderComponent);
-    const currentFrame = anim.frames.length === 1 ? 0 : (Math.round(Math.random() * 100) % anim.frames.length);
+    const currentFrame = anim.frames.length === 1 ? 0 : (~~(Math.random() * 100) % anim.frames.length);
     const animationComponent = new AnimationComponent(treasure, renderComponent, anim, currentFrame);
     treasure.components.push(animationComponent);
     const triggerComponent = new TriggerComponent(treasure);
@@ -214,7 +214,7 @@ export function createTreasureActor(x: number, y: number, w: number, h: number, 
     let speedX = 0.5 + ((Math.random() * 1000) % 100) / 20.0;
     const speedY = -(1 + ((Math.random() * 1000) % 100) / 20.0);
 
-    if (Math.round(Math.random() * 100) & 2) {
+    if (Math.random() > 0.5) {
         speedX *= -1;
     }
 

@@ -33,8 +33,8 @@ export default class HUDSceneNode extends SceneNode {
         const offsetX = scaleX > 0 ? actorImage.offsetX : -actorImage.offsetX;
         const offsetY = scaleY > 0 ? actorImage.offsetY : -actorImage.offsetY;
         const renderRect = new Rect(
-            Math.floor(this.properties.position.x - actorImage.width / 2 + offsetX),
-            Math.floor(this.properties.position.y - actorImage.height / 2 + offsetY),
+            ~~(this.properties.position.x - actorImage.width / 2 + offsetX),
+            ~~(this.properties.position.y - actorImage.height / 2 + offsetY),
             actorImage.width,
             actorImage.height
         );

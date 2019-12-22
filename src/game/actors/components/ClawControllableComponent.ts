@@ -23,6 +23,7 @@ import GamePhysics from "../../GamePhysics";
 import HealthComponent, {HealthObserver} from "./HealthComponent";
 import EventData_Health_Changed from "../../events/EventData_Health_Changed";
 import EventData_Claw_Died from "../../events/EventData_Claw_Died";
+import {popRandomItem} from "../../utils/Util";
 
 export default class ClawControllableComponent extends ActorComponent implements AnimationObserver, HealthObserver {
     public static NAME = 'ClawControllableComponent';
@@ -256,22 +257,24 @@ export default class ClawControllableComponent extends ActorComponent implements
     }
 
     OnClawKilledEnemy(damageType: DamageType, enemy: Actor) {
-        if (this.onKillSounds.length > 0 && Math.random() < this.soundChance) {
-            const i = Math.floor(Math.random() * 100) % this.onKillSounds.length;
-            EventMgr.getInstance().VQueueEvent(new EventData_Request_Play_Sound(this.onKillSounds[i]));
+        const sound = popRandomItem(this.onKillSounds, this.soundChance);
+        if (sound !== null) {
+            EventMgr.getInstance().VQueueEvent(new EventData_Request_Play_Sound(sound));
         }
     }
 
     VOnHealthChanged(oldHealth: number, newHealth: number, damageType: DamageType, sourceActor: Actor): void {
         if (/*newHealth > 0 &&*/ oldHealth > newHealth) {
-            if (this.damageAnims.length > 0 && this.animationComponent) {
-                const i = Math.round(Math.random() * 100) % this.damageAnims.length;
-                this.setAnimation(this.damageAnims[i]);
+            if (this.animationComponent) {
+                const anim = popRandomItem(this.damageAnims);
+                if (anim !== null) {
+                    this.setAnimation(anim);
+                }
             }
 
-            if (this.damageSounds.length > 0) {
-                const i = Math.round(Math.random() * 100) % this.damageSounds.length;
-                EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(this.damageSounds[i]));
+            const sound = popRandomItem(this.damageSounds);
+            if (sound !== null) {
+                EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(sound));
             }
 
             this.healthComponent.isInvulnerable = true;

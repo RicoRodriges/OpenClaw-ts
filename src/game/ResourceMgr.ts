@@ -16,7 +16,7 @@ export default class ResourceMgr {
     private animations = new Map<string, Animation>();
     private treasures = new Map<PickupType, Treasure[]>();
     private sounds = new Map<string, HTMLAudioElement>();
-    private loadingGraphics = new Map<string, Promise<CanvasImageSource>>();
+    private loadingGraphics = new Map<string, CanvasImageSource>();
     private loadingSounds = new Map<string, Promise<HTMLAudioElement>>();
 
     static getInstance() {
@@ -30,7 +30,8 @@ export default class ResourceMgr {
     getSprite(name: string) {
         const spriteInfo = this.sprites.get(name);
         if (spriteInfo) {
-            const img = this.getImage(spriteInfo.imgName);
+            //const img = this.getImage(spriteInfo.imgName);
+            const img = spriteInfo.img;
             if (img) {
                 return new Sprite(img, spriteInfo.rect);
             }
@@ -45,26 +46,28 @@ export default class ResourceMgr {
         return this.sounds.get(name);
     }
 
-    loadImage(name: string, src: string) {
+    loadImage(name: string, src: string): CanvasImageSource {
         if (!this.loadingGraphics.has(name) && !this.images.has(name)) {
+            const img = new Image();
             const promise = new Promise<CanvasImageSource>((r) => {
-                const img = new Image();
                 img.onload = () => {
                     r(img);
                 };
                 img.src = src;
             });
-            this.loadingGraphics.set(name, promise);
+            this.loadingGraphics.set(name, img);
             promise.then((img) => {
                 this.images.set(name, img);
                 this.loadingGraphics.delete(name);
             });
+            return img;
         }
+        return (this.loadingGraphics.get(name) || this.images.get(name)) as CanvasImageSource;
     }
 
     loadSprite(spriteName: string, imageName: string, src: string, x: number, y: number, width: number, height: number) {
-        this.loadImage(imageName, src);
-        this.sprites.set(spriteName, new SpriteInfo(imageName, x, y, width, height));
+        const img = this.loadImage(imageName, src);
+        this.sprites.set(spriteName, new SpriteInfo(imageName, img, x, y, width, height));
     }
 
     loadSound(soundName: string, src: string) {
@@ -120,11 +123,9 @@ export class Sprite {
 }
 
 class SpriteInfo {
-    imgName: string;
     rect: Rect;
 
-    constructor(imgName: string, x: number, y: number, width: number, height: number) {
-        this.imgName = imgName;
+    constructor(public imgName: string, public img: CanvasImageSource, x: number, y: number, width: number, height: number) {
         this.rect = new Rect(x, y, width, height);
     }
 }

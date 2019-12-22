@@ -8,6 +8,7 @@ import EnemyAIComponent from "./EnemyAIComponent";
 import {Sounds} from "../../../enums/Sounds";
 import EventMgr from "../../../events/EventMgr";
 import EventData_Request_Play_Sound from "../../../events/EventData_Request_Play_Sound";
+import {popRandomItem} from "../../../utils/Util";
 
 export default class TakeDamageAIStateComponent extends EnemyAIStateComponent implements AnimationObserver {
     public static NAME = 'TakeDamageAIStateComponent';
@@ -45,12 +46,14 @@ export default class TakeDamageAIStateComponent extends EnemyAIStateComponent im
         }
         this.isActive = true;
 
-        const animIndex = Math.floor(Math.random() * 100) % this.anims.length;
-        this.animationComponent.setAnimation(this.anims[animIndex]);
+        const anim = popRandomItem(this.anims);
+        if (anim !== null) {
+            this.animationComponent.setAnimation(anim);
+        }
 
-        if (this.sounds.length > 0) {
-            const soundIndex = Math.floor(Math.random() * 100) % this.sounds.length;
-            EventMgr.getInstance().VQueueEvent(new EventData_Request_Play_Sound(this.sounds[soundIndex]));
+        const sound = popRandomItem(this.sounds);
+        if (sound) {
+            EventMgr.getInstance().VQueueEvent(new EventData_Request_Play_Sound(sound));
         }
     }
 

@@ -29,14 +29,14 @@ export default class ScreenElementHud implements IScreenElement {
     updateScore(score: number) {
         for (let i = this.score.length - 1; i >= 0; --i) {
             this.score[i] = score % 10;
-            score = Math.floor(score / 10);
+            score = ~~(score / 10);
         }
     }
 
     updateHealth(health: number) {
         for (let i = this.health.length - 1; i >= 0; --i) {
             this.health[i] = health % 10;
-            health = Math.floor(health / 10);
+            health = ~~(health / 10);
         }
     }
 

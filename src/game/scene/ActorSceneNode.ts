@@ -33,8 +33,8 @@ export default class ActorSceneNode extends SceneNode {
         const offsetX = scaleX > 0 ? actorImage.offsetX : -actorImage.offsetX;
         const offsetY = scaleY > 0 ? actorImage.offsetY : -actorImage.offsetY;
         const renderRect = new Rect(
-            Math.floor(this.properties.position.x - actorImage.width / 2 + offsetX - cameraRect.x),
-            Math.floor(this.properties.position.y - actorImage.height / 2 + offsetY - cameraRect.y),
+            ~~(this.properties.position.x - actorImage.width / 2 + offsetX - cameraRect.x),
+            ~~(this.properties.position.y - actorImage.height / 2 + offsetY - cameraRect.y),
             actorImage.width,
             actorImage.height
         );

@@ -14,6 +14,7 @@ import AnimationComponent from "../AnimationComponent";
 import PositionComponent from "../PositionComponent";
 import EventData_Move_Actor from "../../../events/EventData_Move_Actor";
 import EventData_Request_Delete_Actor from "../../../events/EventData_Request_Delete_Actor";
+import {popRandomItem} from "../../../utils/Util";
 
 export default class EnemyAIComponent extends ActorComponent implements HealthObserver {
     public static NAME = 'EnemyAIComponent';
@@ -109,11 +110,9 @@ export default class EnemyAIComponent extends ActorComponent implements HealthOb
     }
 
     TryPlaySpeechSound(chance: number, sounds: Sounds[]) {
-        if (sounds.length > 0) {
-            if (Math.random() <= chance) {
-                const index = Math.round(Math.random() * 100) % sounds.length;
-                EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(sounds[index]));
-            }
+        const sound = popRandomItem(sounds, chance);
+        if (sound !== null) {
+            EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(sound));
         }
     }
 
@@ -125,10 +124,12 @@ export default class EnemyAIComponent extends ActorComponent implements HealthOb
             }
         });
 
-        // Play deaht sound
-        if (this.deathSound && this.deathSound.length > 0) {
-            const i = Math.floor(Math.random() * 100) % this.deathSound.length;
-            EventMgr.getInstance().VQueueEvent(new EventData_Request_Play_Sound(this.deathSound[i]));
+        // Play death sound
+        if (this.deathSound) {
+            const sound = popRandomItem(this.deathSound);
+            if (sound !== null) {
+                EventMgr.getInstance().VQueueEvent(new EventData_Request_Play_Sound(sound));
+            }
         }
 
         this.physicsComponent.Destroy();

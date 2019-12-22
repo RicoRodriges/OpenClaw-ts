@@ -6,6 +6,7 @@ import Scene from "./Scene";
 export default class CameraNode extends SceneNode {
     actor: Actor | null;
     followByActor = true;
+    actorNode: SceneNode | null = null;
 
     constructor(public x: number, public y: number, public w: number, public h: number, follow: Actor | null = null) {
         super();
@@ -14,10 +15,12 @@ export default class CameraNode extends SceneNode {
 
     getCameraRect(scene: Scene): Rect {
         if (this.followByActor && this.actor) {
-            const actorNode = scene.actorNodes.get(this.actor);
-            if (actorNode) {
-                this.x = actorNode.properties.position.x - this.w / 2;
-                this.y = actorNode.properties.position.y - this.h / 2;
+            if (this.actorNode === null) {
+                this.resolveActorNode(scene, this.actor);
+            }
+            if (this.actorNode !== null) {
+                this.x = this.actorNode.properties.position.x - this.w / 2;
+                this.y = this.actorNode.properties.position.y - this.h / 2;
             }
         }
         // if (this.actor) {
@@ -26,7 +29,14 @@ export default class CameraNode extends SceneNode {
         //         console.log(actorNode.properties.position.x - this.w / 2, actorNode.properties.position.y - this.h / 2);
         //     }
         // }
-        return new Rect(Math.floor(this.x), Math.floor(this.y), this.w, this.h);
+        return new Rect(~~(this.x), ~~(this.y), this.w, this.h);
+    }
+
+    private resolveActorNode(scene: Scene, a: Actor) {
+        const actorNode = scene.actorNodes.get(a);
+        if (actorNode) {
+            this.actorNode = actorNode;
+        }
     }
 
 }

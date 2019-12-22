@@ -19,15 +19,15 @@ export default class TilesSceneNode extends SceneNode {
         const zIndex = renderComponent.zIndex;
         const isRepeated = renderComponent.repeated;
         const cameraRect = scene.camera.getCameraRect(scene);
-        const cameraX = Math.floor(cameraRect.x * zIndex);
-        const cameraY = Math.floor(cameraRect.y * zIndex);
+        const cameraX = ~~(cameraRect.x * zIndex);
+        const cameraY = ~~(cameraRect.y * zIndex);
         const cameraOffsetX = cameraX < tileWidth ? tileWidth : cameraX;
         const cameraOffsetY = cameraY < tileHeight ? tileHeight : cameraY;
 
-        const startX = Math.floor(cameraOffsetX / tileWidth - 1);
-        const startY = Math.floor(cameraOffsetY / tileHeight - 1);
-        const endX = Math.floor((cameraOffsetX + cameraRect.w) / tileWidth + 1);
-        const endY = Math.floor((cameraOffsetY + cameraRect.h) / tileHeight + 1);
+        const startX = ~~(cameraOffsetX / tileWidth - 1);
+        const startY = ~~(cameraOffsetY / tileHeight - 1);
+        const endX = ~~((cameraOffsetX + cameraRect.w) / tileWidth + 1);
+        const endY = ~~((cameraOffsetY + cameraRect.h) / tileHeight + 1);
 
         const resources = ResourceMgr.getInstance();
         const ctx = resources.context;
