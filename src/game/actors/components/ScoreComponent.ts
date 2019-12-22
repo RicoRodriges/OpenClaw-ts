@@ -17,7 +17,6 @@ export default class ScoreComponent extends ActorComponent {
 
     AddScorePoints(scorePoints: number, pickupType: PickupType) {
         this.score += scorePoints;
-        EventMgr.getInstance().VTriggerEvent(new EventData_Score_Changed(this.score));
-        // TODO: implement score
+        EventMgr.getInstance().VTriggerEvent(new EventData_Score_Changed(this.score, pickupType));
     }
 }

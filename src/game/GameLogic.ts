@@ -6,7 +6,7 @@ import {
     createBgtilesAndScene,
     createClawActor,
     createCollisionObjectsAndScene,
-    createHUDElementActor,
+    createHUDElementActor, createLevelFinishActor,
     createLevelObjectActor,
     createLootBoxActor,
     createOfficerActor, createSoundPickupActor,
@@ -15,7 +15,7 @@ import {
     createTreasureActor,
     loadAllSounds,
     loadAnimationWithSprites,
-    lootToMap, toHUDSceneNode
+    lootToMap, mergeLoot, toHUDSceneNode
 } from "./utils/Converters";
 import ActorController from "./ActorController";
 import ScreenElementScene from "./user-interface/ScreenElementScene";
@@ -46,6 +46,9 @@ import EventData_Request_Play_Sound from "./events/EventData_Request_Play_Sound"
 import ScreenElementHud from "./user-interface/ScreenElementHud";
 import HUDSceneNode from "./scene/HUDSceneNode";
 import EventData_Claw_Died from "./events/EventData_Claw_Died";
+import EventData_Level_Finish from "./events/EventData_Level_Finish";
+import ScreenElementFinishMenu from "./user-interface/ScreenElementFinishMenu";
+import {PickupType} from "./enums/PickupType";
 
 export default class GameLogic {
     actors: Actor[] = [];
@@ -62,6 +65,7 @@ export default class GameLogic {
         EventMgr.getInstance().VAddListener((e) => this.onActorCreateDelegate(e), EventData_Request_New_Actor.NAME);
         EventMgr.getInstance().VAddListener((e) => this.onActorDeleteDelegate(e), EventData_Request_Delete_Actor.NAME);
         EventMgr.getInstance().VAddListener((e) => this.onClawDeadDelegate(e), EventData_Claw_Died.NAME);
+        EventMgr.getInstance().VAddListener((e) => this.onLevelFinishDelegate(e), EventData_Level_Finish.NAME);
     }
 
     VOnUpdate(diff: number) {
@@ -113,6 +117,8 @@ export default class GameLogic {
 
         // Load treasure definitions
         resources.loadTreasures(levelData.treasureDef);
+        const totalTreasures = new Map<PickupType, number>();
+        let totalScore = 0;
 
         // Load sounds
         loadAllSounds(levelData.sounds);
@@ -125,8 +131,10 @@ export default class GameLogic {
         // Create crate actors
         levelData.crateInstances.forEach((o) => {
             // TODO: remove w and h
+            const loot = lootToMap(o.loot);
+            totalScore += mergeLoot(totalTreasures, loot);
             const crate = createLootBoxActor(o.spawnX, o.spawnY, 42, 42, Animations.crate, Animations.crate_destroying,
-                this.gamePhysics as GamePhysics, [Sounds.crate_break1, Sounds.crate_break2], lootToMap(o.loot));
+                this.gamePhysics as GamePhysics, [Sounds.crate_break1, Sounds.crate_break2], loot);
             this.actors.push(crate);
         });
 
@@ -138,12 +146,14 @@ export default class GameLogic {
 
         // Create enemy actors
         levelData.officerInstances.forEach((o) => {
+            const loot = lootToMap(o.loot ? o.loot : undefined);
+            totalScore += mergeLoot(totalTreasures, loot);
             const officerActor = createOfficerActor(this.gamePhysics as GamePhysics, o.spawnX, o.spawnY, Animations.idleOfficer,
                 Animations.runOfficer, Animations.swordAttackOfficer, levelData.officer.speed, o.borderLeft, o.borderRight, camera,
                 [Animations.damageOfficer], [Sounds.officer_damage1, Sounds.officer_damage2],
                 Animations.deathOfficer, [Sounds.officer_killed1, Sounds.officer_killed2],
                 Sounds.officer_swordAttack, [Sounds.officer_agro1, Sounds.officer_agro2], [Sounds.officer_idle1, Sounds.officer_idle2],
-                lootToMap(o.loot ? o.loot : undefined));
+                loot);
             this.actors.push(officerActor);
         });
 
@@ -152,6 +162,9 @@ export default class GameLogic {
             const t = resources.getTreasure(o.type);
             if (t && this.gamePhysics) {
                 this.actors.push(createTreasureActor(o.x, o.y, t.w, t.h, o.type, t.anim, this.gamePhysics, true, t.sounds, t.score));
+                totalScore += t.score;
+                const prew = totalTreasures.get(o.type) || 0;
+                totalTreasures.set(o.type, prew + 1);
             }
         });
 
@@ -161,6 +174,10 @@ export default class GameLogic {
                 this.actors.push(createSoundPickupActor(o.x, o.y, o.w, o.h, o.sound, this.gamePhysics));
             }
         });
+
+        // Create level exit
+        const f = levelData.finish;
+        this.actors.push(createLevelFinishActor(f.x, f.y, f.anim, f.sound, this.gamePhysics));
 
         // Create scene nodes for every actors
         const actorSceneNodes: ActorSceneNode[] = [];
@@ -217,6 +234,9 @@ export default class GameLogic {
         ];
         const deathMenuScreenElement = new ScreenElementMenu(deathMenuNodes, screenElementScene);
 
+        // Create finish menu
+        const screenElementFinishMenu = new ScreenElementFinishMenu(screenElementScene, totalTreasures, totalScore);
+
         // Create HUD
         const uiTreasureActor = createHUDElementActor(22, 30, false, false, Animations.ui_treasure);
         this.actors.push(uiTreasureActor);
@@ -228,7 +248,8 @@ export default class GameLogic {
         HUDNodes.set('health', toHUDSceneNode(uiHealthActor));
         const screenElementHud = new ScreenElementHud(HUDNodes, screenElementScene);
 
-        this.gameView = new GameView(loadingScreenElement, menuScreenElement, deathMenuScreenElement, screenElementHud,
+        this.gameView = new GameView(loadingScreenElement, menuScreenElement, deathMenuScreenElement, screenElementFinishMenu,
+            screenElementHud,
             [screenElementScene], new ActorController(actorNodes.get(claw) as ActorSceneNode));
     }
 
@@ -260,6 +281,15 @@ export default class GameLogic {
         const view = this.gameView;
         if (view) {
             view.isDeathMenu = true;
+        }
+    }
+
+    onLevelFinishDelegate(e: IEventData) {
+        this.isStopped = true;
+
+        const view = this.gameView;
+        if (view) {
+            view.isFinishMenu = true;
         }
     }
 

@@ -38,4 +38,6 @@ export enum Sounds {
     claw_path = 'claw_path',
     claw_pointless = 'claw_pointless',
     claw_soFarSoGood = 'claw_soFarSoGood',
+
+    level_finish = 'level_finish',
 }

@@ -1765,6 +1765,12 @@ export default {
         }
         ]
     },
+    finish: {
+        x: 8 * 64,
+        y: 10 * 64,
+        anim: Animations.level_end,
+        sound: Sounds.level_finish,
+    },
     player: {
         spawnX: 64 * 8,
         spawnY: 64 * 24,
@@ -3834,6 +3840,10 @@ export default {
         {
             name: Sounds.claw_exercises,
             src: 'sounds/claw_exercises.mp3'
+        },
+        {
+            name: Sounds.level_finish,
+            src: 'sounds/level_finish.mp3'
         },
     ]
 };

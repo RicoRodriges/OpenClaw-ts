@@ -41,6 +41,7 @@ import ScoreComponent from "../actors/components/ScoreComponent";
 import DestroyableComponent from "../actors/components/DestroyableComponent";
 import HUDSceneNode from "../scene/HUDSceneNode";
 import SoundPickupComponent from "../actors/components/loot/SoundPickupComponent";
+import FinishLevelPickupComponent from "../actors/components/loot/FinishLevelPickupComponent";
 
 export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, animName: Animations): Actor {
     const anim = ResourceMgr.getInstance().getAnimation(animName);
@@ -167,13 +168,27 @@ export function lootToMap(loot: LootInfo[] | undefined) {
     } else {
         [PickupType.RING, PickupType.GOLD_BAR, PickupType.SCEPTER, PickupType.SKULL, PickupType.GECKO,
             PickupType.CROWN, PickupType.CROSS, PickupType.CHALICE, PickupType.COIN].forEach((t) => {
-            const c = Math.random() * 1000 % 4;
+            const c = Math.floor(Math.random() * 1000) % 4;
             if (c) {
                 map.set(t, c);
             }
         })
     }
     return map;
+}
+
+export function mergeLoot(dest: Map<PickupType, number>, source: Map<PickupType, number>) {
+    let score = 0;
+    const res = ResourceMgr.getInstance();
+    source.forEach((c, t) => {
+        const def = res.getTreasure(t);
+        if (def) {
+            const prew = dest.get(t) || 0;
+            dest.set(t, prew + c);
+            score += def.score * c;
+        }
+    });
+    return score;
 }
 
 export function createTreasureActor(x: number, y: number, w: number, h: number, type: PickupType,
@@ -249,6 +264,42 @@ export function createTreasureActor(x: number, y: number, w: number, h: number, 
     // }
 
     return treasure;
+}
+
+export function createLevelFinishActor(x: number, y: number, animName: Animations,
+                                       pickupSound: Sounds, physics: GamePhysics) {
+    const resources = ResourceMgr.getInstance();
+    const anim = resources.getAnimation(animName);
+    if (!anim) {
+        console.error('Resources were not found');
+        throw new Error('Resources were not found');
+    }
+    const actor = new Actor();
+    const positionComponent = new PositionComponent(actor, new Point(x, y));
+    actor.components.push(positionComponent);
+    const renderComponent = new ActorRenderComponent(actor);
+    actor.components.push(renderComponent);
+    const animationComponent = new AnimationComponent(actor, renderComponent, anim);
+    actor.components.push(animationComponent);
+    const triggerComponent = new TriggerComponent(actor);
+    actor.components.push(triggerComponent);
+
+    const bodyDef = new ActorBodyDef();
+    bodyDef.bodyType = BodyType.STATIC;
+    bodyDef.makeSensor = true;
+    bodyDef.fixtureType = FixtureType.FixtureType_Trigger;
+    bodyDef.size.x = anim.frames[0].image.width;
+    bodyDef.size.y = anim.frames[0].image.height;
+    bodyDef.position.x = x;
+    bodyDef.position.y = y;
+    bodyDef.gravityScale = 0;
+    bodyDef.collisionFlag = CollisionFlag.CollisionFlag_Pickup;
+    bodyDef.collisionMask = CollisionFlag.CollisionFlag_Controller;
+    const physicsComponent = new PhysicsComponent(actor, false, 0, bodyDef, physics);
+    actor.components.push(physicsComponent);
+    const finishLevelPickupComponent = new FinishLevelPickupComponent(actor, triggerComponent, pickupSound);
+    actor.components.push(finishLevelPickupComponent);
+    return actor;
 }
 
 export function createSoundPickupActor(x: number, y: number, w: number, h: number, pickupSound: Sounds, physics: GamePhysics) {
