@@ -6,7 +6,7 @@ import SceneNodeProperties from "./SceneNodeProperties";
 export default class TitleSceneNode extends SceneNode {
 
     constructor(public text: string, x: number, y: number, public fontSize = 48, public fontName = 'serif') {
-        super(new SceneNodeProperties(null, x, y, 0, 0));
+        super(new SceneNodeProperties(null, x, y));
     }
 
     VRender(scene: Scene) {

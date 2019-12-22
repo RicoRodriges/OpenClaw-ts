@@ -1,20 +1,20 @@
 import SceneNode from "./SceneNode";
 import Scene from "./Scene";
 import Rect from "../utils/Rect";
-import {ActorRenderComponent} from "../actors/components/RenderComponent";
+import {HUDRenderComponent} from "../actors/components/RenderComponent";
 import Actor from "../actors/Actor";
 import SceneNodeProperties from "./SceneNodeProperties";
 import ResourceMgr from "../ResourceMgr";
 
-export default class ActorSceneNode extends SceneNode {
+export default class HUDSceneNode extends SceneNode {
 
-    constructor(actor: Actor, x: number, y: number, renderComponent: ActorRenderComponent) {
+    constructor(actor: Actor, x: number, y: number, renderComponent: HUDRenderComponent) {
         super(new SceneNodeProperties(actor, x, y));
         this.renderComponent = renderComponent;
     }
 
     VRender(scene: Scene) {
-        const renderComponent = this.renderComponent as ActorRenderComponent;
+        const renderComponent = this.renderComponent as HUDRenderComponent;
         if (!renderComponent) {
             return;
         }
@@ -33,14 +33,16 @@ export default class ActorSceneNode extends SceneNode {
         const offsetX = scaleX > 0 ? actorImage.offsetX : -actorImage.offsetX;
         const offsetY = scaleY > 0 ? actorImage.offsetY : -actorImage.offsetY;
         const renderRect = new Rect(
-            Math.floor(this.properties.position.x - actorImage.width / 2 + offsetX - cameraRect.x),
-            Math.floor(this.properties.position.y - actorImage.height / 2 + offsetY - cameraRect.y),
+            Math.floor(this.properties.position.x - actorImage.width / 2 + offsetX),
+            Math.floor(this.properties.position.y - actorImage.height / 2 + offsetY),
             actorImage.width,
             actorImage.height
         );
-
-        if (!this.intersectWithCamera(renderRect, cameraRect)) {
-            return;
+        if (renderComponent.isRight) {
+            renderRect.x += cameraRect.w;
+        }
+        if (renderComponent.isBottom) {
+            renderRect.y += cameraRect.h;
         }
 
         const resources = ResourceMgr.getInstance();
@@ -67,13 +69,5 @@ export default class ActorSceneNode extends SceneNode {
         if (canvasTransformation) {
             ctx.restore();
         }
-    }
-
-    private intersectWithCamera(o: Rect, c: Rect) {
-        if (o.x + o.w < 0 || o.y + o.h < 0 ||
-            o.x > c.w || o.y > c.h) {
-            return false;
-        }
-        return true;
     }
 }

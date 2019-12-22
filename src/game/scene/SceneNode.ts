@@ -9,7 +9,7 @@ export default class SceneNode {
     renderComponent?: RenderComponent;
 
     constructor(properties: SceneNodeProperties | null = null) {
-        this.properties = properties ? properties : new SceneNodeProperties(null, 0, 0, 0, 0);
+        this.properties = properties ? properties : new SceneNodeProperties(null, 0, 0);
     }
 
     VRender(scene: Scene) {

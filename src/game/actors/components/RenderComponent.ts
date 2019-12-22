@@ -42,6 +42,18 @@ export class ActorRenderComponent extends RenderComponent {
     }
 }
 
+export class HUDRenderComponent extends ActorRenderComponent {
+    public static readonly NAME1 = 'HUDRenderComponent';
+
+    constructor(owner: Actor, public isRight = false, public isBottom = false) {
+        super(owner);
+    }
+
+    getName(): string {
+        return HUDRenderComponent.NAME1;
+    }
+}
+
 export class TileRenderComponent extends RenderComponent {
     public static readonly NAME = 'TileRenderComponent';
 

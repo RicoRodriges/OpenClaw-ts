@@ -13,6 +13,7 @@ export enum Sounds {
     claw_killEnemy = 'claw_killEnemy',
     claw_killEnemy2 = 'claw_killEnemy2',
     claw_killEnemy3 = 'claw_killEnemy3',
+    claw_death = 'claw_death',
     claw_damage4 = 'claw_damage4',
     claw_damage3 = 'claw_damage3',
     claw_damage2 = 'claw_damage2',

@@ -3,34 +3,51 @@ import ActorController from "./ActorController";
 import ResourceMgr from "./ResourceMgr";
 import ScreenElementLoadingScreen from "./user-interface/ScreenElementLoadingScreen";
 import ScreenElementMenu from "./user-interface/ScreenElementMenu";
+import ScreenElementHud from "./user-interface/ScreenElementHud";
+import EventMgr from "./events/EventMgr";
+import EventData_Score_Changed from "./events/EventData_Score_Changed";
+import EventData_Health_Changed from "./events/EventData_Health_Changed";
 
 export default class GameView {
     screenElements: IScreenElement[];
-    // screenElementHUD: IScreenElement;
+    screenElementHUD: ScreenElementHud;
     loadingScreen: IScreenElement;
+    deathScreen: IScreenElement;
     menuScreen: IScreenElement;
     keyBoardHandler: ActorController;
     isLoading = true;
     isInGameMenu = true;
+    isDeathMenu = false;
 
     constructor(loadingScreen: ScreenElementLoadingScreen,
                 menuScreen: ScreenElementMenu,
+                deathScreen: ScreenElementMenu,
+                screenElementHUD: ScreenElementHud,
                 screenElements: IScreenElement[], keyBoardHandler: ActorController) {
         this.loadingScreen = loadingScreen;
         this.menuScreen = menuScreen;
+        this.deathScreen = deathScreen;
+        this.screenElementHUD = screenElementHUD;
         this.screenElements = screenElements;
         this.keyBoardHandler = keyBoardHandler;
+        EventMgr.getInstance().VAddListener((e) => this.screenElementHUD.updateScore((e as EventData_Score_Changed).score), EventData_Score_Changed.NAME);
+        EventMgr.getInstance().VAddListener((e) => this.screenElementHUD.updateHealth((e as EventData_Health_Changed).health), EventData_Health_Changed.NAME);
     }
 
     onKeyDown(e: KeyboardEvent) {
         if (!this.isLoading) {
             if (!this.isInGameMenu) {
-                this.screenElements.forEach((se) => {
-                    if (se.isVisible()) {
-                        se.onKeyDown(e as KeyboardEvent);
-                    }
-                });
-                this.keyBoardHandler.onKeyDown(e);
+                if (!this.isDeathMenu) {
+                    this.screenElements.forEach((se) => {
+                        if (se.isVisible()) {
+                            se.onKeyDown(e as KeyboardEvent);
+                        }
+                    });
+                    this.screenElementHUD.onKeyDown(e);
+                    this.keyBoardHandler.onKeyDown(e);
+                } else {
+                    this.deathScreen.onKeyDown(e);
+                }
             } else {
                 this.menuScreen.onKeyDown(e as KeyboardEvent);
             }
@@ -44,12 +61,17 @@ export default class GameView {
     onKeyUp(e: KeyboardEvent) {
         if (!this.isLoading) {
             if (!this.isInGameMenu) {
-                this.screenElements.forEach((se) => {
-                    if (se.isVisible()) {
-                        se.onKeyUp(e as KeyboardEvent);
-                    }
-                });
-                this.keyBoardHandler.onKeyUp(e);
+                if (!this.isDeathMenu) {
+                    this.screenElements.forEach((se) => {
+                        if (se.isVisible()) {
+                            se.onKeyUp(e as KeyboardEvent);
+                        }
+                    });
+                    this.screenElementHUD.onKeyUp(e);
+                    this.keyBoardHandler.onKeyUp(e);
+                } else {
+                    this.deathScreen.onKeyUp(e);
+                }
             } else {
                 this.menuScreen.onKeyUp(e as KeyboardEvent);
             }
@@ -67,7 +89,12 @@ export default class GameView {
             ctx.clearRect(0, 0, resources.canvasWidth, resources.canvasHeight);
             if (!this.isLoading) {
                 if (!this.isInGameMenu) {
-                    this.screenElements.forEach((s) => s.VOnRender(diff));
+                    if (!this.isDeathMenu) {
+                        this.screenElements.forEach((s) => s.VOnRender(diff));
+                        this.screenElementHUD.VOnRender(diff);
+                    } else {
+                        this.deathScreen.VOnRender(diff);
+                    }
                 } else {
                     this.menuScreen.VOnRender(diff);
                 }
@@ -78,7 +105,7 @@ export default class GameView {
     }
 
     VOnUpdate(diff: number) {
-        if (!this.isLoading && !this.isInGameMenu) {
+        if (!this.isLoading && !this.isInGameMenu && !this.isDeathMenu) {
             this.keyBoardHandler.onUpdate(diff);
         }
     }

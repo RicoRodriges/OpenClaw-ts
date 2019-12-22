@@ -5,13 +5,17 @@ import EventMgr from "./events/EventMgr";
 import {
     createBgtilesAndScene,
     createClawActor,
-    createCollisionObjectsAndScene, createLevelObjectActor,
+    createCollisionObjectsAndScene,
+    createHUDElementActor,
+    createLevelObjectActor,
     createLootBoxActor,
     createOfficerActor,
-    createSpriteDefinitions, createSpriteDefinitionsFromGridTiles, createTreasureActor,
+    createSpriteDefinitions,
+    createSpriteDefinitionsFromGridTiles,
+    createTreasureActor,
     loadAllSounds,
     loadAnimationWithSprites,
-    lootToMap
+    lootToMap, toHUDSceneNode
 } from "./utils/Converters";
 import ActorController from "./ActorController";
 import ScreenElementScene from "./user-interface/ScreenElementScene";
@@ -26,7 +30,7 @@ import {ActorRenderComponent} from "./actors/components/RenderComponent";
 import ResourceMgr from "./ResourceMgr";
 import EventData_Level_Loaded from "./events/EventData_Level_Loaded";
 import TitleSceneNode from "./scene/TitleSceneNode";
-import gameProperties from "./GameProperties";
+import GameProperties from "./GameProperties";
 import {Animations} from "./enums/Animations";
 import EventData_Actor_Attack from "./events/EventData_Actor_Attack";
 import ClawControllableComponent from "./actors/components/ClawControllableComponent";
@@ -35,17 +39,20 @@ import AudioMgr from "./audio/AudioMgr";
 import {Sounds} from "./enums/Sounds";
 import EventData_Request_New_Actor from "./events/EventData_Request_New_Actor";
 import EventData_Request_Delete_Actor from "./events/EventData_Request_Delete_Actor";
-import GameProperties from "./GameProperties";
 import ScreenElementLoadingScreen from "./user-interface/ScreenElementLoadingScreen";
 import EventData_Menu_Exit from "./events/EventData_Menu_Exit";
 import ScreenElementMenu from "./user-interface/ScreenElementMenu";
 import EventData_Request_Play_Sound from "./events/EventData_Request_Play_Sound";
+import ScreenElementHud from "./user-interface/ScreenElementHud";
+import HUDSceneNode from "./scene/HUDSceneNode";
+import EventData_Claw_Died from "./events/EventData_Claw_Died";
 
 export default class GameLogic {
     actors: Actor[] = [];
     gameView?: GameView;
     gamePhysics?: GamePhysics;
     running = false;
+    isStopped = false;
 
     constructor() {
         EventMgr.getInstance().VAddListener((e) => this.onActorStartMoveDelegate(e), EventData_Actor_Start_Move.NAME);
@@ -54,16 +61,17 @@ export default class GameLogic {
         EventMgr.getInstance().VAddListener((e) => this.onActorAttackDelegate(e), EventData_Actor_Attack.NAME);
         EventMgr.getInstance().VAddListener((e) => this.onActorCreateDelegate(e), EventData_Request_New_Actor.NAME);
         EventMgr.getInstance().VAddListener((e) => this.onActorDeleteDelegate(e), EventData_Request_Delete_Actor.NAME);
+        EventMgr.getInstance().VAddListener((e) => this.onClawDeadDelegate(e), EventData_Claw_Died.NAME);
     }
 
     VOnUpdate(diff: number) {
-        if (!this.running) {
+        if (!this.running && !this.isStopped) {
             if (ResourceMgr.getInstance().isResourcesLoaded()) {
                 EventMgr.getInstance().VTriggerEvent(new EventData_Level_Loaded());
             }
         }
 
-        if (this.running) {
+        if (this.running && !this.isStopped) {
             if (this.gamePhysics) {
                 this.gamePhysics.VOnUpdate(diff);
                 this.gamePhysics.VSyncVisibleScene();
@@ -74,7 +82,7 @@ export default class GameLogic {
             this.gameView.VOnUpdate(diff);
         }
 
-        if (this.running) {
+        if (this.running && !this.isStopped) {
             this.actors.forEach((a) => a.Update(diff));
         }
 
@@ -155,9 +163,7 @@ export default class GameLogic {
             const renderComponent = a.getComponent(ActorRenderComponent.NAME) as ActorRenderComponent;
             const positionComponent = a.getComponent(PositionComponent.NAME) as PositionComponent;
             if (renderComponent && positionComponent) {
-                const actorSceneNode = new ActorSceneNode(a, positionComponent.position.x, positionComponent.position.y,
-                    // TODO: remove this hack
-                    gameProperties.player.stayW, gameProperties.player.stayH, renderComponent);
+                const actorSceneNode = new ActorSceneNode(a, positionComponent.position.x, positionComponent.position.y, renderComponent);
                 actorSceneNodes.push(actorSceneNode);
                 actorNodes.set(a, actorSceneNode);
             }
@@ -196,7 +202,26 @@ export default class GameLogic {
         ];
         const menuScreenElement = new ScreenElementMenu(menuNodes, screenElementScene);
 
-        this.gameView = new GameView(loadingScreenElement, menuScreenElement,
+        // Create death menu
+        const deathMenuNodes = [
+            new TitleSceneNode('I don\'t know how and why but', 30, 40, 30),
+            new TitleSceneNode('        you are dead!        ', 30, 90, 40),
+            new TitleSceneNode('  I hope you are happy now!  ', 30, 140, 30),
+        ];
+        const deathMenuScreenElement = new ScreenElementMenu(deathMenuNodes, screenElementScene);
+
+        // Create HUD
+        const uiTreasureActor = createHUDElementActor(22, 30, false, false, Animations.ui_treasure);
+        this.actors.push(uiTreasureActor);
+        const uiHealthActor = createHUDElementActor(-70, 20, true, false, Animations.ui_health);
+        this.actors.push(uiHealthActor);
+
+        const HUDNodes = new Map<string, SceneNode>();
+        HUDNodes.set('score', toHUDSceneNode(uiTreasureActor));
+        HUDNodes.set('health', toHUDSceneNode(uiHealthActor));
+        const screenElementHud = new ScreenElementHud(HUDNodes, screenElementScene);
+
+        this.gameView = new GameView(loadingScreenElement, menuScreenElement, deathMenuScreenElement, screenElementHud,
             [screenElementScene], new ActorController(actorNodes.get(claw) as ActorSceneNode));
     }
 
@@ -220,6 +245,15 @@ export default class GameLogic {
             view.isInGameMenu = false;
         }
         EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(Sounds.level_music, true, 0.2));
+    }
+
+    onClawDeadDelegate(e: IEventData) {
+        this.isStopped = true;
+
+        const view = this.gameView;
+        if (view) {
+            view.isDeathMenu = true;
+        }
     }
 
     onActorStartMoveDelegate(e: IEventData) {
@@ -250,9 +284,7 @@ export default class GameLogic {
                 if (positionComponent) {
                     const physicComponent = actor.getComponent(PhysicsComponent.NAME) as PhysicsComponent;
                     if (physicComponent) {
-                        const actorSceneNode = new ActorSceneNode(actor, positionComponent.position.x, positionComponent.position.y,
-                            // TODO: remove this hack
-                            physicComponent.actorBodyDef.size.x, physicComponent.actorBodyDef.size.y, renderComponent);
+                        const actorSceneNode = new ActorSceneNode(actor, positionComponent.position.x, positionComponent.position.y, renderComponent);
                         if (this.gameView) {
                             const ses = this.gameView.screenElements[0] as ScreenElementScene;
                             ses.actorNodes.set(actor, actorSceneNode);

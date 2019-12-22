@@ -53,6 +53,10 @@ export enum Animations {
     crate_destroying = 'crate_destroying',
     level_end = 'level_end',
 
+    ui_treasure = 'ui_treasure',
+    ui_points = 'ui_points',
+    ui_health = 'ui_health',
+
     column_center = 'column_center',
     column_repeated = 'column_repeated',
     column_bottom = 'column_bottom',

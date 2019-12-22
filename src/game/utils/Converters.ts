@@ -3,7 +3,12 @@ import PositionComponent from "../actors/components/PositionComponent";
 import Point from "./Point";
 import PhysicsComponent from "../actors/components/PhysicsComponent";
 import GamePhysics, {ActorBodyDef, ActorFixtureDef} from "../GamePhysics";
-import {ActorRenderComponent, TileId, TileRenderComponent} from "../actors/components/RenderComponent";
+import {
+    ActorRenderComponent,
+    HUDRenderComponent,
+    TileId,
+    TileRenderComponent
+} from "../actors/components/RenderComponent";
 import AnimationComponent from "../actors/components/AnimationComponent";
 import Animation from "../graphics/Animation";
 import Frame from "../graphics/Frame";
@@ -34,6 +39,7 @@ import LootComponent from "../actors/components/LootComponent";
 import {PickupType} from "../enums/PickupType";
 import ScoreComponent from "../actors/components/ScoreComponent";
 import DestroyableComponent from "../actors/components/DestroyableComponent";
+import HUDSceneNode from "../scene/HUDSceneNode";
 
 export function createClawActor(physics: GamePhysics, spawnX: number, spawnY: number, animName: Animations): Actor {
     const anim = ResourceMgr.getInstance().getAnimation(animName);
@@ -313,6 +319,42 @@ export function createLevelObjectActor(x: number, y: number, img: Animations) {
         throw new Error(m);
     }
     return actor;
+}
+
+export function createHUDElementActor(x: number, y: number, isRight: boolean, isBottom: boolean, img: Animations) {
+    const resources = ResourceMgr.getInstance();
+    const anim = resources.getAnimation(img);
+    if (!anim) {
+        console.error('Resources were not found');
+        throw new Error('Resources were not found');
+    }
+    const actor = new Actor();
+    const positionComponent = new PositionComponent(actor, new Point(x, y));
+    actor.components.push(positionComponent);
+    const renderComponent = new HUDRenderComponent(actor, isRight, isBottom);
+    actor.components.push(renderComponent);
+    if (anim.frames.length > 1) {
+        const animationComponent = new AnimationComponent(actor, renderComponent, anim);
+        actor.components.push(animationComponent);
+    } else if (anim.frames.length === 1) {
+        renderComponent.image = anim.frames[0].image;
+    } else {
+        const m = `${anim.name} animation does not have frames`;
+        console.error(m);
+        throw new Error(m);
+    }
+    return actor;
+}
+
+export function toHUDSceneNode(a: Actor) {
+    const renderComponent = a.getComponent(HUDRenderComponent.NAME1) as HUDRenderComponent;
+    const positionComponent = a.getComponent(PositionComponent.NAME) as PositionComponent;
+    if (!renderComponent || !positionComponent) {
+        const m = 'HUD actor does not have required components';
+        console.error(m);
+        throw new Error(m);
+    }
+    return new HUDSceneNode(a, positionComponent.position.x, positionComponent.position.y, renderComponent);
 }
 
 export function createSpriteDefinitions(tiles: Tiles, spriteNamePrefix: string): SpriteDefinition[] {

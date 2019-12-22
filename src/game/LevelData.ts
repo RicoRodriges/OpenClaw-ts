@@ -3446,6 +3446,201 @@ export default {
                 },
             ]
         },
+        // TODO: do we need it here???
+        {
+            name: Animations.ui_health,
+            src: 'sprites/health_ui.png',
+            srcWidth: 0,
+            srcHeight: 0,
+            w: 66,
+            h: 24,
+            map: [
+                {
+                    id: 0,
+                    x: 0,
+                    y: 24 * 0,
+                    cx: 0,
+                    cy: 0,
+                    delay: 200,
+                },
+                {
+                    id: 1,
+                    x: 0,
+                    y: 24 * 1,
+                    cx: 0,
+                    cy: 0,
+                    delay: 200,
+                },
+                {
+                    id: 2,
+                    x: 0,
+                    y: 24 * 2,
+                    cx: 0,
+                    cy: 0,
+                    delay: 200,
+                },
+            ]
+        },
+        {
+            name: Animations.ui_points,
+            src: 'sprites/points.png',
+            srcWidth: 0,
+            srcHeight: 0,
+            map: [
+                {
+                    id: 0,
+                    x: 0,
+                    y: 0,
+                    w: 120,
+                    h: 54,
+                    cx: 0,
+                    cy: 0,
+                    delay: 30000000,
+                },
+            ]
+        },
+        {
+            name: Animations.ui_treasure,
+            src: 'sprites/UI treasure.png',
+            srcWidth: 0,
+            srcHeight: 0,
+            w: 29,
+            h: 28,
+            map: [
+                {
+                    id: 0,
+                    x: 29 * 0,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 1,
+                    x: 29 * 1,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 2,
+                    x: 29 * 2,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 3,
+                    x: 29 * 3,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 4,
+                    x: 29 * 4,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 5,
+                    x: 29 * 5,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 6,
+                    x: 29 * 6,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 7,
+                    x: 29 * 7,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 8,
+                    x: 29 * 8,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 9,
+                    x: 29 * 9,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 10,
+                    x: 29 * 10,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 11,
+                    x: 29 * 11,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 12,
+                    x: 29 * 12,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 13,
+                    x: 29 * 13,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 14,
+                    x: 29 * 14,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 15,
+                    x: 29 * 15,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 16,
+                    x: 29 * 16,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 17,
+                    x: 29 * 17,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 18,
+                    x: 29 * 18,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 19,
+                    x: 29 * 19,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 20,
+                    x: 29 * 20,
+                    y: 0,
+                    delay: 150,
+                },
+                {
+                    id: 21,
+                    x: 29 * 21,
+                    y: 0,
+                    delay: 150,
+                },
+            ]
+        },
     ],
     sounds: [
         {
@@ -3519,6 +3714,10 @@ export default {
         {
             name: Sounds.claw_killEnemy3,
             src: 'sounds/claw_killEnemy3.mp3'
+        },
+        {
+            name: Sounds.claw_death,
+            src: 'sounds/claw_death.mp3'
         },
         {
             name: Sounds.treasure_ring,

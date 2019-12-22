@@ -21,6 +21,8 @@ import {DamageType} from "../../enums/DamageType";
 import EventData_Request_New_Actor from "../../events/EventData_Request_New_Actor";
 import GamePhysics from "../../GamePhysics";
 import HealthComponent, {HealthObserver} from "./HealthComponent";
+import EventData_Health_Changed from "../../events/EventData_Health_Changed";
+import EventData_Claw_Died from "../../events/EventData_Claw_Died";
 
 export default class ClawControllableComponent extends ActorComponent implements AnimationObserver, HealthObserver {
     public static NAME = 'ClawControllableComponent';
@@ -278,9 +280,12 @@ export default class ClawControllableComponent extends ActorComponent implements
 
             this.state = ClawState.ClawState_TakingDamage;
         }
+        EventMgr.getInstance().VTriggerEvent(new EventData_Health_Changed(newHealth));
     }
 
     VOnHealthBelowZero(damageType: DamageType, sourceActor: Actor) {
-        this.healthComponent.AddHealth(100, DamageType.DamageType_None, this.owner);
+        //this.healthComponent.AddHealth(100, DamageType.DamageType_None, this.owner);
+        EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(Sounds.claw_death));
+        EventMgr.getInstance().VTriggerEvent(new EventData_Claw_Died());
     }
 }
