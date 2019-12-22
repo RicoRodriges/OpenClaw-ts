@@ -29,8 +29,8 @@ export default class GameApp {
         // Render debug info
         if (GameProperties.debug) {
             if (this.gameLogic.gamePhysics && this.gameLogic.gameView && this.gameLogic.gamePhysics.world &&
-                this.gameLogic.gameView.screenElements.length > 0) {
-                const scene = this.gameLogic.gameView.screenElements[0] as ScreenElementScene;
+                this.gameLogic.gameView.gameScreen) {
+                const scene = this.gameLogic.gameView.gameScreen as ScreenElementScene;
                 const camera = scene.camera;
                 const resources = ResourceMgr.getInstance();
                 const k = GamePhysics.METERS_TO_PIXELS;

@@ -6,16 +6,20 @@ import {
     createBgtilesAndScene,
     createClawActor,
     createCollisionObjectsAndScene,
-    createHUDElementActor, createLevelFinishActor,
+    createHUDElementActor,
+    createLevelFinishActor,
     createLevelObjectActor,
     createLootBoxActor,
-    createOfficerActor, createSoundPickupActor,
+    createOfficerActor,
+    createSoundPickupActor,
     createSpriteDefinitions,
     createSpriteDefinitionsFromGridTiles,
     createTreasureActor,
     loadAllSounds,
     loadAnimationWithSprites,
-    lootToMap, mergeLoot, toHUDSceneNode
+    lootToMap,
+    mergeLoot,
+    toHUDSceneNode
 } from "./utils/Converters";
 import ActorController from "./ActorController";
 import ScreenElementScene from "./user-interface/ScreenElementScene";
@@ -44,7 +48,6 @@ import EventData_Menu_Exit from "./events/EventData_Menu_Exit";
 import ScreenElementMenu from "./user-interface/ScreenElementMenu";
 import EventData_Request_Play_Sound from "./events/EventData_Request_Play_Sound";
 import ScreenElementHud from "./user-interface/ScreenElementHud";
-import HUDSceneNode from "./scene/HUDSceneNode";
 import EventData_Claw_Died from "./events/EventData_Claw_Died";
 import EventData_Level_Finish from "./events/EventData_Level_Finish";
 import ScreenElementFinishMenu from "./user-interface/ScreenElementFinishMenu";
@@ -249,15 +252,14 @@ export default class GameLogic {
         const screenElementHud = new ScreenElementHud(HUDNodes, screenElementScene);
 
         this.gameView = new GameView(loadingScreenElement, menuScreenElement, deathMenuScreenElement, screenElementFinishMenu,
-            screenElementHud,
-            [screenElementScene], new ActorController(actorNodes.get(claw) as ActorSceneNode));
+            screenElementHud, screenElementScene, new ActorController(actorNodes.get(claw) as ActorSceneNode));
     }
 
     onLevelLoadedDelegate(e: IEventData) {
         const view = this.gameView;
         if (view) {
-            view.isInGameMenu = true;
-            view.isLoading = false;
+            view.isMenu = true;
+            view.currentScreen = view.menuScreen;
         }
 
         // Register keyboard events
@@ -270,7 +272,8 @@ export default class GameLogic {
 
         const view = this.gameView;
         if (view) {
-            view.isInGameMenu = false;
+            view.isMenu = false;
+            view.currentScreen = view.gameScreen;
         }
         EventMgr.getInstance().VTriggerEvent(new EventData_Request_Play_Sound(Sounds.level_music, true, 0.2));
     }
@@ -280,7 +283,8 @@ export default class GameLogic {
 
         const view = this.gameView;
         if (view) {
-            view.isDeathMenu = true;
+            view.isMenu = true;
+            view.currentScreen = view.deathScreen;
         }
     }
 
@@ -289,7 +293,8 @@ export default class GameLogic {
 
         const view = this.gameView;
         if (view) {
-            view.isFinishMenu = true;
+            view.isMenu = true;
+            view.currentScreen = view.finishScreen;
         }
     }
 
@@ -323,7 +328,7 @@ export default class GameLogic {
                     if (physicComponent) {
                         const actorSceneNode = new ActorSceneNode(actor, positionComponent.position.x, positionComponent.position.y, renderComponent);
                         if (this.gameView) {
-                            const ses = this.gameView.screenElements[0] as ScreenElementScene;
+                            const ses = this.gameView.gameScreen as ScreenElementScene;
                             ses.actorNodes.set(actor, actorSceneNode);
                             ses.root.childrenList.push(actorSceneNode);
                         }
@@ -345,7 +350,7 @@ export default class GameLogic {
             const renderComponent = actor.getComponent(ActorRenderComponent.NAME) as ActorRenderComponent;
             if (renderComponent && this.gameView) {
                 if (this.gameView) {
-                    const ses = this.gameView.screenElements[0] as ScreenElementScene;
+                    const ses = this.gameView.gameScreen as ScreenElementScene;
                     const node = ses.actorNodes.get(actor);
                     if (node) {
                         ses.root.childrenList = ses.root.childrenList.filter((n) => n !== node);
