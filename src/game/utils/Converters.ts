@@ -12,8 +12,7 @@ import {
 import AnimationComponent from "../actors/components/AnimationComponent";
 import Animation from "../graphics/Animation";
 import Frame from "../graphics/Frame";
-import {AnimationTiles, CollisionTiles, GridTile, LootInfo, SoundInfo, Tiles} from "../LevelData";
-import {SpriteDefinition} from "../../components/SvgSpriteDefinitionComponent";
+import {AnimationTiles, CollisionTiles, GridTile, LootInfo, SoundInfo, SpriteDefinition, Tiles} from "../LevelData";
 import Rect from "./Rect";
 import Image from "../graphics/Image";
 import TilesSceneNode from "../scene/TilesSceneNode";

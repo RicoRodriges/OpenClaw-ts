@@ -3,12 +3,12 @@ import GameApp from "../game/GameApp";
 import ResourceMgr from "../game/ResourceMgr";
 
 export default class ReactClaw extends React.Component {
-    maxFps = 70;
+    maxFps = 60;
     game = new GameApp();
-    state = {dt: 1000 / this.maxFps};
+    state = {dt: ~~(1000 / this.maxFps)};
 
     static defaultProps = {
-        w: 640,
+        w: 800,
         h: 640
     };
 
@@ -32,11 +32,8 @@ export default class ReactClaw extends React.Component {
     }
 
     loop(dt: number) {
-        const before = new Date().getMilliseconds();
-        this.game.onUpdate(dt);
-        const after = new Date().getMilliseconds();
-        const timer = dt - (after - before);
-        setTimeout(this.loop.bind(this, dt), timer < 0 ? 0 : timer);
+        setTimeout(this.loop.bind(this, dt), dt);
+        this.game.onUpdate(~~(dt * 1.2));
         //this.setState({dt: dt});
     }
 

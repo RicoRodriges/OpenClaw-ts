@@ -2,6 +2,7 @@ import {CollisionType} from "./enums/CollisionType";
 import {Sounds} from "./enums/Sounds";
 import {Animations} from "./enums/Animations";
 import {PickupType} from "./enums/PickupType";
+import Rect from "./utils/Rect";
 
 export class CollisionInfo {
     constructor(public x: number, public y: number, public w: number, public h: number,
@@ -3917,4 +3918,12 @@ export interface TreasureDef {
 export interface LootInfo {
     type: PickupType;
     count: number;
+}
+
+export interface SpriteDefinition {
+    id: string;
+    rect: Rect;
+    srcWidth: number;
+    srcHeight: number;
+    src: string;
 }
