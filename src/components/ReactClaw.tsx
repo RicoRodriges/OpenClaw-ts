@@ -12,8 +12,6 @@ export default class ReactClaw extends React.Component {
         h: 640
     };
 
-    // anim = {count: 8, src: 'sprites/claw_idle.png', w: 592, h: 116};
-
     constructor(props: Readonly<{ w: number, h: number }>) {
         super(props);
     }
@@ -33,7 +31,7 @@ export default class ReactClaw extends React.Component {
 
     loop(dt: number) {
         setTimeout(this.loop.bind(this, dt), dt);
-        this.game.onUpdate(~~(dt * 1.2));
+        this.game.onUpdate(dt);
         //this.setState({dt: dt});
     }
 
