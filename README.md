@@ -4,6 +4,8 @@ TypeScript port of [OpenClaw project](https://github.com/pjasicek/OpenClaw).
 
 This project was created just for fun and education.
 
+Now it's obsolete since I ported OpenClaw to Emscripten.
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -11,15 +13,11 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [http://localhost:9000](http://localhost:9000) to view it in the browser.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+The page will reload if you make edits.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
+Builds the app for production to the `dist` folder.<br />
 Your app is ready to be deployed!
