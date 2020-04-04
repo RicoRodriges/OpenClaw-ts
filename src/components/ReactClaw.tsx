@@ -26,12 +26,13 @@ export default class ReactClaw extends React.Component {
         resource.canvasWidth = width;
         resource.canvasHeight = height;
         this.game.loadGame(width, height);
-        this.loop(this.state.dt);
+
+        this.loop();
     }
 
-    loop(dt: number) {
-        setTimeout(this.loop.bind(this, dt), dt);
-        this.game.onUpdate(dt);
+    loop() {
+        window.requestAnimationFrame(this.loop.bind(this));
+        this.game.onUpdate(1000 / 60);
         //this.setState({dt: dt});
     }
 
