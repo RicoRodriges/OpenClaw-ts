@@ -16,9 +16,9 @@ import GameProperties from "./GameProperties";
 export default class GamePhysics {
     public static METERS_TO_PIXELS = 75.0;
 
-    world: any;
-    contactListener: any;
-    actorBodies = new Map<Actor, any>();
+    world: Box2D.b2World;
+    contactListener: Box2D.JSContactListener;
+    actorBodies = new Map<Actor, Box2D.b2Body>();
     toBeDestroyed: Actor[] = [];
     toBeCreated: ActorBodyDef[] = [];
 
@@ -28,7 +28,7 @@ export default class GamePhysics {
         Box2D.destroy(gravity);
 
         this.contactListener = new Box2D.JSContactListener();
-        this.contactListener.BeginContact = (contactPtr: any) => {
+        this.contactListener.BeginContact = (contactPtr: Box2D.Pointer) => {
             const contact = Box2D.wrapPointer(contactPtr, Box2D.b2Contact);
             let pFixtureA = contact.GetFixtureA();
             let pFixtureB = contact.GetFixtureB();
@@ -97,7 +97,7 @@ export default class GamePhysics {
                 }
             }
         };
-        this.contactListener.EndContact = (contactPtr: any) => {
+        this.contactListener.EndContact = (contactPtr: Box2D.Pointer) => {
             const contact = Box2D.wrapPointer(contactPtr, Box2D.b2Contact);
             let pFixtureA = contact.GetFixtureA();
             let pFixtureB = contact.GetFixtureB();
